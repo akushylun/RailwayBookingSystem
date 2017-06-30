@@ -21,10 +21,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akushylun.model.dao.BookingDao;
-import com.akushylun.model.entity.Booking;
-import com.akushylun.model.entity.Person;
-import com.akushylun.model.entity.Person.Role;
-import com.akushylun.model.entity.Ticket;
+import com.akushylun.model.entities.Booking;
+import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Ticket;
+import com.akushylun.model.entities.Person.Role;
 
 public class JdbcBookingDaoTest {
     static Connection connection;

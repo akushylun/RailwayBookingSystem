@@ -1,4 +1,4 @@
-package com.akushylun.model.entity;
+package com.akushylun.model.entities;
 
 import java.util.ArrayList;
 import java.util.List;

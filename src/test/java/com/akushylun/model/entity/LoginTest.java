@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.akushylun.model.entities.Login;
+
 public class LoginTest {
     @Test
     public void shouldCreateLogin() {

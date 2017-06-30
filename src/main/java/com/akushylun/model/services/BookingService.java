@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
-import com.akushylun.model.entity.Booking;
+import com.akushylun.model.entities.Booking;
 
 public class BookingService {
     private DaoFactory daoFactory;

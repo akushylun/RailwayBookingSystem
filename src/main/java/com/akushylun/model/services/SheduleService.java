@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.SheduleDao;
-import com.akushylun.model.entity.Shedule;
+import com.akushylun.model.entities.Shedule;
 
 public class SheduleService {
     private DaoFactory daoFactory;

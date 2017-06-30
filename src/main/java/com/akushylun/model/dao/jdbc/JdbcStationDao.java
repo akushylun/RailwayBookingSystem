@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.StationDao;
-import com.akushylun.model.entity.Station;
+import com.akushylun.model.entities.Station;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcStationDao implements StationDao {

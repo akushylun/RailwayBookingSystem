@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akushylun.model.dao.LoginDao;
-import com.akushylun.model.entity.Login;
+import com.akushylun.model.entities.Login;
 
 public class JdbcLoginDaoTest {
 

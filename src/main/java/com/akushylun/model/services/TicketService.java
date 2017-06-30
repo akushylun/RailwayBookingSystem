@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TicketDao;
-import com.akushylun.model.entity.Ticket;
+import com.akushylun.model.entities.Ticket;
 
 public class TicketService {
     private DaoFactory daoFactory;

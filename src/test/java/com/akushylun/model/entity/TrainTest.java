@@ -9,6 +9,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.akushylun.model.entities.Shedule;
+import com.akushylun.model.entities.Train;
+
 public class TrainTest {
 
     final int ID = 1;

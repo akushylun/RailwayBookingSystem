@@ -9,7 +9,10 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.akushylun.model.entity.Person.Role;
+import com.akushylun.model.entities.Booking;
+import com.akushylun.model.entities.Login;
+import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Person.Role;
 
 public class PersonTest {
 

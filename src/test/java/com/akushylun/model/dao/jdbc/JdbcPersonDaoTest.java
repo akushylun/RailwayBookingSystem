@@ -17,9 +17,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akushylun.model.dao.PersonDao;
-import com.akushylun.model.entity.Login;
-import com.akushylun.model.entity.Person;
-import com.akushylun.model.entity.Person.Role;
+import com.akushylun.model.entities.Login;
+import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Person.Role;
 
 public class JdbcPersonDaoTest {
     static Connection connection;

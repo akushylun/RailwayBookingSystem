@@ -1,17 +1,19 @@
-package com.akushylun.model.entity;
+package com.akushylun.model.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Train {
+public class Station {
 
     private int id;
-    private String name;
+    private String from;
+    private String to;
     private List<Shedule> shedules = new ArrayList<Shedule>();
 
-    private Train(Builder builder) {
+    private Station(Builder builder) {
 	this.id = builder.id;
-	this.name = builder.name;
+	this.from = builder.from;
+	this.to = builder.to;
 	this.shedules = builder.shedules;
     }
 
@@ -23,17 +25,22 @@ public class Train {
 	this.id = id;
     }
 
-    public String getName() {
-	return name;
+    public String getFrom() {
+	return from;
     }
 
-    public List<Shedule> getTickets() {
+    public String getTo() {
+	return to;
+    }
+
+    public List<Shedule> getShedules() {
 	return shedules;
     }
 
     public static class Builder {
 	private int id;
-	private String name;
+	private String from;
+	private String to;
 	private List<Shedule> shedules = new ArrayList<Shedule>();
 
 	public Builder withId(int id) {
@@ -41,8 +48,13 @@ public class Train {
 	    return this;
 	}
 
-	public Builder withName(String name) {
-	    this.name = name;
+	public Builder from(String fromStation) {
+	    this.from = fromStation;
+	    return this;
+	}
+
+	public Builder to(String toStation) {
+	    this.to = toStation;
 	    return this;
 	}
 
@@ -51,19 +63,19 @@ public class Train {
 	    return this;
 	}
 
-	public Train build() {
-	    return new Train(this);
+	public Station build() {
+	    return new Station(this);
 	}
-
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
+	result = prime * result + ((from == null) ? 0 : from.hashCode());
 	result = prime * result + id;
-	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	result = prime * result + ((shedules == null) ? 0 : shedules.hashCode());
+	result = prime * result + ((to == null) ? 0 : to.hashCode());
 	return result;
     }
 
@@ -73,27 +85,32 @@ public class Train {
 	    return true;
 	if (obj == null)
 	    return false;
-	if (!(obj instanceof Train))
+	if (!(obj instanceof Station))
 	    return false;
-	Train other = (Train) obj;
-	if (id != other.id)
-	    return false;
-	if (name == null) {
-	    if (other.name != null)
+	Station other = (Station) obj;
+	if (from == null) {
+	    if (other.from != null)
 		return false;
-	} else if (!name.equals(other.name))
+	} else if (!from.equals(other.from))
+	    return false;
+	if (id != other.id)
 	    return false;
 	if (shedules == null) {
 	    if (other.shedules != null)
 		return false;
 	} else if (!shedules.equals(other.shedules))
 	    return false;
+	if (to == null) {
+	    if (other.to != null)
+		return false;
+	} else if (!to.equals(other.to))
+	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Train [id=" + id + ", name=" + name + ", shedules=" + shedules + "]";
+	return "Station [id=" + id + ", from=" + from + ", to=" + to + ", shedules=" + shedules + "]";
     }
 
 }

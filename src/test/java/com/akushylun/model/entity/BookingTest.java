@@ -11,6 +11,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.akushylun.model.entities.Booking;
+import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Ticket;
+
 public class BookingTest {
 
     final int ID = 1;

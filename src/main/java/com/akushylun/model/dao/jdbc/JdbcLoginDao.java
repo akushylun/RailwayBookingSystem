@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.LoginDao;
-import com.akushylun.model.entity.Login;
+import com.akushylun.model.entities.Login;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcLoginDao implements LoginDao {

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.TicketDao;
-import com.akushylun.model.entity.Shedule;
-import com.akushylun.model.entity.Ticket;
+import com.akushylun.model.entities.Shedule;
+import com.akushylun.model.entities.Ticket;
 
 public class JdbcTicketDao implements TicketDao {
 

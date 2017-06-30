@@ -7,7 +7,7 @@ import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
 import com.akushylun.model.dao.PersonDao;
-import com.akushylun.model.entity.Person;
+import com.akushylun.model.entities.Person;
 
 public class PersonService {
 

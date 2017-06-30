@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.TrainDao;
-import com.akushylun.model.entity.Train;
+import com.akushylun.model.entities.Train;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcTrainDao implements TrainDao {

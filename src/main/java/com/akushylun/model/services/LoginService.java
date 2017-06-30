@@ -6,7 +6,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
-import com.akushylun.model.entity.Login;
+import com.akushylun.model.entities.Login;
 
 public class LoginService {
     private DaoFactory daoFactory;

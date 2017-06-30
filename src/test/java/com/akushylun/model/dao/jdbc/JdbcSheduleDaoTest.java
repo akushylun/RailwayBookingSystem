@@ -18,9 +18,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akushylun.model.dao.SheduleDao;
-import com.akushylun.model.entity.Shedule;
-import com.akushylun.model.entity.Station;
-import com.akushylun.model.entity.Train;
+import com.akushylun.model.entities.Shedule;
+import com.akushylun.model.entities.Station;
+import com.akushylun.model.entities.Train;
 
 public class JdbcSheduleDaoTest {
     static Connection connection;

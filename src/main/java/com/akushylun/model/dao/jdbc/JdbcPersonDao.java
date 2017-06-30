@@ -9,8 +9,8 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.PersonDao;
-import com.akushylun.model.entity.Login;
-import com.akushylun.model.entity.Person;
+import com.akushylun.model.entities.Login;
+import com.akushylun.model.entities.Person;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcPersonDao implements PersonDao {

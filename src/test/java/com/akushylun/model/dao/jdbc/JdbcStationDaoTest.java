@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.akushylun.model.dao.StationDao;
-import com.akushylun.model.entity.Station;
+import com.akushylun.model.entities.Station;
 
 public class JdbcStationDaoTest {
     static Connection connection;

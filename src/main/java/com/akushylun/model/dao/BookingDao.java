@@ -1,6 +1,6 @@
 package com.akushylun.model.dao;
 
-import com.akushylun.model.entity.Booking;
+import com.akushylun.model.entities.Booking;
 
 public interface BookingDao extends GenericDao<Booking>, AutoCloseable {
 

@@ -1,4 +1,4 @@
-package com.akushylun.model.entity;
+package com.akushylun.model.entities;
 
 public class Login {
     private int id;
