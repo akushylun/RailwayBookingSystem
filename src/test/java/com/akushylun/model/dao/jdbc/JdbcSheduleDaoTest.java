@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import org.h2.tools.RunScript;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.akushylun.model.dao.SheduleDao;
@@ -57,6 +58,16 @@ public class JdbcSheduleDaoTest {
     @Test
     public void getAllTest() {
 	assertEquals(2, sheduleDao.findAll().size());
+    }
+
+    /**
+     * Doesn't work because the SQL differences in MySQL and H2. Should be
+     * fixed.
+     */
+    @Ignore
+    @Test
+    public void getAllByDateTest() {
+	assertEquals(sheduleInH2Script, sheduleDao.findAllByDate(sheduleInH2Script.getStart()));
     }
 
     @Test

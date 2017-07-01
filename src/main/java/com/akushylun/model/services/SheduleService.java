@@ -1,5 +1,6 @@
 package com.akushylun.model.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +32,19 @@ public class SheduleService {
 	}
     }
 
-    public List<Shedule> getByAll() {
+    public List<Shedule> getAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    SheduleDao sheduleDao = daoFactory.createSheduleDao();
 	    connection.begin();
 	    return sheduleDao.findAll();
+	}
+    }
+
+    public List<Shedule> getAllByDate(LocalDateTime date) {
+	try (DaoConnection connection = daoFactory.getConnection()) {
+	    SheduleDao sheduleDao = daoFactory.createSheduleDao();
+	    connection.begin();
+	    return sheduleDao.findAllByDate(date);
 	}
     }
 

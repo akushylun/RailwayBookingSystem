@@ -39,6 +39,14 @@ public class BookingService {
 	}
     }
 
+    public List<Booking> getAllByUserId(int userId) {
+	try (DaoConnection connection = daoFactory.getConnection()) {
+	    BookingDao bookingDao = daoFactory.createBookingDao();
+	    connection.begin();
+	    return bookingDao.findAllByUserId(userId);
+	}
+    }
+
     public void createBooking(Booking booking) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();

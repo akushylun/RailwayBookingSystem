@@ -25,6 +25,10 @@ public class JdbcBookingDao implements BookingDao {
 	    + "p.p_role_r_name, t.ti_id, t.ti_price FROM booking as b INNER JOIN person as p ON p.p_id = b.b_person_p_id "
 	    + "INNER JOIN m2m_booking_ticket as m2m ON b.b_id = m2m.m2m_booking_b_id "
 	    + "INNER JOIN ticket as t ON m2m.m2m_ticket_ti_id = t.ti_id ";
+    private static final String SELECT_ALL_BOOKINGS_BY_PERSON_ID = "SELECT b.b_id, b.b_price, b.b_date, p.p_id, p.p_name, p.p_surname, p.p_email, "
+	    + "p.p_role_r_name, t.ti_id, t.ti_price FROM booking as b INNER JOIN person as p ON p.p_id = b.b_person_p_id "
+	    + "INNER JOIN m2m_booking_ticket as m2m ON b.b_id = m2m.m2m_booking_b_id "
+	    + "INNER JOIN ticket as t ON m2m.m2m_ticket_ti_id = t.ti_id WHERE p.p_id = ?";
     private static final String CREATE_BOOKING = "INSERT INTO booking (b_price, b_date, b_person_p_id) SELECT ?,?,p_id FROM person "
 	    + "WHERE p_email = ?";
     private static final String CREATE_M2M_BOOKING_TICKETS = "INSERT INTO m2m_booking_ticket (m2m_booking_b_id, m2m_ticket_ti_id) "
@@ -40,7 +44,7 @@ public class JdbcBookingDao implements BookingDao {
 	connectionShouldBeClosed = false;
     }
 
-    private Booking getOrderFromResultSet(ResultSet rs) throws SQLException {
+    private Booking getBookingFromResultSet(ResultSet rs) throws SQLException {
 	Booking booking = new Booking.Builder().withId(rs.getInt("b_id")).withPrice(rs.getBigDecimal("b_price"))
 		.withDate(rs.getTimestamp("b_date").toLocalDateTime()).withUser(getUserFromResultSet(rs))
 		.withTickets(getTicketsFromResultSet(rs)).build();
@@ -85,7 +89,7 @@ public class JdbcBookingDao implements BookingDao {
 	    ResultSet rs = query.executeQuery();
 	    Booking booking;
 	    if (rs.next()) {
-		booking = getOrderFromResultSet(rs);
+		booking = getBookingFromResultSet(rs);
 		result = Optional.of(booking);
 	    }
 	} catch (SQLException ex) {
@@ -95,19 +99,36 @@ public class JdbcBookingDao implements BookingDao {
     }
 
     @Override
-    public List<Booking> findAll() {
-	List<Booking> orderList = new ArrayList<>();
-	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS)) {
+    public List<Booking> findAllByUserId(int userId) {
+	List<Booking> bookingList = new ArrayList<>();
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS_BY_PERSON_ID)) {
+	    query.setInt(1, userId);
 	    ResultSet rs = query.executeQuery();
 	    Booking booking;
 	    while (rs.next()) {
-		booking = getOrderFromResultSet(rs);
-		orderList.add(booking);
+		booking = getBookingFromResultSet(rs);
+		bookingList.add(booking);
 	    }
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);
 	}
-	return orderList;
+	return bookingList;
+    }
+
+    @Override
+    public List<Booking> findAll() {
+	List<Booking> bookingList = new ArrayList<>();
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS)) {
+	    ResultSet rs = query.executeQuery();
+	    Booking booking;
+	    while (rs.next()) {
+		booking = getBookingFromResultSet(rs);
+		bookingList.add(booking);
+	    }
+	} catch (SQLException ex) {
+	    throw new RuntimeException(ex);
+	}
+	return bookingList;
     }
 
     @Override

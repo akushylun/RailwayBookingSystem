@@ -23,8 +23,8 @@ import org.junit.Test;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
-import com.akushylun.model.entities.Ticket;
 import com.akushylun.model.entities.Person.Role;
+import com.akushylun.model.entities.Ticket;
 
 public class JdbcBookingDaoTest {
     static Connection connection;
@@ -61,6 +61,12 @@ public class JdbcBookingDaoTest {
     @Test
     public void getAllTest() {
 	assertEquals(1, bookingDao.findAll().size());
+    }
+
+    @Test
+    public void getAllByUserIdTest() {
+	List<Booking> bookingList = bookingDao.findAllByUserId(bookingInH2Script.getId());
+	assertEquals(1, bookingList.size());
     }
 
     @Test

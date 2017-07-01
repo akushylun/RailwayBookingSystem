@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -20,6 +21,9 @@ public class JdbcSheduleDao implements SheduleDao {
     private static final String SELECT_SHEDULE_BY_ID = "SELECT sh.sh_id, sh.sh_start, sh.sh_end, st.st_id, st.st_from, st.st_to,tr.tr_id, "
 	    + "tr.tr_name FROM shedule as sh INNER JOIN station as st ON sh.sh_station_st_id = st.st_id INNER JOIN train as tr "
 	    + "ON sh.sh_train_tr_id = tr.tr_id WHERE sh.sh_id = ?";
+    private static final String SELECT_ALL_SHEDULES_BY_DATE = "SELECT sh.sh_id, sh.sh_start, sh.sh_end, st.st_id, st.st_from, st.st_to,"
+	    + "tr.tr_id,tr.tr_name FROM shedule as sh INNER JOIN station as st ON sh.sh_station_st_id = st.st_id INNER JOIN train as tr "
+	    + "ON sh.sh_train_tr_id = tr.tr_id WHERE st.st_from =? AND st.st_to =? AND (SELECT date(sh_start)) = ?";
     private static final String SELECT_ALL_SHEDULES = "SELECT sh.sh_id, sh.sh_start, sh.sh_end, st.st_id, st.st_from, st.st_to,tr.tr_id, "
 	    + "tr.tr_name FROM shedule as sh INNER JOIN station as st ON sh.sh_station_st_id = st.st_id INNER JOIN train as tr "
 	    + "ON sh.sh_train_tr_id = tr.tr_id";
@@ -85,6 +89,23 @@ public class JdbcSheduleDao implements SheduleDao {
 	    throw new RuntimeException(ex);
 	}
 	return result;
+    }
+
+    @Override
+    public List<Shedule> findAllByDate(LocalDateTime date) {
+	List<Shedule> sheduleList = new ArrayList<>();
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_SHEDULES_BY_DATE)) {
+	    query.setTimestamp(1, Timestamp.valueOf(date));
+	    ResultSet rs = query.executeQuery();
+	    Shedule shedule;
+	    while (rs.next()) {
+		shedule = getSheduleFromResultSet(rs);
+		sheduleList.add(shedule);
+	    }
+	} catch (SQLException ex) {
+	    throw new RuntimeException(ex);
+	}
+	return sheduleList;
     }
 
     @Override
