@@ -24,9 +24,9 @@ public class JdbcLoginDao implements LoginDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcLoginDao(Connection connection) {
+    public JdbcLoginDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Login getLoginFromResultSet(ResultSet rs) throws SQLException {

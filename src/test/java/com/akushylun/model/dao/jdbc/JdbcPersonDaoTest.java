@@ -41,7 +41,7 @@ public class JdbcPersonDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	personDao = new JdbcPersonDao(connection);
+	personDao = new JdbcPersonDao(connection, true);
 	personDao.create(person);
     }
 

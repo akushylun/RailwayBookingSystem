@@ -24,9 +24,9 @@ public class JdbcStationDao implements StationDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcStationDao(Connection connection) {
+    public JdbcStationDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Station getStationFromResultSet(ResultSet rs) throws SQLException {

@@ -1,9 +1,9 @@
 package com.akushylun.model.dao.jdbc;
 
-import java.io.InputStream;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.util.Properties;
+import java.sql.SQLException;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
@@ -17,16 +17,12 @@ import com.akushylun.model.dao.TrainDao;
 
 public class JdbcDaoFactory extends DaoFactory {
 
-    private static final String DB_URL = "url";
-    private Connection connection;
+    private DataSource dataSource;
 
     public JdbcDaoFactory() {
 	try {
-	    InputStream inputStream = DaoFactory.class.getResourceAsStream(DB_FILE);
-	    Properties dbProps = new Properties();
-	    dbProps.load(inputStream);
-	    String url = dbProps.getProperty(DB_URL);
-	    connection = DriverManager.getConnection(url, dbProps);
+	    InitialContext initContext = new InitialContext();
+	    dataSource = (DataSource) initContext.lookup("java:comp/env/jdbc/railwaybooking");
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -34,42 +30,74 @@ public class JdbcDaoFactory extends DaoFactory {
 
     @Override
     public DaoConnection getConnection() {
-	return new JdbcDaoConnection(connection);
+	try {
+	    return new JdbcDaoConnection(dataSource.getConnection());
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public PersonDao createPersonDao() {
-	return new JdbcPersonDao(connection);
+	try {
+	    return new JdbcPersonDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public LoginDao createLoginDao() {
-	return new JdbcLoginDao(connection);
+	try {
+	    return new JdbcLoginDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public BookingDao createBookingDao() {
-	return new JdbcBookingDao(connection);
+	try {
+	    return new JdbcBookingDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public SheduleDao createSheduleDao() {
-	return new JdbcSheduleDao(connection);
+	try {
+	    return new JdbcSheduleDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public StationDao createStationDao() {
-	return new JdbcStationDao(connection);
+	try {
+	    return new JdbcStationDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public TicketDao createTicketDao() {
-	return new JdbcTicketDao(connection);
+	try {
+	    return new JdbcTicketDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
     @Override
     public TrainDao createTrainDao() {
-	return new JdbcTrainDao(connection);
+	try {
+	    return new JdbcTrainDao(dataSource.getConnection(), true);
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
     }
 
 }

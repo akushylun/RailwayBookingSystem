@@ -23,9 +23,9 @@ public class JdbcTrainDao implements TrainDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcTrainDao(Connection connection) {
+    public JdbcTrainDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Train getTrainFromResultSet(ResultSet rs) throws SQLException {

@@ -38,7 +38,7 @@ public class JdbcStationDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	stationDao = new JdbcStationDao(connection);
+	stationDao = new JdbcStationDao(connection, true);
 	stationDao.create(station);
     }
 

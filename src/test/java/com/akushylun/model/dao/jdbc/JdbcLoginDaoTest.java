@@ -36,7 +36,7 @@ public class JdbcLoginDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	loginDao = new JdbcLoginDao(connection);
+	loginDao = new JdbcLoginDao(connection, true);
 	loginDao.create(newLogin);
     }
 

@@ -42,7 +42,7 @@ public class JdbcTicketDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	ticketDao = new JdbcTicketDao(connection);
+	ticketDao = new JdbcTicketDao(connection, true);
 	ticketDao.create(ticket);
     }
 

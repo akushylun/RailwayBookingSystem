@@ -39,9 +39,9 @@ public class JdbcBookingDao implements BookingDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcBookingDao(Connection connection) {
+    public JdbcBookingDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Booking getBookingFromResultSet(ResultSet rs) throws SQLException {

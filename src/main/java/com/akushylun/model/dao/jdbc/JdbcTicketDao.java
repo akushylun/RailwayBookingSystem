@@ -26,9 +26,9 @@ public class JdbcTicketDao implements TicketDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcTicketDao(Connection connection) {
+    public JdbcTicketDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Ticket getTicketFromResultSet(ResultSet rs) throws SQLException {

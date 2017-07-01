@@ -49,7 +49,7 @@ public class JdbcBookingDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	bookingDao = new JdbcBookingDao(connection);
+	bookingDao = new JdbcBookingDao(connection, true);
 	bookingDao.create(booking);
     }
 

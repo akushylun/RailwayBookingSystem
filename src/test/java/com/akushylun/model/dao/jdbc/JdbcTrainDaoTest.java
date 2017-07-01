@@ -37,7 +37,7 @@ public class JdbcTrainDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	trainDao = new JdbcTrainDao(connection);
+	trainDao = new JdbcTrainDao(connection, true);
 	trainDao.create(train);
     }
 

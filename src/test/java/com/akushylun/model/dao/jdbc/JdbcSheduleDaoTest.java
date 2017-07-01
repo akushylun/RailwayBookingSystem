@@ -46,7 +46,7 @@ public class JdbcSheduleDaoTest {
 	} catch (FileNotFoundException e) {
 	    throw new RuntimeException("could not initialize with script");
 	}
-	sheduleDao = new JdbcSheduleDao(connection);
+	sheduleDao = new JdbcSheduleDao(connection, true);
 	sheduleDao.create(shedule);
     }
 

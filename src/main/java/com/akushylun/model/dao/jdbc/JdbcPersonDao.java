@@ -32,9 +32,9 @@ public class JdbcPersonDao implements PersonDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcPersonDao(Connection connection) {
+    public JdbcPersonDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Person getUserFromResultSet(ResultSet rs) throws SQLException {

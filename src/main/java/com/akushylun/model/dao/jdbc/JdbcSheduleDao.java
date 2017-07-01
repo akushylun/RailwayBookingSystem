@@ -35,9 +35,9 @@ public class JdbcSheduleDao implements SheduleDao {
     private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcSheduleDao(Connection connection) {
+    public JdbcSheduleDao(Connection connection, boolean connectionShouldBeClosed) {
 	this.connection = connection;
-	connectionShouldBeClosed = false;
+	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Shedule getSheduleFromResultSet(ResultSet rs) {
