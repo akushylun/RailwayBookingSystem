@@ -32,7 +32,7 @@ public class JdbcBookingDaoTest {
     static Ticket ticketInH2Script = new Ticket.Builder().withId(1).build();
     static List<Ticket> tickets = new ArrayList<>();
     static Person person = new Person.Builder().withId(1).withName("mark").withSurname("johnson")
-	    .withEmail("mark@gmail.com").withRole(Role.USER.name()).build();
+	    .withEmail("mark@gmail.com").withRole(Role.USER).build();
     static Booking bookingInH2Script = new Booking.Builder().withId(1).withPrice(BigDecimal.valueOf(100))
 	    .withDate(LocalDateTime.of(2017, 06, 27, 19, 58, 27)).withUser(person).build();
     static Booking booking = new Booking.Builder().withId(2).withPrice(BigDecimal.valueOf(200))

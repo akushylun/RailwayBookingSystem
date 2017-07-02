@@ -26,9 +26,9 @@ public class JdbcPersonDaoTest {
     static PersonDao personDao;
     static Login LOGIN = new Login.Builder().withId(1).withLogin("mark123").withPassword("mark1990").build();
     static Person personInH2Script = new Person.Builder().withId(1).withName("mark").withSurname("johnson")
-	    .withEmail("mark@gmail.com").withPersonLogin(LOGIN).withRole(Role.USER.name()).build();
+	    .withEmail("mark@gmail.com").withPersonLogin(LOGIN).withRole(Role.USER).build();
     static Person person = new Person.Builder().withId(2).withName("John").withSurname("Doe")
-	    .withEmail("john@gmail.com").withPersonLogin(LOGIN).withRole(Role.USER.name()).build();
+	    .withEmail("john@gmail.com").withPersonLogin(LOGIN).withRole(Role.USER).build();
 
     @BeforeClass
     public static void setH2DataBase()
@@ -98,7 +98,7 @@ public class JdbcPersonDaoTest {
     @Test
     public void deleteUserTest() {
 	Person newPerson = new Person.Builder().withName("Sam").withSurname("Goldrat").withEmail("sam@yahoo.com")
-		.withPersonLogin(LOGIN).withRole(Role.USER.name()).build();
+		.withPersonLogin(LOGIN).withRole(Role.USER).build();
 	personDao.create(newPerson);
 	assertNotNull(newPerson.getId());
 	personDao.delete(newPerson.getId());

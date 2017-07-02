@@ -29,7 +29,7 @@ public class PersonTest {
     public void shouldCreateUserBuilder() {
 	ordersList.add(booking);
 	Person person = new Person.Builder().withId(ID).withPersonLogin(LOGIN).withName(NAME).withSurname(SURNAME)
-		.withEmail(EMAIL).withOrders(ordersList).withRole(USER.name()).build();
+		.withEmail(EMAIL).withOrders(ordersList).withRole(USER).build();
 
 	assertNotNull(person);
 	assertNotNull(person.toString());
@@ -40,7 +40,7 @@ public class PersonTest {
 	assertEquals(SURNAME, person.getSurname());
 	assertEquals(EMAIL, person.getEmail());
 	assertEquals(ordersList, person.getOrders());
-	assertEquals(USER.name(), person.getRole());
+	assertEquals(USER, person.getRole());
     }
 
 }

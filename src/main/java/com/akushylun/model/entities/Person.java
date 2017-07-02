@@ -55,8 +55,8 @@ public class Person {
 	return bookings;
     }
 
-    public String getRole() {
-	return role.name();
+    public Role getRole() {
+	return role;
     }
 
     public static class Builder {
@@ -98,8 +98,8 @@ public class Person {
 	    return this;
 	}
 
-	public Builder withRole(String role) {
-	    this.role = Role.valueOf(role);
+	public Builder withRole(Role role) {
+	    this.role = role;
 	    return this;
 	}
 

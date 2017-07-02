@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akushylun.controller.commands.Command;
 import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
+import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetShedule;
 import com.akushylun.controller.commands.GetShedulesByParameters;
@@ -21,7 +22,7 @@ import com.akushylun.controller.commands.Login;
 /**
  * Servlet implementation class FrontController
  */
-@WebServlet(name = "frontController", urlPatterns = { "/views/*" })
+@WebServlet(name = "frontController", urlPatterns = { "/view/*" })
 public class FrontController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -37,6 +38,7 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/bookings", new GetBookingsByUser());
 	commands.put("GET:/booking", new GetBooking());
 	commands.put("GET:/persons", new GetPersons());
+	commands.put("GET:/login", new GetLogin());
 	commands.put("POST:/login", new Login());
     }
 
@@ -54,16 +56,15 @@ public class FrontController extends HttpServlet {
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
+
 	String method = request.getMethod().toUpperCase();
 	String path = request.getRequestURI();
-	path = path.replaceAll(".*/views", "").replaceAll("\\d+", "");
-	System.out.println(method + path);
+	path = path.replaceAll(".*/view", "").replaceAll("\\d+", "");
 	String key = method + ":" + path;
-	System.out.println(key);
 	Command command = commands.getOrDefault(key, (req, resp) -> "/index.jsp");
 	String viewPage = command.execute(request, response);
-	System.out.println(viewPage);
 	request.getRequestDispatcher(viewPage).forward(request, response);
+
     }
 
 }

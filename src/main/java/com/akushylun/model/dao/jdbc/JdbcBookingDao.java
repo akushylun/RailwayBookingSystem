@@ -13,6 +13,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Person.Role;
 import com.akushylun.model.entities.Ticket;
 
 public class JdbcBookingDao implements BookingDao {
@@ -57,7 +58,7 @@ public class JdbcBookingDao implements BookingDao {
 	    if (rs.getString("p_email") != null) {
 		person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
 			.withSurname(rs.getString("p_surname")).withEmail(rs.getString("p_email"))
-			.withRole(rs.getString("p_role_r_name")).build();
+			.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
 	    }
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);

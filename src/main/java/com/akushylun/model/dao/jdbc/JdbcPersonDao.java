@@ -11,6 +11,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.PersonDao;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Person.Role;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcPersonDao implements PersonDao {
@@ -40,7 +41,8 @@ public class JdbcPersonDao implements PersonDao {
     private Person getUserFromResultSet(ResultSet rs) throws SQLException {
 	Person person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
 		.withSurname(rs.getString("p_surname")).withEmail(rs.getString("p_email"))
-		.withPersonLogin(getLoginFromResultSet(rs)).withRole(rs.getString("p_role_r_name")).build();
+		.withPersonLogin(getLoginFromResultSet(rs))
+		.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
 	return person;
     }
 
@@ -115,7 +117,7 @@ public class JdbcPersonDao implements PersonDao {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
 	    query.setString(3, person.getEmail());
-	    query.setString(4, person.getRole());
+	    query.setString(4, person.getRole().name());
 	    query.setString(5, person.getLogin().getLogin());
 	    query.executeUpdate();
 	    ResultSet keys = query.getGeneratedKeys();
@@ -133,7 +135,7 @@ public class JdbcPersonDao implements PersonDao {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
 	    query.setString(3, person.getEmail());
-	    query.setString(4, person.getRole());
+	    query.setString(4, person.getRole().name());
 	    query.setInt(5, person.getId());
 	    query.executeUpdate();
 	} catch (SQLException ex) {
