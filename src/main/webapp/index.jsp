@@ -7,8 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<a href="view/login">login</a>
-	<a href="view/logout">logout</a>
-	<a href="view/profile">profile</a>
+	<a href="view/login">Login</a>
+	<a href="view/logout">Logout</a>
+	<a href="view/shedules">Search Train</a>
+	<a href="view/bookings">Look Orders</a>
 </body>
 </html>

@@ -14,6 +14,7 @@ import com.akushylun.controller.commands.Command;
 import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
 import com.akushylun.controller.commands.GetLogin;
+import com.akushylun.controller.commands.GetLogout;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetShedule;
 import com.akushylun.controller.commands.GetShedulesByParameters;
@@ -40,6 +41,7 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/persons", new GetPersons());
 	commands.put("GET:/login", new GetLogin());
 	commands.put("POST:/login", new Login());
+	commands.put("GET:/logout", new GetLogout());
     }
 
     @Override

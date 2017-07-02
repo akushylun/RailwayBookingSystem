@@ -4,35 +4,37 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login page</title>
+<title>Trip page</title>
 </head>
 <body>
-	<h1>Login with Email and Password</h1>
-	<form action="./login" method="POST">
+	<h1>Search train</h1>
+	<form action="views/shedules" method="POST">
 		<center>
 			<table border="1" width="30%" cellpadding="3">
 				<thead>
 					<tr>
-						<th colspan="2">Login Here</th>
+						<th colspan="2">Search train</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>Email</td>
-						<td><input type="text" name="login" /></td>
+						<td>Station From</td>
+						<td><input type="text" name="to" /></td>
 					</tr>
 					<tr>
-						<td>Password</td>
-						<td><input type="password" name="password" /></td>
+						<td>Station To</td>
+						<td><input type="text" name="from" /></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="Login" value="submit" /></td>
+						<td>Date</td>
+						<td><input type="text" name="date" /></td>
+					</tr>
+					<tr>
+						<td><input type="submit" value="Search" value="submit" /></td>
 					</tr>
 				</tbody>
 			</table>
 		</center>
-	</form>
-	CreateNewUser
-	<a href>CreateNewUser</a>
+		</form>
 </body>
 </html>

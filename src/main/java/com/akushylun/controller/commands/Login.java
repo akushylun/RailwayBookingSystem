@@ -15,16 +15,16 @@ import com.akushylun.model.services.PersonService;
 
 public class Login implements Command {
 
-    public static final String PARAM_LOGIN = "login";
-    public static final String PARAM_PASSWORD = "password";
-    PersonService service = PersonService.getInstance();
+    private static final String PARAM_LOGIN = "login";
+    private static final String PARAM_PASSWORD = "password";
+    private PersonService service = PersonService.getInstance();
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
-	String pageToGo;
+	String pageToGo = "";
 	String email = request.getParameter(PARAM_LOGIN);
 	String password = request.getParameter(PARAM_PASSWORD);
 	Optional<Person> person = service.login(email, password);
@@ -32,7 +32,7 @@ public class Login implements Command {
 	if (person.isPresent()) {
 	    HttpSession session = authenticator.getSession();
 	    authenticator.setAttributeToSession(session, person.get());
-	    pageToGo = "/WEB-INF/view/booking.jsp";
+	    pageToGo = "index.jsp";
 	} else
 	    pageToGo = "/WEB-INF/view/login.jsp";
 	return pageToGo;

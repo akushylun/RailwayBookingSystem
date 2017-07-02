@@ -19,7 +19,7 @@ public class GetLogin implements Command {
 	Authenticator authenticator = new AuthenticatorImpl(request);
 
 	if (authenticator.isLoggedIn()) {
-	    pageToGo = "/WEB-INF/view/booking.jsp";
+	    pageToGo = "index.jsp";
 	} else
 	    pageToGo = "/WEB-INF/view/login.jsp";
 	return pageToGo;
