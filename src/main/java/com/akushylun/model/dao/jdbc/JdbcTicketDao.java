@@ -11,7 +11,9 @@ import java.util.Optional;
 
 import com.akushylun.model.dao.TicketDao;
 import com.akushylun.model.entities.Shedule;
+import com.akushylun.model.entities.Station;
 import com.akushylun.model.entities.Ticket;
+import com.akushylun.model.entities.Train;
 
 public class JdbcTicketDao implements TicketDao {
 
@@ -19,6 +21,10 @@ public class JdbcTicketDao implements TicketDao {
 	    + "INNER JOIN shedule as s ON t.ti_shedule_sh_id = s.sh_id WHERE t.ti_id = ?";
     private static final String SELECT_ALL_TICKETS = "SELECT t.ti_id, t.ti_price, s.sh_id, s.sh_start, s.sh_end FROM ticket as t "
 	    + "INNER JOIN shedule as s ON t.ti_shedule_sh_id = s.sh_id";
+    private static final String SELECT_ALL_TICKETS_BY_BOOKING_ID = "SELECT m2m.m2m_ticket_ti_id, t.ti_id, t.ti_price, s.sh_id, s.sh_start, "
+	    + "s.sh_end, st_id, st_from, st_to, tr_id, tr_name FROM ticket as t INNER JOIN m2m_booking_ticket as m2m "
+	    + "ON m2m.m2m_ticket_ti_id = m2m.m2m_booking_b_id INNER JOIN shedule as s ON t.ti_shedule_sh_id = s.sh_id INNER JOIN train "
+	    + "as tr ON s.sh_train_tr_id = tr.tr_id INNER JOIN station as st ON s.sh_station_st_id = st.st_id WHERE m2m.m2m_booking_b_id = ?";
     private static final String CREATE_TICKET = "INSERT INTO ticket (ti_price, ti_shedule_sh_id) " + "VALUES (?,?)";
     private static final String UPDATE_TICKET = "UPDATE ticket SET ti_price = ?, ti_shedule_sh_id = ? WHERE ti_id = ?";
     private static final String DELETE_TICKET_BY_ID = "DELETE FROM ticket WHERE ti_id = ?";
@@ -42,11 +48,33 @@ public class JdbcTicketDao implements TicketDao {
 	try {
 	    shedule = new Shedule.Builder().withId(rs.getInt("sh_id"))
 		    .start(rs.getTimestamp("sh_start").toLocalDateTime())
-		    .end(rs.getTimestamp("sh_end").toLocalDateTime()).build();
+		    .end(rs.getTimestamp("sh_end").toLocalDateTime()).withStation(getStationFromResultSet(rs))
+		    .withTrain(getTrainFromResultSet(rs)).build();
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);
 	}
 	return shedule;
+    }
+
+    private Train getTrainFromResultSet(ResultSet rs) {
+	Train train = null;
+	try {
+	    train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name")).build();
+	} catch (SQLException ex) {
+	    throw new RuntimeException(ex);
+	}
+	return train;
+    }
+
+    private Station getStationFromResultSet(ResultSet rs) {
+	Station station = null;
+	try {
+	    station = new Station.Builder().withId(rs.getInt("st_id")).from(rs.getString("st_from"))
+		    .to(rs.getString("st_to")).build();
+	} catch (SQLException ex) {
+	    throw new RuntimeException(ex);
+	}
+	return station;
     }
 
     @Override
@@ -70,6 +98,23 @@ public class JdbcTicketDao implements TicketDao {
     public List<Ticket> findAll() {
 	List<Ticket> ticketList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_TICKETS)) {
+	    ResultSet rs = query.executeQuery();
+	    Ticket ticket;
+	    while (rs.next()) {
+		ticket = getTicketFromResultSet(rs);
+		ticketList.add(ticket);
+	    }
+	} catch (SQLException ex) {
+	    throw new RuntimeException(ex);
+	}
+	return ticketList;
+    }
+
+    @Override
+    public List<Ticket> findAllByBookingId(int bookingId) {
+	List<Ticket> ticketList = new ArrayList<>();
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_TICKETS_BY_BOOKING_ID)) {
+	    query.setInt(1, bookingId);
 	    ResultSet rs = query.executeQuery();
 	    Ticket ticket;
 	    while (rs.next()) {

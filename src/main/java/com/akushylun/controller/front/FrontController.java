@@ -15,10 +15,11 @@ import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
 import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
-import com.akushylun.controller.commands.GetRegistration;
 import com.akushylun.controller.commands.GetPersons;
+import com.akushylun.controller.commands.GetRegistration;
 import com.akushylun.controller.commands.GetShedule;
 import com.akushylun.controller.commands.GetShedulesByParameters;
+import com.akushylun.controller.commands.GetTickets;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
 
@@ -46,6 +47,7 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/login", new GetLogin());
 	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
+	commands.put("GET:/tickets/", new GetTickets());
     }
 
     @Override
@@ -67,6 +69,7 @@ public class FrontController extends HttpServlet {
 	String path = request.getRequestURI();
 	path = path.replaceAll(".*/view", "").replaceAll("\\d+", "");
 	String key = method + ":" + path;
+	System.out.println(key);
 	Command command = commands.getOrDefault(key, (req, resp) -> "/index.jsp");
 	String viewPage = command.execute(request, response);
 	request.getRequestDispatcher(viewPage).forward(request, response);

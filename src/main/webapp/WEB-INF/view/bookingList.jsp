@@ -8,17 +8,24 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table border="1" cellpadding="5">
-		<tr>
-			<th>Price</th>
-			<th>Date</th>
-		</tr>
-		<c:forEach var="booking" items="${bookingList}">
+	<center>
+		<h1>List Of Bookings</h1>
+	</center>
+	<center>
+		<table border="1" cellpadding="5">
 			<tr>
-				<td><c:out value="${booking.price}" /></td>
-				<td><c:out value="${booking.date}" /></td>
+				<th>Price</th>
+				<th>Date</th>
+				<th>TicketInfo</th>
 			</tr>
-		</c:forEach>
-	</table>
+			<c:forEach var="booking" items="${bookingList}">
+				<tr>
+					<td><c:out value="${booking.price}" /></td>
+					<td><c:out value="${booking.date}" /></td>
+					<td><a href="./tickets/${booking.id}">Ticket Info</a></td>
+				</tr>
+			</c:forEach>
+		</table>
+	</center>
 </body>
 </html>
