@@ -54,8 +54,8 @@ public class PersonService {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    LoginDao loginDao = daoFactory.createLoginDao();
 	    connection.begin();
-	    personDao.create(person);
 	    loginDao.create(person.getLogin());
+	    personDao.create(person);
 	    connection.commit();
 	    connection.close();
 	}

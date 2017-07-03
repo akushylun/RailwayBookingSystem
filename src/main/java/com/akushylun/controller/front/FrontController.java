@@ -15,10 +15,12 @@ import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
 import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
+import com.akushylun.controller.commands.GetRegistration;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetShedule;
 import com.akushylun.controller.commands.GetShedulesByParameters;
-import com.akushylun.controller.commands.Login;
+import com.akushylun.controller.commands.PostLogin;
+import com.akushylun.controller.commands.PostRegistration;
 
 /**
  * Servlet implementation class FrontController
@@ -38,9 +40,11 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/shedules", new GetShedulesByParameters());
 	commands.put("GET:/bookings", new GetBookingsByUser());
 	commands.put("GET:/booking", new GetBooking());
+	commands.put("GET:/registration", new GetRegistration());
+	commands.put("POST:/registration", new PostRegistration());
 	commands.put("GET:/persons", new GetPersons());
 	commands.put("GET:/login", new GetLogin());
-	commands.put("POST:/login", new Login());
+	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
     }
 

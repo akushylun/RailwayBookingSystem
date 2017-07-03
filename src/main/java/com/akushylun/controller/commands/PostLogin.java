@@ -13,7 +13,7 @@ import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.services.PersonService;
 
-public class Login implements Command {
+public class PostLogin implements Command {
 
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";

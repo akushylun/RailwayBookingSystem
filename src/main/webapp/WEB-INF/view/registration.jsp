@@ -4,23 +4,35 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Login page</title>
+<title>Insert title here</title>
 </head>
 <body>
 	<center>
 		<h1>Login with Email and Password</h1>
 	</center>
-	<form action="./login" method="POST">
+	<form action="./registration" method="POST">
 		<center>
 			<table border="1" width="30%" cellpadding="3">
 				<thead>
 					<tr>
-						<th colspan="2">Login Here</th>
+						<th colspan="2">Registration Here</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
+						<td>Name</td>
+						<td><input type="text" name="name" /></td>
+					</tr>
+					<tr>
+						<td>Surname</td>
+						<td><input type="text" name="surname" /></td>
+					</tr>
+					<tr>
 						<td>Email</td>
+						<td><input type="text" name="email" /></td>
+					</tr>
+					<tr>
+						<td>Login</td>
 						<td><input type="text" name="login" /></td>
 					</tr>
 					<tr>
@@ -28,12 +40,11 @@
 						<td><input type="password" name="password" /></td>
 					</tr>
 					<tr>
-						<td><input type="submit" value="Login" /></td>
+						<td><input type="submit" value="Register" /></td>
 					</tr>
 				</tbody>
 			</table>
 		</center>
 	</form>
-	<center><a href=./registration>CreateNewUser</a></center>
 </body>
 </html>
