@@ -17,12 +17,12 @@ import com.akushylun.model.entities.Ticket;
 
 public class BookingTest {
 
-    final int ID = 1;
-    final BigDecimal PRICE = BigDecimal.valueOf(100.222).setScale(2, BigDecimal.ROUND_HALF_UP);
-    final LocalDateTime DATE = LocalDateTime.now();
-    Person person = new Person.Builder().build();
-    Ticket ticket = new Ticket.Builder().build();
-    List<Ticket> ticketsList = new ArrayList<>();
+    private final static int ID = 1;
+    private final static BigDecimal PRICE = BigDecimal.valueOf(100.222).setScale(2, BigDecimal.ROUND_HALF_UP);
+    private final static LocalDateTime DATE = LocalDateTime.now();
+    private Person person = new Person.Builder().build();
+    private Ticket ticket = new Ticket.Builder().build();
+    private List<Ticket> ticketsList = new ArrayList<>();
 
     @Test
     public void shouldCreateOrder() {
@@ -39,5 +39,6 @@ public class BookingTest {
 	assertEquals(DATE, booking.getDate());
 	assertEquals(ticketsList, booking.getTickets());
 	assertEquals(person, booking.getUser());
+
     }
 }

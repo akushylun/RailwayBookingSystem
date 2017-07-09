@@ -7,12 +7,14 @@ public class Train {
 
     private int id;
     private String name;
-    private List<Shedule> shedules = new ArrayList<Shedule>();
+    private List<Station> stationList = new ArrayList<Station>();
+    private List<Departure> departureList = new ArrayList<Departure>();
 
     private Train(Builder builder) {
 	this.id = builder.id;
 	this.name = builder.name;
-	this.shedules = builder.shedules;
+	this.stationList = builder.stationList;
+	this.departureList = builder.departureList;
     }
 
     public int getId() {
@@ -27,14 +29,19 @@ public class Train {
 	return name;
     }
 
-    public List<Shedule> getTickets() {
-	return shedules;
+    public List<Station> getStationList() {
+	return stationList;
+    }
+
+    public List<Departure> getDepartureList() {
+	return departureList;
     }
 
     public static class Builder {
 	private int id;
 	private String name;
-	private List<Shedule> shedules = new ArrayList<Shedule>();
+	private List<Station> stationList = new ArrayList<Station>();
+	private List<Departure> departureList = new ArrayList<Departure>();
 
 	public Builder withId(int id) {
 	    this.id = id;
@@ -46,24 +53,29 @@ public class Train {
 	    return this;
 	}
 
-	public Builder withShedules(List<Shedule> shedules) {
-	    this.shedules.addAll(shedules);
+	public Builder withStationList(List<Station> stationList) {
+	    this.stationList = stationList;
+	    return this;
+	}
+
+	public Builder withDepartureList(List<Departure> departureList) {
+	    this.departureList = departureList;
 	    return this;
 	}
 
 	public Train build() {
 	    return new Train(this);
 	}
-
     }
 
     @Override
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
+	result = prime * result + ((departureList == null) ? 0 : departureList.hashCode());
 	result = prime * result + id;
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
-	result = prime * result + ((shedules == null) ? 0 : shedules.hashCode());
+	result = prime * result + ((stationList == null) ? 0 : stationList.hashCode());
 	return result;
     }
 
@@ -76,6 +88,11 @@ public class Train {
 	if (!(obj instanceof Train))
 	    return false;
 	Train other = (Train) obj;
+	if (departureList == null) {
+	    if (other.departureList != null)
+		return false;
+	} else if (!departureList.equals(other.departureList))
+	    return false;
 	if (id != other.id)
 	    return false;
 	if (name == null) {
@@ -83,17 +100,18 @@ public class Train {
 		return false;
 	} else if (!name.equals(other.name))
 	    return false;
-	if (shedules == null) {
-	    if (other.shedules != null)
+	if (stationList == null) {
+	    if (other.stationList != null)
 		return false;
-	} else if (!shedules.equals(other.shedules))
+	} else if (!stationList.equals(other.stationList))
 	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Train [id=" + id + ", name=" + name + ", shedules=" + shedules + "]";
+	return "Train [id=" + id + ", name=" + name + ", stationList=" + stationList + ", departureList="
+		+ departureList + "]";
     }
 
 }

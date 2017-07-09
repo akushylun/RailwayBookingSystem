@@ -10,4 +10,6 @@ public interface BookingDao extends GenericDao<Booking>, AutoCloseable {
 
     List<Booking> findAllByUserId(int userId);
 
+    void deleteBookingTicketsLink(int id);
+
 }

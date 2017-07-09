@@ -16,20 +16,19 @@ import com.akushylun.model.entities.Person.Role;
 
 public class PersonTest {
 
-    final int ID = 1;
-    final Login LOGIN = new Login.Builder().build();
-    final String NAME = "John";
-    final String SURNAME = "Doe";
-    final String EMAIL = "john@gmail.com";
-    final Role USER = Role.USER;
-    Booking booking = new Booking.Builder().build();
-    List<Booking> ordersList = new ArrayList<>();
+    private final static int ID = 1;
+    private final static Login LOGIN = new Login.Builder().build();
+    private final static String NAME = "John";
+    private final static String SURNAME = "Doe";
+    private final static Role USER = Role.USER;
+    private Booking booking = new Booking.Builder().build();
+    private List<Booking> ordersList = new ArrayList<>();
 
     @Test
     public void shouldCreateUserBuilder() {
 	ordersList.add(booking);
 	Person person = new Person.Builder().withId(ID).withPersonLogin(LOGIN).withName(NAME).withSurname(SURNAME)
-		.withEmail(EMAIL).withOrders(ordersList).withRole(USER).build();
+		.withOrders(ordersList).withRole(USER).build();
 
 	assertNotNull(person);
 	assertNotNull(person.toString());
@@ -38,7 +37,6 @@ public class PersonTest {
 	assertEquals(LOGIN, person.getLogin());
 	assertEquals(NAME, person.getName());
 	assertEquals(SURNAME, person.getSurname());
-	assertEquals(EMAIL, person.getEmail());
 	assertEquals(ordersList, person.getOrders());
 	assertEquals(USER, person.getRole());
     }

@@ -14,7 +14,7 @@ public abstract class DaoFactory {
 
     public abstract BookingDao createBookingDao();
 
-    public abstract SheduleDao createSheduleDao();
+    public abstract DepartureDao createDepartureDao();
 
     public abstract StationDao createStationDao();
 

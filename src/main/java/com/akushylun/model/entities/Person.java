@@ -8,7 +8,6 @@ public class Person {
     private int id;
     private String name;
     private String surname;
-    private String email;
     private Login login;
     private List<Booking> bookings = new ArrayList<Booking>();
     private Role role;
@@ -22,7 +21,6 @@ public class Person {
 	this.login = builder.login;
 	this.name = builder.name;
 	this.surname = builder.surname;
-	this.email = builder.email;
 	this.bookings = builder.bookings;
 	this.role = builder.role;
     }
@@ -47,10 +45,6 @@ public class Person {
 	return surname;
     }
 
-    public String getEmail() {
-	return email;
-    }
-
     public List<Booking> getOrders() {
 	return bookings;
     }
@@ -64,7 +58,6 @@ public class Person {
 	private Login login;
 	private String name;
 	private String surname;
-	private String email;
 	private List<Booking> bookings = new ArrayList<Booking>();
 	private Role role;
 
@@ -85,11 +78,6 @@ public class Person {
 
 	public Builder withSurname(String surname) {
 	    this.surname = surname;
-	    return this;
-	}
-
-	public Builder withEmail(String email) {
-	    this.email = email;
 	    return this;
 	}
 
@@ -114,7 +102,6 @@ public class Person {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((bookings == null) ? 0 : bookings.hashCode());
-	result = prime * result + ((email == null) ? 0 : email.hashCode());
 	result = prime * result + id;
 	result = prime * result + ((login == null) ? 0 : login.hashCode());
 	result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -136,11 +123,6 @@ public class Person {
 	    if (other.bookings != null)
 		return false;
 	} else if (!bookings.equals(other.bookings))
-	    return false;
-	if (email == null) {
-	    if (other.email != null)
-		return false;
-	} else if (!email.equals(other.email))
 	    return false;
 	if (id != other.id)
 	    return false;
@@ -166,8 +148,8 @@ public class Person {
 
     @Override
     public String toString() {
-	return "Person [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", login=" + login
-		+ ", bookings=" + bookings + ", role=" + role + "]";
+	return "Person [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", bookings="
+		+ bookings + ", role=" + role + "]";
     }
 
 }

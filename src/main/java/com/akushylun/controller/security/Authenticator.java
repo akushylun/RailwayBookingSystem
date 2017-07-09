@@ -19,7 +19,6 @@ public interface Authenticator {
     /**
      * Set attribute and it's value to request
      * 
-     * @param person the value of attribute
      * 
      */
     void setAttributeToSession(HttpSession session, Person person);

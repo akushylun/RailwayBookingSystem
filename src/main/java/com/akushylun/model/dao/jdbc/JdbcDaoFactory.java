@@ -2,27 +2,30 @@ package com.akushylun.model.dao.jdbc;
 
 import java.sql.SQLException;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
+import com.akushylun.model.dao.DepartureDao;
 import com.akushylun.model.dao.LoginDao;
 import com.akushylun.model.dao.PersonDao;
-import com.akushylun.model.dao.SheduleDao;
 import com.akushylun.model.dao.StationDao;
 import com.akushylun.model.dao.TicketDao;
 import com.akushylun.model.dao.TrainDao;
 
 public class JdbcDaoFactory extends DaoFactory {
 
-    private DataSource dataSource;
+    private static final String DATASOURCE_NAME = "jdbc/railwaybooking";
+    private static DataSource dataSource;
 
-    public JdbcDaoFactory() {
+    static {
 	try {
 	    InitialContext initContext = new InitialContext();
-	    dataSource = (DataSource) initContext.lookup("java:comp/env/jdbc/railwaybooking");
+	    Context envContext = (Context) initContext.lookup("java:comp/env");
+	    dataSource = (DataSource) envContext.lookup(DATASOURCE_NAME);
 	} catch (Exception e) {
 	    throw new RuntimeException(e);
 	}
@@ -65,9 +68,9 @@ public class JdbcDaoFactory extends DaoFactory {
     }
 
     @Override
-    public SheduleDao createSheduleDao() {
+    public DepartureDao createDepartureDao() {
 	try {
-	    return new JdbcSheduleDao(dataSource.getConnection(), true);
+	    return new JdbcDepartureDao(dataSource.getConnection(), true);
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

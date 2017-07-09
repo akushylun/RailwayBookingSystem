@@ -28,12 +28,8 @@
 						<td><input type="text" name="surname" /></td>
 					</tr>
 					<tr>
-						<td>Email</td>
+						<td>Email as login</td>
 						<td><input type="text" name="email" /></td>
-					</tr>
-					<tr>
-						<td>Login</td>
-						<td><input type="text" name="login" /></td>
 					</tr>
 					<tr>
 						<td>Password</td>

@@ -1,20 +1,13 @@
 package com.akushylun.model.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Station {
 
     private int id;
-    private String from;
-    private String to;
-    private List<Shedule> shedules = new ArrayList<Shedule>();
+    private String name;
 
     private Station(Builder builder) {
 	this.id = builder.id;
-	this.from = builder.from;
-	this.to = builder.to;
-	this.shedules = builder.shedules;
+	this.name = builder.name;
     }
 
     public int getId() {
@@ -25,41 +18,21 @@ public class Station {
 	this.id = id;
     }
 
-    public String getFrom() {
-	return from;
-    }
-
-    public String getTo() {
-	return to;
-    }
-
-    public List<Shedule> getShedules() {
-	return shedules;
+    public String getName() {
+	return name;
     }
 
     public static class Builder {
 	private int id;
-	private String from;
-	private String to;
-	private List<Shedule> shedules = new ArrayList<Shedule>();
+	private String name;
 
 	public Builder withId(int id) {
 	    this.id = id;
 	    return this;
 	}
 
-	public Builder from(String fromStation) {
-	    this.from = fromStation;
-	    return this;
-	}
-
-	public Builder to(String toStation) {
-	    this.to = toStation;
-	    return this;
-	}
-
-	public Builder withShedules(List<Shedule> shedules) {
-	    this.shedules.addAll(shedules);
+	public Builder withName(String name) {
+	    this.name = name;
 	    return this;
 	}
 
@@ -72,10 +45,8 @@ public class Station {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
-	result = prime * result + ((from == null) ? 0 : from.hashCode());
 	result = prime * result + id;
-	result = prime * result + ((shedules == null) ? 0 : shedules.hashCode());
-	result = prime * result + ((to == null) ? 0 : to.hashCode());
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
 	return result;
     }
 
@@ -88,29 +59,19 @@ public class Station {
 	if (!(obj instanceof Station))
 	    return false;
 	Station other = (Station) obj;
-	if (from == null) {
-	    if (other.from != null)
-		return false;
-	} else if (!from.equals(other.from))
-	    return false;
 	if (id != other.id)
 	    return false;
-	if (shedules == null) {
-	    if (other.shedules != null)
+	if (name == null) {
+	    if (other.name != null)
 		return false;
-	} else if (!shedules.equals(other.shedules))
-	    return false;
-	if (to == null) {
-	    if (other.to != null)
-		return false;
-	} else if (!to.equals(other.to))
+	} else if (!name.equals(other.name))
 	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Station [id=" + id + ", from=" + from + ", to=" + to + ", shedules=" + shedules + "]";
+	return "Station [id=" + id + ", name=" + name + "]";
     }
 
 }

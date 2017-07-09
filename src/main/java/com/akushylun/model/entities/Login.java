@@ -2,12 +2,12 @@ package com.akushylun.model.entities;
 
 public class Login {
     private int id;
-    private String login;
+    private String email;
     private String password;
 
     private Login(Builder builder) {
 	this.id = builder.id;
-	this.login = builder.login;
+	this.email = builder.email;
 	this.password = builder.password;
     }
 
@@ -19,8 +19,8 @@ public class Login {
 	this.id = id;
     }
 
-    public String getLogin() {
-	return login;
+    public String getEmail() {
+	return email;
     }
 
     public String getPassword() {
@@ -29,7 +29,7 @@ public class Login {
 
     public static class Builder {
 	private int id;
-	private String login;
+	private String email;
 	private String password;
 
 	public Builder withId(int id) {
@@ -37,8 +37,8 @@ public class Login {
 	    return this;
 	}
 
-	public Builder withLogin(String login) {
-	    this.login = login;
+	public Builder withEmail(String email) {
+	    this.email = email;
 	    return this;
 	}
 
@@ -56,8 +56,8 @@ public class Login {
     public int hashCode() {
 	final int prime = 31;
 	int result = 1;
+	result = prime * result + ((email == null) ? 0 : email.hashCode());
 	result = prime * result + id;
-	result = prime * result + ((login == null) ? 0 : login.hashCode());
 	result = prime * result + ((password == null) ? 0 : password.hashCode());
 	return result;
     }
@@ -71,12 +71,12 @@ public class Login {
 	if (!(obj instanceof Login))
 	    return false;
 	Login other = (Login) obj;
-	if (id != other.id)
-	    return false;
-	if (login == null) {
-	    if (other.login != null)
+	if (email == null) {
+	    if (other.email != null)
 		return false;
-	} else if (!login.equals(other.login))
+	} else if (!email.equals(other.email))
+	    return false;
+	if (id != other.id)
 	    return false;
 	if (password == null) {
 	    if (other.password != null)
@@ -88,7 +88,7 @@ public class Login {
 
     @Override
     public String toString() {
-	return "Login [id=" + id + ", login=" + login + ", password=" + password + "]";
+	return "Login [id=" + id + ", email=" + email + ", password=" + password + "]";
     }
 
 }

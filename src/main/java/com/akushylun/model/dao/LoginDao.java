@@ -4,4 +4,6 @@ import com.akushylun.model.entities.Login;
 
 public interface LoginDao extends GenericDao<Login>, AutoCloseable {
 
+
+
 }

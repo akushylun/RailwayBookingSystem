@@ -6,26 +6,44 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+<!-- Bootstrap core CSS -->
+<link href="<c:url value="/resources/css/bootstrap.min.css" />"
+	rel="stylesheet">
+
+<link href="<c:url value="/resources/css/header.css" />"
+	rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="<c:url value="/resources/css/grid.css" />" rel="stylesheet">
+
 </head>
 <body>
-	<center>
-		<h1>List Of Bookings</h1>
-	</center>
-	<center>
-		<table border="1" cellpadding="5">
-			<tr>
-				<th>Price</th>
-				<th>Date</th>
-				<th>TicketInfo</th>
-			</tr>
-			<c:forEach var="booking" items="${bookingList}">
+	<%@include file="parts/header.jsp"%>
+
+	<div class="container">
+		<center><h1>List Of Orders</h1></center>
+		<table class="table">
+			<thead>
+
 				<tr>
-					<td><c:out value="${booking.price}" /></td>
-					<td><c:out value="${booking.date}" /></td>
-					<td><a href="./tickets/${booking.id}">Ticket Info</a></td>
+					<th>#</th>
+					<th>Price</th>
+					<th>Date</th>
+					<th>TicketInfo</th>
 				</tr>
-			</c:forEach>
+			</thead>
+			<tbody>
+				<c:forEach var="booking" items="${bookingList}">
+					<tr>
+						<th scope="row"><c:out value="${booking_rowNum}"></c:out></th>
+						<td><c:out value="${booking.price}" /></td>
+						<td><c:out value="${booking.date}" /></td>
+						<td><a href="./tickets/${booking.id}">Ticket Info</a></td>
+					</tr>
+				</c:forEach>
+			</tbody>
 		</table>
-	</center>
+	</div>
 </body>
 </html>

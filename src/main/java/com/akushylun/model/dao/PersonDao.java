@@ -5,5 +5,5 @@ import java.util.Optional;
 import com.akushylun.model.entities.Person;
 
 public interface PersonDao extends GenericDao<Person>, AutoCloseable {
-    Optional<Person> findByEmail(String email);
+    Optional<Person> findByLogin(String login);
 }

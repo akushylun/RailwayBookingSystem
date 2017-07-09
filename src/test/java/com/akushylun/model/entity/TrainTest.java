@@ -9,25 +9,28 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.akushylun.model.entities.Shedule;
+import com.akushylun.model.entities.Departure;
+import com.akushylun.model.entities.Station;
 import com.akushylun.model.entities.Train;
 
 public class TrainTest {
 
-    final int ID = 1;
-    final String NAME = "Hyunday";
-    Shedule shedule = new Shedule.Builder().build();
-    List<Shedule> sheduleList = new ArrayList<>();
+    private final static int ID = 1;
+    private final static String NAME = "Hyunday";
+    private List<Station> stationList = new ArrayList<Station>();
+    private List<Departure> departureList = new ArrayList<Departure>();;
 
     @Test
     public void shouldCreateTrain() {
-	Train train = new Train.Builder().withId(ID).withName(NAME).withShedules(sheduleList).build();
+	Train train = new Train.Builder().withId(ID).withName(NAME).withStationList(stationList)
+		.withDepartureList(departureList).build();
 
 	assertNotNull(train);
 	assertNotNull(train.toString());
 	assertTrue(train.equals(train));
 	assertEquals(ID, train.getId());
 	assertEquals(NAME, train.getName());
-	assertEquals(sheduleList, train.getTickets());
+	assertEquals(stationList, train.getStationList());
+	assertEquals(departureList, train.getDepartureList());
     }
 }

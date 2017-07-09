@@ -33,14 +33,6 @@ public class PersonService {
 	}
     }
 
-    public Optional<Person> login(String email, String password) {
-	try (DaoConnection connection = daoFactory.getConnection()) {
-	    PersonDao personDao = daoFactory.createPersonDao();
-	    connection.begin();
-	    return personDao.findByEmail(email).filter(person -> password.equals(person.getLogin().getPassword()));
-	}
-    }
-
     public List<Person> getAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
@@ -78,6 +70,14 @@ public class PersonService {
 	    personDao.delete(id);
 	    connection.commit();
 	    connection.close();
+	}
+    }
+
+    public Optional<Person> login(String loginName, String password) {
+	try (DaoConnection connection = daoFactory.getConnection()) {
+	    PersonDao loginDao = daoFactory.createPersonDao();
+	    connection.begin();
+	    return loginDao.findByLogin(loginName).filter(login -> password.equals(login.getLogin().getPassword()));
 	}
     }
 

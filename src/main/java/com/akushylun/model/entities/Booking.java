@@ -33,6 +33,18 @@ public class Booking {
 	return price;
     }
 
+    public void setPrice(BigDecimal price) {
+	this.price = price.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+	this.dateTime = dateTime;
+    }
+
+    public void setPerson(Person person) {
+	this.person = person;
+    }
+
     public LocalDateTime getDate() {
 	return dateTime;
     }
@@ -93,9 +105,9 @@ public class Booking {
 	int result = 1;
 	result = prime * result + ((dateTime == null) ? 0 : dateTime.hashCode());
 	result = prime * result + id;
+	result = prime * result + ((person == null) ? 0 : person.hashCode());
 	result = prime * result + ((price == null) ? 0 : price.hashCode());
 	result = prime * result + ((tickets == null) ? 0 : tickets.hashCode());
-	result = prime * result + ((person == null) ? 0 : person.hashCode());
 	return result;
     }
 
@@ -115,6 +127,11 @@ public class Booking {
 	    return false;
 	if (id != other.id)
 	    return false;
+	if (person == null) {
+	    if (other.person != null)
+		return false;
+	} else if (!person.equals(other.person))
+	    return false;
 	if (price == null) {
 	    if (other.price != null)
 		return false;
@@ -125,18 +142,13 @@ public class Booking {
 		return false;
 	} else if (!tickets.equals(other.tickets))
 	    return false;
-	if (person == null) {
-	    if (other.person != null)
-		return false;
-	} else if (!person.equals(other.person))
-	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Order [id=" + id + ", price=" + price + ", date=" + dateTime + ", tickets=" + tickets + ", user="
-		+ person + "]";
+	return "Booking [id=" + id + ", price=" + price + ", dateTime=" + dateTime + ", tickets=" + tickets
+		+ ", person=" + person + "]";
     }
 
 }

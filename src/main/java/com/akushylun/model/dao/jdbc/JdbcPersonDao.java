@@ -16,18 +16,18 @@ import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcPersonDao implements PersonDao {
 
-    private static final String SELECT_PERSON_BY_ID = "SELECT p.p_id, p.p_name, p.p_surname, p.p_email, "
-	    + "p.p_role_r_name, l.l_id, l.l_login, l.l_password FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id "
+    private static final String SELECT_PERSON_BY_ID = "SELECT p.p_id, p.p_name, p.p_surname, "
+	    + "p.p_role_r_name, l.l_id, l.l_email, l.l_password FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id "
 	    + "WHERE p.p_id = ?";
-    private static final String SELECT_PERSON_BY_EMAIL = "SELECT p.p_id, p.p_name, p.p_surname, p.p_email, "
-	    + "p.p_role_r_name, l.l_id, l.l_login, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id "
-	    + "WHERE p.p_email = ?";
-    private static final String SELECT_ALL_PERSONS = "SELECT p.p_id, p.p_name, p.p_surname, p.p_email, "
-	    + "p.p_role_r_name, l.l_id, l.l_login, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id ";
-    private static final String CREATE_PERSON = "INSERT INTO person (p_name, p_surname, p_email, p_role_r_name, p_login_l_id) "
-	    + "SELECT ?,?,?,?,l_id FROM login WHERE l_login = ?";
-    private static final String UPDATE_PERSON = "UPDATE person SET p_name = ?, p_surname = ?, p_email = ?, "
-	    + "p_role_r_name = ?" + " WHERE p_id = ?";
+    private static final String SELECT_PERSON_BY_LOGIN_NAME = "SELECT p.p_id, p.p_name, p.p_surname, "
+	    + "p.p_role_r_name, l.l_id, l.l_email, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id "
+	    + "WHERE l.l_email = ?";
+    private static final String SELECT_ALL_PERSONS = "SELECT p.p_id, p.p_name, p.p_surname, "
+	    + "p.p_role_r_name, l.l_id, l.l_email, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id ";
+    private static final String CREATE_PERSON = "INSERT INTO person (p_name, p_surname, p_role_r_name, p_login_l_id) "
+	    + "SELECT ?,?,?,?";
+    private static final String UPDATE_PERSON = "UPDATE person SET p_name = ?, p_surname = ?, " + "p_role_r_name = ?"
+	    + " WHERE p_id = ?";
     private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_id = ?";
 
     private final boolean connectionShouldBeClosed;
@@ -40,8 +40,7 @@ public class JdbcPersonDao implements PersonDao {
 
     private Person getUserFromResultSet(ResultSet rs) throws SQLException {
 	Person person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
-		.withSurname(rs.getString("p_surname")).withEmail(rs.getString("p_email"))
-		.withPersonLogin(getLoginFromResultSet(rs))
+		.withSurname(rs.getString("p_surname")).withPersonLogin(getLoginFromResultSet(rs))
 		.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
 	return person;
     }
@@ -49,11 +48,11 @@ public class JdbcPersonDao implements PersonDao {
     private Login getLoginFromResultSet(ResultSet rs) {
 	Login login = null;
 	try {
-	    if (rs.getString("l_login") != null) {
+	    if (rs.getString("l_email") != null) {
 		int id = rs.getInt("l_id");
-		String loginName = rs.getString("l_login");
+		String loginName = rs.getString("l_email");
 		String password = rs.getString("l_password");
-		login = new Login.Builder().withId(id).withLogin(loginName).withPassword(password).build();
+		login = new Login.Builder().withId(id).withEmail(loginName).withPassword(password).build();
 	    }
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);
@@ -79,10 +78,10 @@ public class JdbcPersonDao implements PersonDao {
     }
 
     @Override
-    public Optional<Person> findByEmail(String email) {
+    public Optional<Person> findByLogin(String loginName) {
 	Optional<Person> result = Optional.empty();
-	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_EMAIL)) {
-	    query.setString(1, email);
+	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_LOGIN_NAME)) {
+	    query.setString(1, loginName);
 	    ResultSet rs = query.executeQuery();
 	    Person person;
 	    if (rs.next()) {
@@ -116,9 +115,8 @@ public class JdbcPersonDao implements PersonDao {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_PERSON, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
-	    query.setString(3, person.getEmail());
-	    query.setString(4, person.getRole().name());
-	    query.setString(5, person.getLogin().getLogin());
+	    query.setString(3, person.getRole().name());
+	    query.setInt(4, person.getLogin().getId());
 	    query.executeUpdate();
 	    ResultSet keys = query.getGeneratedKeys();
 	    if (keys.next()) {
@@ -134,9 +132,8 @@ public class JdbcPersonDao implements PersonDao {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_PERSON)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
-	    query.setString(3, person.getEmail());
-	    query.setString(4, person.getRole().name());
-	    query.setInt(5, person.getId());
+	    query.setString(3, person.getRole().name());
+	    query.setInt(4, person.getId());
 	    query.executeUpdate();
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);

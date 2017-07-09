@@ -18,7 +18,6 @@ public class PostRegistration implements Command {
     private static final String PARAM_NAME = "name";
     private static final String PARAM_SURNAME = "surname";
     private static final String PARAM_EMAIL = "email";
-    private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
     private PersonService service = PersonService.getInstance();
 
@@ -32,16 +31,15 @@ public class PostRegistration implements Command {
 	String name = request.getParameter(PARAM_NAME);
 	String surname = request.getParameter(PARAM_SURNAME);
 	String email = request.getParameter(PARAM_EMAIL);
-	String loginName = request.getParameter(PARAM_LOGIN);
 	String password = request.getParameter(PARAM_PASSWORD);
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	if (authenticator.isLoggedIn()) {
 	    pageToGo = "login.jsp";
 	} else {
-	    login = new Login.Builder().withLogin(loginName).withPassword(password).build();
-	    person = new Person.Builder().withName(name).withSurname(surname).withEmail(email).withPersonLogin(login)
-		    .withRole(Role.USER).build();
+	    login = new Login.Builder().withEmail(email).withPassword(password).build();
+	    person = new Person.Builder().withName(name).withSurname(surname).withPersonLogin(login).withRole(Role.USER)
+		    .build();
 	    service.create(person);
 	    authenticator.getSession();
 	    pageToGo = "index.jsp";

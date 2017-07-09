@@ -2,82 +2,68 @@ package com.akushylun.model.dao.jdbc;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-import org.h2.tools.RunScript;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.akushylun.model.dao.StationDao;
 import com.akushylun.model.entities.Station;
 
 public class JdbcStationDaoTest {
-    static Connection connection;
-    static StationDao stationDao;
-    static final int ID = 2;
-    static final String FROM_STATION = "Kyiv";
-    static final String TO_STATION = "ODESSA";
-    static Station station = new Station.Builder().withId(ID).from(FROM_STATION).to(TO_STATION).build();
+    private Connection connection;
+    private DatabaseConfig databaseConfig = new DatabaseConfig(connection);
+    private StationDao dao;
 
-    @BeforeClass
-    public static void setH2DataBase()
-	    throws IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-	Class.forName("org.h2.Driver").newInstance();
-	connection = DriverManager.getConnection("jdbc:h2:mem:;MODE=mysql;", "sa", "");
-	try {
-	    File script = new File(JdbcPersonDaoTest.class.getResource("/mydb.sql").getFile());
-	    RunScript.execute(connection, new FileReader(script));
-	} catch (FileNotFoundException e) {
-	    throw new RuntimeException("could not initialize with script");
-	}
-	stationDao = new JdbcStationDao(connection, true);
-	stationDao.create(station);
+    @Before
+    public void setUp() {
+	databaseConfig.establishConnection();
+	databaseConfig.runDatabaseScripts();
+	dao = new JdbcStationDao(databaseConfig.getConnection(), true);
     }
 
     @Test
     public void getByIdTest() {
-	assertEquals(station, stationDao.find(station.getId()).get());
+	Station actualStation = dao.find(1).get();
+	assertNotNull(actualStation);
+	assertEquals(1, actualStation.getId());
+	assertEquals("kiev", actualStation.getName());
     }
 
     @Test
     public void getAllTest() {
-	assertEquals(2, stationDao.findAll().size());
+	assertEquals(4, dao.findAll().size());
     }
 
     @Test
     public void createTest() {
-	assertEquals(station, stationDao.find(station.getId()).get());
+	Station expectedStation = new Station.Builder().withName("warshava").build();
+	dao.create(expectedStation);
+	assertNotNull(expectedStation.getId());
+	assertEquals(expectedStation.getId(), dao.find(expectedStation.getId()).get().getId());
+	assertEquals(expectedStation.getName(), dao.find(expectedStation.getId()).get().getName());
     }
 
     @Test
     public void deleteTest() {
-	Station newStation = new Station.Builder().withId(3).from("Lviv").from("DONETSK").build();
-	stationDao.create(newStation);
-	stationDao.delete(newStation.getId());
-	assertFalse(stationDao.find(newStation.getId()).isPresent());
+	Station expectedStation = new Station.Builder().withName("warshava").build();
+	dao.create(expectedStation);
+	dao.delete(expectedStation.getId());
+	assertFalse(dao.find(expectedStation.getId()).isPresent());
     }
 
     @Test
     public void updateTest() {
-	Station findedStation = stationDao.find(station.getId()).get();
-	Station updateStation = new Station.Builder().withId(findedStation.getId()).from("Chercassy").to("Chernigiv")
-		.build();
-	stationDao.update(updateStation);
-	assertEquals(updateStation, stationDao.find(updateStation.getId()).get());
-	stationDao.update(findedStation);
-	assertEquals(findedStation, stationDao.find(findedStation.getId()).get());
+	Station expectedStation = new Station.Builder().withId(1).withName("warshava").build();
+	dao.update(expectedStation);
+	assertEquals(expectedStation.getName(), dao.find(expectedStation.getId()).get().getName());
     }
 
-    @AfterClass
-    public static void closeConnection() throws Exception {
-	connection.close();
+    @After
+    public void closeConnection() throws Exception {
+	databaseConfig.closeConnection();
     }
 }

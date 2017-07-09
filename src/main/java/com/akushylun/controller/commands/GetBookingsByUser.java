@@ -30,6 +30,7 @@ public class GetBookingsByUser implements Command {
 	    Person person = authenticator.getLoggedPerson();
 	    int userId = person.getId();
 	    bookingList = service.getAllByUserId(userId);
+	    System.out.println(bookingList);
 	    request.setAttribute("bookingList", bookingList);
 	    pageToGo = "/WEB-INF/view/bookingList.jsp";
 	} else

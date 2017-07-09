@@ -17,11 +17,11 @@ import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
-import com.akushylun.controller.commands.GetShedule;
-import com.akushylun.controller.commands.GetShedulesByParameters;
 import com.akushylun.controller.commands.GetTickets;
+import com.akushylun.controller.commands.GetTrain;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
+import com.akushylun.controller.commands.PostTrain;
 
 /**
  * Servlet implementation class FrontController
@@ -37,8 +37,8 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void init() {
-	commands.put("GET:/shedule", new GetShedule());
-	commands.put("GET:/shedules", new GetShedulesByParameters());
+	commands.put("GET:/train", new GetTrain());
+	commands.put("POST:/train", new PostTrain());
 	commands.put("GET:/bookings", new GetBookingsByUser());
 	commands.put("GET:/booking", new GetBooking());
 	commands.put("GET:/registration", new GetRegistration());

@@ -14,11 +14,10 @@ import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcStationDao implements StationDao {
 
-    private static final String SELECT_STATION_BY_ID = "SELECT s.st_id, s.st_from, s.st_to FROM station as s"
-	    + " WHERE s.st_id = ?";
-    private static final String SELECT_ALL_STATIONS = "SELECT s.st_id, s.st_from, s.st_to FROM station as s";
-    private static final String CREATE_STATION = "INSERT INTO station (st_from, st_to) " + " VALUES (?,?)";
-    private static final String UPDATE_STATION = "UPDATE station SET st_from = ?, st_to = ?" + " WHERE st_id = ?";
+    private static final String SELECT_STATION_BY_ID = "SELECT s.st_id, s.st_name FROM station as s WHERE s.st_id = ?";
+    private static final String SELECT_ALL_STATIONS = "SELECT s.st_id, s.st_name FROM station as s";
+    private static final String CREATE_STATION = "INSERT INTO station (st_name) " + " VALUES (?)";
+    private static final String UPDATE_STATION = "UPDATE station SET st_name = ? " + " WHERE st_id = ?";
     private static final String DELETE_STATION_BY_ID = "DELETE FROM station WHERE st_id = ?";
 
     private final boolean connectionShouldBeClosed;
@@ -30,8 +29,7 @@ public class JdbcStationDao implements StationDao {
     }
 
     private Station getStationFromResultSet(ResultSet rs) throws SQLException {
-	Station station = new Station.Builder().withId(rs.getInt("st_id")).from(rs.getString("st_from"))
-		.to(rs.getString("st_to")).build();
+	Station station = new Station.Builder().withId(rs.getInt("st_id")).withName(rs.getString("st_name")).build();
 	return station;
     }
 
@@ -71,8 +69,7 @@ public class JdbcStationDao implements StationDao {
     @Override
     public void create(Station station) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_STATION, Statement.RETURN_GENERATED_KEYS)) {
-	    query.setString(1, station.getFrom());
-	    query.setString(2, station.getTo());
+	    query.setString(1, station.getName());
 	    query.executeUpdate();
 	    ResultSet keys = query.getGeneratedKeys();
 	    if (keys.next()) {
@@ -87,9 +84,8 @@ public class JdbcStationDao implements StationDao {
     @Override
     public void update(Station station) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_STATION)) {
-	    query.setString(1, station.getFrom());
-	    query.setString(2, station.getTo());
-	    query.setInt(3, station.getId());
+	    query.setString(1, station.getName());
+	    query.setInt(2, station.getId());
 	    query.executeUpdate();
 	} catch (SQLException ex) {
 	    throw new RuntimeException(ex);

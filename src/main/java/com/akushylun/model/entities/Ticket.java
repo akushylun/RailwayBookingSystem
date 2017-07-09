@@ -9,13 +9,13 @@ public class Ticket {
     private int id;
     private BigDecimal price;
     private List<Booking> bookings;
-    private Shedule shedule;
+    private Train train;
 
     private Ticket(Builder builder) {
 	this.id = builder.id;
 	this.price = builder.price;
 	this.bookings = builder.bookings;
-	this.shedule = builder.shedule;
+	this.train = builder.train;
     }
 
     public int getId() {
@@ -30,12 +30,16 @@ public class Ticket {
 	return price;
     }
 
-    public List<Booking> getOrders() {
+    public List<Booking> getBookings() {
 	return bookings;
     }
 
-    public Shedule getShedule() {
-	return shedule;
+    public Train getTrain() {
+	return train;
+    }
+
+    public void setTrain(Train train) {
+	this.train = train;
     }
 
     public static class Builder {
@@ -43,7 +47,7 @@ public class Ticket {
 	private int id;
 	private BigDecimal price;
 	private List<Booking> bookings = new ArrayList<>();
-	private Shedule shedule;
+	private Train train;
 
 	public Builder withId(int id) {
 	    this.id = id;
@@ -55,13 +59,13 @@ public class Ticket {
 	    return this;
 	}
 
-	public Builder withOrders(List<Booking> bookings) {
+	public Builder withBooking(List<Booking> bookings) {
 	    this.bookings.addAll(bookings);
 	    return this;
 	}
 
-	public Builder withShedule(Shedule shedule) {
-	    this.shedule = shedule;
+	public Builder withTrain(Train train) {
+	    this.train = train;
 	    return this;
 	}
 
@@ -78,7 +82,7 @@ public class Ticket {
 	result = prime * result + ((bookings == null) ? 0 : bookings.hashCode());
 	result = prime * result + id;
 	result = prime * result + ((price == null) ? 0 : price.hashCode());
-	result = prime * result + ((shedule == null) ? 0 : shedule.hashCode());
+	result = prime * result + ((train == null) ? 0 : train.hashCode());
 	return result;
     }
 
@@ -103,17 +107,17 @@ public class Ticket {
 		return false;
 	} else if (!price.equals(other.price))
 	    return false;
-	if (shedule == null) {
-	    if (other.shedule != null)
+	if (train == null) {
+	    if (other.train != null)
 		return false;
-	} else if (!shedule.equals(other.shedule))
+	} else if (!train.equals(other.train))
 	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Ticket [id=" + id + ", price=" + price + ", bookings=" + bookings + ", shedule=" + shedule + "]";
+	return "Ticket [id=" + id + ", price=" + price + ", bookings=" + bookings + ", train=" + train + "]";
     }
 
 }
