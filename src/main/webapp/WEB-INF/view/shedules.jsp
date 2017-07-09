@@ -6,24 +6,42 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+<link href="<c:url value="/resources/css/bootstrap.min.css" />"
+	rel="stylesheet">
+<link href="<c:url value="/resources/css/header.css" />"
+	rel="stylesheet">
 </head>
 <body>
-	<center>
-		<h1>List Of FindedShedules</h1>
-	</center>
-	<center>
-		<table border="1" cellpadding="5">
-			<tr>
-				<th>Time start</th>
-				<th>Time end</th>
-			</tr>
-			<c:forEach var="shedule" items="${sheduleList}">
+	<%@include file="parts/header.jsp"%>
+
+	<div class="container">
+		<div class="page-header">
+			<center>
+				<h1>List Of Finded Trains</h1>
+			</center>
+		</div>
+		<table class="table table-striped">
+			<thead>
 				<tr>
-					<td><c:out value="${shedule.start}" /></td>
-					<td><c:out value="${shedule.end}" /></td>
+					<th>Train</th>
+					<th>Station start</th>
+					<th>Station End</th>
+					<th>Time departure</th>
+					<th>Buy ticket</th>
+				</tr>
+			</thead>
+			<tbody>
+			<c:forEach var="train" items="${trainList}">
+				<tr>
+					<td><c:out value="${train.name}" /></td>
+					<td><c:out value="${train.stationList[0].name}" /></td>
+					<td><c:out value="${train.stationList[1].name}" /></td>
+					<td><c:out value="${train.departureList[0].dateTime}" /></td>
+					<td><button class="btn btn-success btn-sm" type="submit">Buy ticket</button></td>
 				</tr>
 			</c:forEach>
+			</tbody>
 		</table>
-	</center>
+	</div>
 </body>
 </html>

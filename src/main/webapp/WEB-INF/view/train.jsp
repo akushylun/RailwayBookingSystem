@@ -17,31 +17,42 @@
 <body>
 	<%@include file="parts/header.jsp"%>
 
-	<form action="./shedule" method="POST">
+	<div class="container">
+		<form action="./train" method="POST">
+			<div class="col-xs-3 col-xs-offset-5">
+				<div class="page-header">
+					<center>
+						<h2>Find Train Here</h2>
+					</center>
+				</div>
 
-		<center>
-			<h1>Find Train Here</h1>
-		</center>
+				<div class="form-group">
 
-		<center>
-			Station From <select name="stationFrom">
-				<c:forEach var="station" items="${stationList}">
-					<option><c:out value="${station.name}"></c:out></option>
-				</c:forEach>
-			</select> <br /> Station To <select name="stationTo">
-				<c:forEach var="station" items="${stationList}">
-					<option><c:out value="${station.name}"></c:out></option>
-				</c:forEach>
-			</select><br />
+					<label for="station from">Station From</label> <select
+						class="form-control" id="inputStationFrom" name="stationFrom">
+						<c:forEach var="station" items="${stationList}">
+							<option><c:out value="${station.name}"></c:out></option>
+						</c:forEach>
+					</select>
+				</div>
 
-			<p>
-				Start Date/Time: <input id="start_dt" name="date" class='datepicker'
-					size='11' />
-			</p>
-			<br /> <input type="submit" value="Submit" />
 
-		</center>
-	</form>
+				<div class="form-group">
+					<label for="station to">Station to</label> <select
+						class="form-control" id="inputStationTo" name="stationTo">
+						<c:forEach var="station" items="${stationList}">
+							<option><c:out value="${station.name}"></c:out></option>
+						</c:forEach>
+					</select>
+				</div>
 
+				<div class="form-group">
+					<label for="date">Start Date</label> <input id="start_dt"
+						name="date" class='datepicker' size='10' />
+				</div>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+			</div>
+		</form>
+	</div>
 </body>
 </html>

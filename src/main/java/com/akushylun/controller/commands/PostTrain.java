@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
-import com.akushylun.model.entities.Departure;
-import com.akushylun.model.services.DepartureService;
+import com.akushylun.model.entities.Train;
+import com.akushylun.model.services.TrainService;
 
 public class PostTrain implements Command {
 
-    private DepartureService service = DepartureService.getInstance();
+    private TrainService service = TrainService.getInstance();
     private static final String STATION_FROM = "stationFrom";
     private static final String STATION_TO = "stationTo";
     private static final String DATE_START = "date";
@@ -31,15 +31,12 @@ public class PostTrain implements Command {
 	    String stationFrom = request.getParameter(STATION_FROM);
 	    String stationTo = request.getParameter(STATION_TO);
 	    String dateStart = request.getParameter(DATE_START);
-	    System.out.println(stationFrom);
-	    System.out.println(stationTo);
-	    System.out.println(dateStart);
-	    LocalDate dateStartParsedToDate = LocalDate.parse(dateStart,
-		    DateTimeFormatter.ofPattern("d-MMM-yyyy"));
+	    String dateStartParsedToDate = LocalDate.parse(dateStart, DateTimeFormatter.ofPattern("d-MMM-yyyy"))
+		    .toString();
 	    System.out.println(dateStartParsedToDate);
-////	    List<Departure> listShedules = service.getAllByShedulesParams(stationFrom, stationTo, dateStartParsedToDate);
-//	    System.out.println(listShedules);
-//	    request.setAttribute("sheduleList", listShedules);
+	    List<Train> trainList = service.getByAll(stationFrom, stationTo, dateStartParsedToDate);
+	    System.out.println(trainList);
+	    request.setAttribute("trainList", trainList);
 	    pageToGo = "/WEB-INF/view/shedules.jsp";
 	} else
 	    pageToGo = "/WEB-INF/view/login.jsp";

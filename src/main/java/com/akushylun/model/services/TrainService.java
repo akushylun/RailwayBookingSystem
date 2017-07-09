@@ -39,6 +39,14 @@ public class TrainService {
 	}
     }
 
+    public List<Train> getByAll(String stationStart, String stationEnd, String startDate) {
+	try (DaoConnection connection = daoFactory.getConnection()) {
+	    TrainDao trainDao = daoFactory.createTrainDao();
+	    connection.begin();
+	    return trainDao.findAll(stationStart, stationEnd, startDate);
+	}
+    }
+
     public void createTrain(Train train) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();

@@ -21,11 +21,14 @@
 <body>
 	<%@include file="parts/header.jsp"%>
 
+	<div class="page-header">
+		<center>
+			<h1>List Of Orders</h1>
+		</center>
+	</div>
 	<div class="container">
-		<center><h1>List Of Orders</h1></center>
-		<table class="table">
+		<table class="table table-striped">
 			<thead>
-
 				<tr>
 					<th>#</th>
 					<th>Price</th>
@@ -34,9 +37,11 @@
 				</tr>
 			</thead>
 			<tbody>
+				<c:set var="count" value="0" scope="page" />
 				<c:forEach var="booking" items="${bookingList}">
+					<c:set var="count" value="${count + 1}" scope="page" />
 					<tr>
-						<th scope="row"><c:out value="${booking_rowNum}"></c:out></th>
+						<td><c:out value="${count}" /></td>
 						<td><c:out value="${booking.price}" /></td>
 						<td><c:out value="${booking.date}" /></td>
 						<td><a href="./tickets/${booking.id}">Ticket Info</a></td>

@@ -15,32 +15,40 @@
 </head>
 <body>
 	<%@include file="parts/header.jsp"%>
-
+	<div class="page-header">
 	<center>
 		<h1>List of tickets</h1>
 	</center>
+	</div>
+	
 	<center>
 		<form action="./tickets" method="GET">
-			<div class="container">
-				<table class="table">
-					<tr>
-						<th>#</th>
-						<th>Ticket Price</th>
-						<th>Train</th>
-						<th>Departure time</th>
-						<th>Station from</th>
-						<th>Station to</th>
-					</tr>
-					<c:forEach var="ticket" items="${ticketList}">
+			<div class="container" >
+				<table class="table table-striped">
+					<thead>
 						<tr>
-							<th scope="row"><c:out value="${ticket_rowNum}"></c:out></th>
-							<td><c:out value="${ticket.price}" /></td>
-							<td><c:out value="${ticket.train.name}" /></td>
-							<td><c:out value="${ticket.train.departureList[0].dateTime}" /></td>
-							<td><c:out value="${ticket.train.stationList[0].name}" /></td>
-							<td><c:out value="${ticket.train.stationList[1].name}" /></td>
+							<th>#</th>
+							<th>Ticket Price</th>
+							<th>Train</th>
+							<th>Departure time</th>
+							<th>Station from</th>
+							<th>Station to</th>
 						</tr>
-					</c:forEach>
+					</thead>
+					<tbody>
+						<c:set var="count" value="0" scope="page" />
+						<c:forEach var="ticket" items="${ticketList}">
+							<c:set var="count" value="${count + 1}" scope="page" />
+							<tr>
+								<td><c:out value="${count}" /></td>
+								<td><c:out value="${ticket.price}" /></td>
+								<td><c:out value="${ticket.train.name}" /></td>
+								<td><c:out value="${ticket.train.departureList[0].dateTime}" /></td>
+								<td><c:out value="${ticket.train.stationList[0].name}" /></td>
+								<td><c:out value="${ticket.train.stationList[1].name}" /></td>
+							</tr>
+						</c:forEach>
+					</tbody>
 				</table>
 			</div>
 		</form>
