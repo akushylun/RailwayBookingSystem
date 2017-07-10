@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.akushylun.controller.constants.PagePath;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.dao.exceptions.ServiceException;
@@ -27,7 +28,6 @@ public class PostRegistration implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException, ServiceException {
 
-	String pageToGo = null;
 	Person person = null;
 	Login login = null;
 	String name = request.getParameter(PARAM_NAME);
@@ -44,9 +44,8 @@ public class PostRegistration implements Command {
 
 	HttpSession session = request.getSession(true);
 	authenticator.setAttributeToSession(session, person);
-	pageToGo = "index.jsp";
 
-	return pageToGo;
+	return PagePath.INDEX;
 
     }
 }

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.akushylun.controller.constants.PagePath;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.dao.exceptions.ServiceException;
@@ -33,9 +34,9 @@ public class PostLogin implements Command {
 	if (person.isPresent()) {
 	    HttpSession session = request.getSession(true);
 	    authenticator.setAttributeToSession(session, person.get());
-	    pageToGo = "index.jsp";
+	    pageToGo = PagePath.INDEX;
 	} else
-	    pageToGo = "/WEB-INF/view/login.jsp";
+	    pageToGo = PagePath.LOGIN;
 	return pageToGo;
 
     }

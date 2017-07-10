@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.akushylun.controller.constants.PagePath;
 import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.services.BookingService;
@@ -24,7 +25,7 @@ public class GetBooking implements Command {
 	Optional<Booking> booking = service.getById(bookingId);
 	booking.ifPresent((bookingRecord) -> request.setAttribute("booking", booking));
 
-	return "/WEB-INF/view/booking.jsp";
+	return PagePath.BOOKING;
 
     }
 }

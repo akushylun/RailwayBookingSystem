@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.akushylun.controller.constants.PagePath;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.dao.exceptions.ServiceException;
@@ -23,18 +24,15 @@ public class GetBookingsByUser implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException, ServiceException {
 
-	String pageToGo = "";
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	List<Booking> bookingList = new ArrayList<>();
 
 	Person person = authenticator.getLoggedPerson();
 	int userId = person.getId();
 	bookingList = service.getAllByUserId(userId);
-	System.out.println(bookingList);
 	request.setAttribute("bookingList", bookingList);
-	pageToGo = "/WEB-INF/view/bookingList.jsp";
 
-	return pageToGo;
+	return PagePath.BOOKING_LIST;
 
     }
 }

@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.akushylun.controller.constants.PagePath;
 import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Ticket;
 import com.akushylun.model.entities.Train;
@@ -23,8 +24,6 @@ public class GetTickets implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException, ServiceException {
 
-	String pageToGo = "";
-
 	List<Ticket> ticketList = new ArrayList<>();
 	String path = request.getRequestURI();
 	int bookingId = Integer.parseInt(path.replaceAll("\\D+", ""));
@@ -33,12 +32,10 @@ public class GetTickets implements Command {
 	for (Ticket ticket : ticketList) {
 	    Train train = trainService.getById(ticket.getId()).get();
 	    ticket.setTrain(train);
-	    System.out.println(train);
 	}
 	request.setAttribute("ticketList", ticketList);
-	pageToGo = "/WEB-INF/view/ticketList.jsp";
 
-	return pageToGo;
+	return PagePath.TICKET_LIST;
 
     }
 }
