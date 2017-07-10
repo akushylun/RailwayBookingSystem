@@ -14,16 +14,14 @@ public class GetLogout implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
-	String pageToGo = "";
+
 	Authenticator authenticator = new AuthenticatorImpl(request);
+	authenticator.logout();
 
-	if (authenticator.isLoggedIn()) {
-	    authenticator.logout();
-	    pageToGo = "/WEB-INF/view/login.jsp";
-	} else {
-	    pageToGo = "index.jsp";
-	}
+	String pageToGo = "";
+	pageToGo = "index.jsp";
+
 	return pageToGo;
-    }
 
+    }
 }

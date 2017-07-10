@@ -7,8 +7,8 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TicketDao;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Ticket;
-import com.akushylun.model.exceptions.ServiceException;
 
 public class TicketService {
     private DaoFactory daoFactory;

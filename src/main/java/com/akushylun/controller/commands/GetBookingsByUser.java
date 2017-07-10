@@ -10,9 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
-import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.BookingService;
 
 public class GetBookingsByUser implements Command {
@@ -27,16 +27,14 @@ public class GetBookingsByUser implements Command {
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	List<Booking> bookingList = new ArrayList<>();
 
-	if (authenticator.isLoggedIn()) {
-	    Person person = authenticator.getLoggedPerson();
-	    int userId = person.getId();
-	    bookingList = service.getAllByUserId(userId);
-	    System.out.println(bookingList);
-	    request.setAttribute("bookingList", bookingList);
-	    pageToGo = "/WEB-INF/view/bookingList.jsp";
-	} else
-	    pageToGo = "/WEB-INF/view/login.jsp";
-	return pageToGo;
-    }
+	Person person = authenticator.getLoggedPerson();
+	int userId = person.getId();
+	bookingList = service.getAllByUserId(userId);
+	System.out.println(bookingList);
+	request.setAttribute("bookingList", bookingList);
+	pageToGo = "/WEB-INF/view/bookingList.jsp";
 
+	return pageToGo;
+
+    }
 }

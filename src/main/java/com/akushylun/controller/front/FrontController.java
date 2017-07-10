@@ -22,7 +22,7 @@ import com.akushylun.controller.commands.GetTrain;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
-import com.akushylun.model.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.ServiceException;
 
 /**
  * Servlet implementation class FrontController

@@ -24,14 +24,6 @@ public interface Authenticator {
     void setAttributeToSession(HttpSession session, Person person);
 
     /**
-     * Returns the current HttpSession or associated with this request or if the
-     * request does not have a session, creates one.
-     * 
-     * @return the {@code HttpSession}
-     */
-    HttpSession getSession();
-
-    /**
      * Checks if the current person is logged in
      * 
      * @return true if the person is logged in

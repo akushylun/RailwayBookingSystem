@@ -1,4 +1,4 @@
-package com.akushylun.model.exceptions;
+package com.akushylun.model.dao.exceptions;
 
 import java.sql.SQLException;
 

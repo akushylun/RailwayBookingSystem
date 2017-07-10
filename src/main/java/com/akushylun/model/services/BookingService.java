@@ -7,8 +7,8 @@ import java.util.Optional;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
-import com.akushylun.model.exceptions.ServiceException;
 
 public class BookingService {
 

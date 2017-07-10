@@ -6,9 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.akushylun.controller.security.Authenticator;
-import com.akushylun.controller.security.AuthenticatorImpl;
-
 public class GetLogin implements Command {
 
     @Override
@@ -16,12 +13,8 @@ public class GetLogin implements Command {
 	    throws ServletException, IOException {
 
 	String pageToGo;
-	Authenticator authenticator = new AuthenticatorImpl(request);
 
-	if (authenticator.isLoggedIn()) {
-	    pageToGo = "index.jsp";
-	} else
-	    pageToGo = "/WEB-INF/view/login.jsp";
+	pageToGo = "/WEB-INF/view/login.jsp";
 	return pageToGo;
 
     }

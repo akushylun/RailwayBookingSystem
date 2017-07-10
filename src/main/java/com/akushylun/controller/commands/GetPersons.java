@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
-import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.PersonService;
 
 public class GetPersons implements Command {

@@ -49,8 +49,4 @@ public class AuthenticatorImpl implements Authenticator {
 	session.setAttribute(AUTH_TOKEN, person);
     }
 
-    @Override
-    public HttpSession getSession() {
-	return request.getSession(true);
-    }
 }

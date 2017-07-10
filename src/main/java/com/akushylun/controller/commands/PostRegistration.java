@@ -5,13 +5,14 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
-import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.PersonService;
 
 public class PostRegistration implements Command {
@@ -35,16 +36,16 @@ public class PostRegistration implements Command {
 	String password = request.getParameter(PARAM_PASSWORD);
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
-	if (authenticator.isLoggedIn()) {
-	    pageToGo = "login.jsp";
-	} else {
-	    login = new Login.Builder().withEmail(email).withPassword(password).build();
-	    person = new Person.Builder().withName(name).withSurname(surname).withPersonLogin(login).withRole(Role.USER)
-		    .build();
-	    service.create(person);
-	    authenticator.getSession();
-	    pageToGo = "index.jsp";
-	}
+
+	login = new Login.Builder().withEmail(email).withPassword(password).build();
+	person = new Person.Builder().withName(name).withSurname(surname).withPersonLogin(login).withRole(Role.USER)
+		.build();
+	service.create(person);
+
+	HttpSession session = request.getSession(true);
+	authenticator.setAttributeToSession(session, person);
+	pageToGo = "index.jsp";
+
 	return pageToGo;
 
     }

@@ -8,8 +8,8 @@ import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
 import com.akushylun.model.dao.PersonDao;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Person;
-import com.akushylun.model.exceptions.ServiceException;
 
 public class PersonService {
 

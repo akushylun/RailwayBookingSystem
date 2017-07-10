@@ -7,8 +7,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
-import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.BookingService;
 
 public class GetBooking implements Command {
@@ -18,11 +18,13 @@ public class GetBooking implements Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException, ServiceException {
+
 	String path = request.getRequestURI();
 	int bookingId = Integer.parseInt(path.replaceAll("\\D+", ""));
 	Optional<Booking> booking = service.getById(bookingId);
 	booking.ifPresent((bookingRecord) -> request.setAttribute("booking", booking));
-	return "/WEB-INF/view/booking.jsp";
-    }
 
+	return "/WEB-INF/view/booking.jsp";
+
+    }
 }

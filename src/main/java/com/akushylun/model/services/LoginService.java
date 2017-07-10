@@ -7,8 +7,8 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
+import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Login;
-import com.akushylun.model.exceptions.ServiceException;
 
 public class LoginService {
     private DaoFactory daoFactory;
