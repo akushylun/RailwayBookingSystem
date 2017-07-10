@@ -11,6 +11,7 @@ import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.PersonService;
 
 public class GetPersons implements Command {
@@ -19,7 +20,7 @@ public class GetPersons implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 
 	String pageToGo = "";
 	Authenticator authenticator = new AuthenticatorImpl(request);

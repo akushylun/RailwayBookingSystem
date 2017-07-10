@@ -21,12 +21,10 @@ public class JdbcLoginDao implements LoginDao {
     private static final String UPDATE_LOGIN = "UPDATE login SET l_email = ?, l_password = ?" + " WHERE l_id = ?";
     private static final String DELETE_LOGIN_BY_ID = "DELETE FROM login WHERE l_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcLoginDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcLoginDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Login getLoginFromResultSet(ResultSet rs) throws SQLException {
@@ -36,7 +34,7 @@ public class JdbcLoginDao implements LoginDao {
     }
 
     @Override
-    public Optional<Login> find(int id) {
+    public Optional<Login> find(int id) throws SQLException {
 	Optional<Login> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_LOGIN_BY_ID)) {
 	    query.setInt(1, id);
@@ -46,14 +44,12 @@ public class JdbcLoginDao implements LoginDao {
 		login = getLoginFromResultSet(rs);
 		result = Optional.of(login);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Login> findAll() {
+    public List<Login> findAll() throws SQLException {
 	List<Login> loginList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_LOGINS)) {
 	    ResultSet rs = query.executeQuery();
@@ -62,14 +58,12 @@ public class JdbcLoginDao implements LoginDao {
 		login = getLoginFromResultSet(rs);
 		loginList.add(login);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return loginList;
     }
 
     @Override
-    public void create(Login login) {
+    public void create(Login login) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_LOGIN, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, login.getEmail());
 	    query.setString(2, login.getPassword());
@@ -78,43 +72,25 @@ public class JdbcLoginDao implements LoginDao {
 	    if (keys.next()) {
 		login.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void update(Login login) {
+    public void update(Login login) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_LOGIN)) {
 	    query.setString(1, login.getEmail());
 	    query.setString(2, login.getPassword());
 	    query.setInt(3, login.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_LOGIN_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
-    }
-
-    @Override
-    public void close() throws Exception {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
-	}
-
     }
 
 }

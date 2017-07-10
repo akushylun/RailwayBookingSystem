@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -23,11 +24,11 @@ public class JdbcLoginDaoTest {
     public void setH2DataBase() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcLoginDao(databaseConfig.getConnection(), true);
+	dao = new JdbcLoginDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws SQLException {
 	Login actualLogin = dao.find(1).get();
 	assertNotNull(actualLogin);
 	assertEquals(1, actualLogin.getId());
@@ -36,12 +37,12 @@ public class JdbcLoginDaoTest {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
     @Test
-    public void createTest() {
+    public void createTest() throws SQLException {
 	Login expectedLogin = new Login.Builder().withEmail("liza").withPassword("lizz123").build();
 	dao.create(expectedLogin);
 	assertNotNull(expectedLogin.getId());
@@ -49,7 +50,7 @@ public class JdbcLoginDaoTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws SQLException {
 	Login expectedLogin = new Login.Builder().withEmail("liza").withPassword("lizz123").build();
 	dao.create(expectedLogin);
 	dao.delete(expectedLogin.getId());
@@ -57,7 +58,7 @@ public class JdbcLoginDaoTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws SQLException {
 	Login expectedLogin = new Login.Builder().withId(1).withEmail("Mark_P@yahoo.com").withPassword("mark123Pass")
 		.build();
 	dao.update(expectedLogin);

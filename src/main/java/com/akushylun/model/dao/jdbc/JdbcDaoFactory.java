@@ -43,7 +43,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public PersonDao createPersonDao() {
 	try {
-	    return new JdbcPersonDao(dataSource.getConnection(), true);
+	    return new JdbcPersonDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -52,7 +52,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public LoginDao createLoginDao() {
 	try {
-	    return new JdbcLoginDao(dataSource.getConnection(), true);
+	    return new JdbcLoginDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -61,7 +61,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public BookingDao createBookingDao() {
 	try {
-	    return new JdbcBookingDao(dataSource.getConnection(), true);
+	    return new JdbcBookingDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -70,7 +70,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public DepartureDao createDepartureDao() {
 	try {
-	    return new JdbcDepartureDao(dataSource.getConnection(), true);
+	    return new JdbcDepartureDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -79,7 +79,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public StationDao createStationDao() {
 	try {
-	    return new JdbcStationDao(dataSource.getConnection(), true);
+	    return new JdbcStationDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -88,7 +88,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public TicketDao createTicketDao() {
 	try {
-	    return new JdbcTicketDao(dataSource.getConnection(), true);
+	    return new JdbcTicketDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}
@@ -97,7 +97,7 @@ public class JdbcDaoFactory extends DaoFactory {
     @Override
     public TrainDao createTrainDao() {
 	try {
-	    return new JdbcTrainDao(dataSource.getConnection(), true);
+	    return new JdbcTrainDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

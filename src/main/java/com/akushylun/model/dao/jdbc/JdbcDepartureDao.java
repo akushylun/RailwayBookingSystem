@@ -26,23 +26,17 @@ public class JdbcDepartureDao implements DepartureDao {
 	    + " WHERE d_id = ?";
     private static final String DELETE_DEPARTURE_BY_ID = "DELETE FROM departure WHERE d_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcDepartureDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcDepartureDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
-    private Departure getDepartureFromResultSet(ResultSet rs) {
+    private Departure getDepartureFromResultSet(ResultSet rs) throws SQLException {
 	Departure departure = null;
-	try {
-	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
-		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).withTrain(getTrainFromResultSet(rs))
-		    .build();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
+	departure = new Departure.Builder().withId(rs.getInt("d_id"))
+		.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).withTrain(getTrainFromResultSet(rs))
+		.build();
 	return departure;
     }
 
@@ -52,7 +46,7 @@ public class JdbcDepartureDao implements DepartureDao {
     }
 
     @Override
-    public Optional<Departure> find(int id) {
+    public Optional<Departure> find(int id) throws SQLException {
 	Optional<Departure> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_DEPARTURE_BY_ID)) {
 	    query.setInt(1, id);
@@ -62,14 +56,12 @@ public class JdbcDepartureDao implements DepartureDao {
 		departure = getDepartureFromResultSet(rs);
 		result = Optional.of(departure);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Departure> findAll() {
+    public List<Departure> findAll() throws SQLException {
 	List<Departure> sheduleList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_DEPARTURES)) {
 	    ResultSet rs = query.executeQuery();
@@ -78,14 +70,12 @@ public class JdbcDepartureDao implements DepartureDao {
 		departure = getDepartureFromResultSet(rs);
 		sheduleList.add(departure);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return sheduleList;
     }
 
     @Override
-    public void create(Departure departure) {
+    public void create(Departure departure) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_DEPARTURE, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setTimestamp(1, Timestamp.valueOf(departure.getDateTime()));
 	    query.setInt(2, departure.getTrain().getId());
@@ -94,42 +84,26 @@ public class JdbcDepartureDao implements DepartureDao {
 	    if (keys.next()) {
 		departure.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 
     }
 
     @Override
-    public void update(Departure departure) {
+    public void update(Departure departure) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_DEPARTURE)) {
 	    query.setTimestamp(1, Timestamp.valueOf(departure.getDateTime()));
 	    query.setInt(2, departure.getTrain().getId());
 	    query.setInt(3, departure.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_DEPARTURE_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
-    @Override
-    public void close() {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
-	}
-    }
 }

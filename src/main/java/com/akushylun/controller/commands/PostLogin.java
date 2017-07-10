@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Person;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.PersonService;
 
 public class PostLogin implements Command {
@@ -21,7 +22,7 @@ public class PostLogin implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	String pageToGo = "";

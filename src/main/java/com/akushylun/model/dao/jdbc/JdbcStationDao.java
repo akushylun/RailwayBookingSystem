@@ -20,12 +20,10 @@ public class JdbcStationDao implements StationDao {
     private static final String UPDATE_STATION = "UPDATE station SET st_name = ? " + " WHERE st_id = ?";
     private static final String DELETE_STATION_BY_ID = "DELETE FROM station WHERE st_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcStationDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcStationDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Station getStationFromResultSet(ResultSet rs) throws SQLException {
@@ -34,7 +32,7 @@ public class JdbcStationDao implements StationDao {
     }
 
     @Override
-    public Optional<Station> find(int id) {
+    public Optional<Station> find(int id) throws SQLException {
 	Optional<Station> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_STATION_BY_ID)) {
 	    query.setInt(1, id);
@@ -44,14 +42,12 @@ public class JdbcStationDao implements StationDao {
 		station = getStationFromResultSet(rs);
 		result = Optional.of(station);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Station> findAll() {
+    public List<Station> findAll() throws SQLException {
 	List<Station> trainList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_STATIONS)) {
 	    ResultSet rs = query.executeQuery();
@@ -60,14 +56,12 @@ public class JdbcStationDao implements StationDao {
 		station = getStationFromResultSet(rs);
 		trainList.add(station);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return trainList;
     }
 
     @Override
-    public void create(Station station) {
+    public void create(Station station) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_STATION, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, station.getName());
 	    query.executeUpdate();
@@ -75,43 +69,24 @@ public class JdbcStationDao implements StationDao {
 	    if (keys.next()) {
 		station.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 
     }
 
     @Override
-    public void update(Station station) {
+    public void update(Station station) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_STATION)) {
 	    query.setString(1, station.getName());
 	    query.setInt(2, station.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
-
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_STATION_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
-
-    }
-
-    @Override
-    public void close() throws Exception {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
 	}
     }
 

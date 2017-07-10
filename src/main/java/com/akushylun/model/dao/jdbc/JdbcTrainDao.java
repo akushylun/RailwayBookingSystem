@@ -35,12 +35,10 @@ public class JdbcTrainDao implements TrainDao {
     private static final String UPDATE_TRAIN = "UPDATE train SET tr_name = ? WHERE tr_id = ?";
     private static final String DELETE_TRAIN_BY_ID = "DELETE FROM train WHERE tr_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcTrainDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcTrainDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Train getTrainFromResultSet(ResultSet rs) throws SQLException {
@@ -52,52 +50,40 @@ public class JdbcTrainDao implements TrainDao {
     private List<Station> getStationFromResultSet(ResultSet rs) throws SQLException {
 	List<Station> stationList = new ArrayList<>();
 	Station station = null;
-	try {
-	    int trainId = rs.getInt("tr_id");
-	    ResultSet result = rs;
-	    boolean flag = true;
-	    while ((flag == true) && containsStation(result, trainId)) {
-		station = new Station.Builder().withId(rs.getInt("st_id")).withName(rs.getString("st_name")).build();
-		stationList.add(station);
-		flag = rs.next();
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	int trainId = rs.getInt("tr_id");
+	ResultSet result = rs;
+	boolean flag = true;
+	while ((flag == true) && containsStation(result, trainId)) {
+	    station = new Station.Builder().withId(rs.getInt("st_id")).withName(rs.getString("st_name")).build();
+	    stationList.add(station);
+	    flag = rs.next();
 	}
 	return stationList;
     }
 
-    private boolean containsStation(ResultSet rs, int trainId) {
+    private boolean containsStation(ResultSet rs, int trainId) throws SQLException {
 	boolean contains;
-	try {
-	    if (rs.getInt("tr_id") == trainId) {
-		contains = true;
-	    } else {
-		contains = false;
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("tr_id") == trainId) {
+	    contains = true;
+	} else {
+	    contains = false;
 	}
 	return contains;
     }
 
-    private List<Departure> getDepartureFromResultSet(ResultSet rs) {
+    private List<Departure> getDepartureFromResultSet(ResultSet rs) throws SQLException {
 	List<Departure> departureList = new ArrayList<>();
 	Departure departure = null;
-	try {
-	    if (rs.getInt("d_id") != 0) {
-		departure = new Departure.Builder().withId(rs.getInt("d_id"))
-			.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-		departureList.add(departure);
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("d_id") != 0) {
+	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
+		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
+	    departureList.add(departure);
 	}
 	return departureList;
     }
 
     @Override
-    public Optional<Train> find(int id) {
+    public Optional<Train> find(int id) throws SQLException {
 	Optional<Train> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_TRAIN_BY_ID)) {
 	    query.setInt(1, id);
@@ -107,14 +93,12 @@ public class JdbcTrainDao implements TrainDao {
 		train = getTrainFromResultSet(rs);
 		result = Optional.of(train);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Train> findAll() {
+    public List<Train> findAll() throws SQLException {
 	List<Train> trainList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_TRAINS)) {
 	    ResultSet rs = query.executeQuery();
@@ -123,14 +107,12 @@ public class JdbcTrainDao implements TrainDao {
 		train = getTrainFromResultSet(rs);
 		trainList.add(train);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return trainList;
     }
 
     @Override
-    public List<Train> findAll(String stationStart, String stationEnd, String startDate) {
+    public List<Train> findAll(String stationStart, String stationEnd, String startDate) throws SQLException {
 	List<Train> trainList = new ArrayList<>();
 	try (PreparedStatement query = connection
 		.prepareStatement(SELECT_ALL_TRAINS_BY_STATION_START_STATION_END_START_DATE)) {
@@ -144,38 +126,32 @@ public class JdbcTrainDao implements TrainDao {
 		train = extractTrainFromResultSet(rs);
 		trainList.add(train);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return trainList;
     }
 
-    private Train extractTrainFromResultSet(ResultSet rs) {
+    private Train extractTrainFromResultSet(ResultSet rs) throws SQLException {
 	Train train;
 	List<Departure> departureList = new ArrayList<>();
 	Departure departure;
-	try {
-	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
-		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-	    departureList.add(departure);
-	    List<Station> stationList = new ArrayList<>();
-	    Station stationFrom = new Station.Builder().withId(rs.getInt("st_id_start"))
-		    .withName(rs.getString("st_name_start")).build();
-	    Station stationTo = new Station.Builder().withId(rs.getInt("st_id_end"))
-		    .withName(rs.getString("st_name_end")).build();
-	    stationList.add(stationFrom);
-	    stationList.add(stationTo);
+	departure = new Departure.Builder().withId(rs.getInt("d_id"))
+		.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
+	departureList.add(departure);
+	List<Station> stationList = new ArrayList<>();
+	Station stationFrom = new Station.Builder().withId(rs.getInt("st_id_start"))
+		.withName(rs.getString("st_name_start")).build();
+	Station stationTo = new Station.Builder().withId(rs.getInt("st_id_end")).withName(rs.getString("st_name_end"))
+		.build();
+	stationList.add(stationFrom);
+	stationList.add(stationTo);
 
-	    train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
-		    .withDepartureList(departureList).withStationList(stationList).build();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
+	train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
+		.withDepartureList(departureList).withStationList(stationList).build();
 	return train;
     }
 
     @Override
-    public void create(Train train) {
+    public void create(Train train) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_TRAIN, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, train.getName());
 	    query.executeUpdate();
@@ -183,40 +159,23 @@ public class JdbcTrainDao implements TrainDao {
 	    if (keys.next()) {
 		train.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void update(Train train) {
+    public void update(Train train) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_TRAIN)) {
 	    query.setString(1, train.getName());
 	    query.setInt(2, train.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_TRAIN_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
-    }
-
-    @Override
-    public void close() throws Exception {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
 	}
     }
 }

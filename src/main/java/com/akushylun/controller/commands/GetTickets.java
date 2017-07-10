@@ -12,6 +12,7 @@ import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Ticket;
 import com.akushylun.model.entities.Train;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.TicketService;
 import com.akushylun.model.services.TrainService;
 
@@ -22,7 +23,7 @@ public class GetTickets implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 	String pageToGo = "";
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	List<Ticket> ticketList = new ArrayList<>();

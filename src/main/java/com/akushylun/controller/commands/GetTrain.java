@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Station;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.StationService;
 
 public class GetTrain implements Command {
@@ -18,7 +19,7 @@ public class GetTrain implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 	String pageToGo = null;
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	if (authenticator.isLoggedIn()) {

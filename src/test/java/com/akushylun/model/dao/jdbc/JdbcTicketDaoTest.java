@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,11 +26,11 @@ public class JdbcTicketDaoTest {
     public void setUp() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcTicketDao(databaseConfig.getConnection(), true);
+	dao = new JdbcTicketDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws SQLException {
 	Ticket actualTicket = dao.find(1).get();
 	assertNotNull(actualTicket);
 	assertEquals(1, actualTicket.getId());
@@ -38,12 +39,12 @@ public class JdbcTicketDaoTest {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
     @Test
-    public void createTest() {
+    public void createTest() throws SQLException {
 	Ticket expectedTicket = new Ticket.Builder().withPrice(BigDecimal.valueOf(600))
 		.withTrain(new Train.Builder().withId(1).build()).build();
 	dao.create(expectedTicket);
@@ -51,7 +52,7 @@ public class JdbcTicketDaoTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws SQLException {
 	Ticket expectedTicket = new Ticket.Builder().withPrice(BigDecimal.valueOf(600))
 		.withTrain(new Train.Builder().withId(1).build()).build();
 	dao.create(expectedTicket);
@@ -60,7 +61,7 @@ public class JdbcTicketDaoTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws SQLException {
 	Ticket expectedTicket = new Ticket.Builder().withId(1).withPrice(BigDecimal.valueOf(600))
 		.withTrain(new Train.Builder().withId(1).build()).build();
 	dao.update(expectedTicket);

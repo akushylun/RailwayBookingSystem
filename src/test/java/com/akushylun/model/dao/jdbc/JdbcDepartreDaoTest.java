@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 import org.junit.After;
@@ -25,11 +26,11 @@ public class JdbcDepartreDaoTest {
     public void setUp() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcDepartureDao(databaseConfig.getConnection(), true);
+	dao = new JdbcDepartureDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws SQLException {
 	Departure actualDeparture = dao.find(1).get();
 	assertNotNull(actualDeparture);
 	assertEquals(1, actualDeparture.getId());
@@ -38,12 +39,12 @@ public class JdbcDepartreDaoTest {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
     @Test
-    public void createTest() {
+    public void createTest() throws SQLException {
 	Departure expectedDeparture = new Departure.Builder().withDateTtime(LocalDateTime.of(2017, 06, 5, 17, 38, 15))
 		.withTrain(new Train.Builder().withId(1).build()).build();
 	dao.create(expectedDeparture);
@@ -52,13 +53,13 @@ public class JdbcDepartreDaoTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws SQLException {
 	dao.delete(1);
 	assertFalse(dao.find(1).isPresent());
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws SQLException {
 	Departure expectedDeparture = new Departure.Builder().withId(1)
 		.withDateTtime(LocalDateTime.of(2018, 04, 8, 17, 38, 15))
 		.withTrain(new Train.Builder().withId(1).build()).build();

@@ -37,16 +37,14 @@ public class JdbcBookingDao implements BookingDao {
     private static final String DELETE_BOOKING_BY_ID = "DELETE FROM booking WHERE b_id = ?";
     private static final String DELETE_M2M_BOOKING_TICKETS_ID = "DELETE FROM m2m_booking_ticket WHERE m2m_booking_b_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcBookingDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcBookingDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     @Override
-    public Optional<Booking> find(int id) {
+    public Optional<Booking> find(int id) throws SQLException {
 	Optional<Booking> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_BOOKING_BY_ID)) {
 	    query.setInt(1, id);
@@ -56,8 +54,6 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		result = Optional.of(booking);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
@@ -69,37 +65,28 @@ public class JdbcBookingDao implements BookingDao {
 	return booking;
     }
 
-    private Person getUserFromResultSet(ResultSet rs) {
+    private Person getUserFromResultSet(ResultSet rs) throws SQLException {
 	Person person = null;
-	try {
-	    if (rs.getInt("p_id") != 0) {
-		person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
-			.withSurname(rs.getString("p_surname"))
-			.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("p_id") != 0) {
+	    person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
+		    .withSurname(rs.getString("p_surname"))
+		    .withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
 	}
 	return person;
     }
 
-    private List<Ticket> getTicketsFromResultSet(ResultSet rs) {
+    private List<Ticket> getTicketsFromResultSet(ResultSet rs) throws SQLException {
 	List<Ticket> ticketsList = new ArrayList<>();
 	Ticket ticket = null;
-	try {
-	    if (rs.getInt("ti_id") != 0) {
-		ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).withPrice(rs.getBigDecimal("ti_price"))
-			.build();
-		ticketsList.add(ticket);
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("ti_id") != 0) {
+	    ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).withPrice(rs.getBigDecimal("ti_price")).build();
+	    ticketsList.add(ticket);
 	}
 	return ticketsList;
     }
 
     @Override
-    public List<Booking> findAllByUserId(int userId) {
+    public List<Booking> findAllByUserId(int userId) throws SQLException {
 	List<Booking> bookingList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS_BY_PERSON_ID)) {
 	    query.setInt(1, userId);
@@ -109,14 +96,12 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		bookingList.add(booking);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return bookingList;
     }
 
     @Override
-    public List<Booking> findAll() {
+    public List<Booking> findAll() throws SQLException {
 	List<Booking> bookingList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS);
 		ResultSet rs = query.executeQuery();) {
@@ -125,14 +110,12 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		bookingList.add(booking);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return bookingList;
     }
 
     @Override
-    public void create(Booking booking) {
+    public void create(Booking booking) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_BOOKING, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setBigDecimal(1, booking.getPrice());
 	    query.setTimestamp(2, Timestamp.valueOf(booking.getDate()));
@@ -142,13 +125,11 @@ public class JdbcBookingDao implements BookingDao {
 	    if (keys.next()) {
 		booking.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void createBookingTicketsLink(Booking booking) {
+    public void createBookingTicketsLink(Booking booking) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_M2M_BOOKING_TICKETS_ID)) {
 	    query.setInt(1, booking.getId());
 	    List<Ticket> tickets = booking.getTickets();
@@ -157,51 +138,32 @@ public class JdbcBookingDao implements BookingDao {
 		query.setInt(2, ticketId);
 		query.executeUpdate();
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void update(Booking booking) {
+    public void update(Booking booking) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_BOOKING)) {
 	    query.setBigDecimal(1, booking.getPrice());
 	    query.setTimestamp(2, Timestamp.valueOf(booking.getDate()));
 	    query.setInt(3, booking.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_BOOKING_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void deleteBookingTicketsLink(int id) {
+    public void deleteBookingTicketsLink(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_M2M_BOOKING_TICKETS_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
-    }
-
-    @Override
-    public void close() {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
 	}
     }
 }

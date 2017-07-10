@@ -11,6 +11,7 @@ import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.PersonService;
 
 public class PostRegistration implements Command {
@@ -23,7 +24,7 @@ public class PostRegistration implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 
 	String pageToGo = null;
 	Person person = null;

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,11 +23,11 @@ public class JdbcTrainDaoTest {
     public void setUp() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcTrainDao(databaseConfig.getConnection(), true);
+	dao = new JdbcTrainDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws SQLException {
 	Train actualTrain = dao.find(1).get();
 	assertNotNull(actualTrain);
 	assertEquals(1, actualTrain.getId());
@@ -34,19 +35,19 @@ public class JdbcTrainDaoTest {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
     @Test
-    public void createTest() {
+    public void createTest() throws SQLException {
 	Train expectedTrain = new Train.Builder().withName("A900").build();
 	dao.create(expectedTrain);
 	assertNotNull(expectedTrain.getId());
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws SQLException {
 	Train expectedTrain = new Train.Builder().withName("A900").build();
 	dao.create(expectedTrain);
 	dao.delete(expectedTrain.getId());
@@ -54,7 +55,7 @@ public class JdbcTrainDaoTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws SQLException {
 	Train expectedTrain = new Train.Builder().withId(1).withName("A345").build();
 	dao.update(expectedTrain);
 	assertEquals(expectedTrain.getName(), dao.find(expectedTrain.getId()).get().getName());

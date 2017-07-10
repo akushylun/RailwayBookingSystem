@@ -38,12 +38,10 @@ public class JdbcTicketDao implements TicketDao {
     private static final String UPDATE_TICKET = "UPDATE ticket SET ti_price = ?, ti_train_tr_id = ? WHERE ti_id = ?";
     private static final String DELETE_TICKET_BY_ID = "DELETE FROM ticket WHERE ti_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcTicketDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcTicketDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Ticket getTicketFromResultSet(ResultSet rs) throws SQLException {
@@ -52,68 +50,52 @@ public class JdbcTicketDao implements TicketDao {
 	return ticket;
     }
 
-    private Train getTrainFromResultSet(ResultSet rs) {
+    private Train getTrainFromResultSet(ResultSet rs) throws SQLException {
 	Train train = null;
-	try {
-	    train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
-		    .withDepartureList(getDeparturesFromResultSet(rs)).withStationList(getStationsFromResultSet(rs))
-		    .build();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
+	train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
+		.withDepartureList(getDeparturesFromResultSet(rs)).withStationList(getStationsFromResultSet(rs))
+		.build();
 	return train;
     }
 
-    private List<Departure> getDeparturesFromResultSet(ResultSet rs) {
+    private List<Departure> getDeparturesFromResultSet(ResultSet rs) throws SQLException {
 	List<Departure> departureList = new ArrayList<>();
 	Departure departure = null;
-	try {
-	    if (rs.getInt("d_id") != 0) {
-		departure = new Departure.Builder().withId(rs.getInt("d_id"))
-			.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-		departureList.add(departure);
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("d_id") != 0) {
+	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
+		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
+	    departureList.add(departure);
 	}
 	return departureList;
     }
 
-    private List<Station> getStationsFromResultSet(ResultSet rs) {
+    private List<Station> getStationsFromResultSet(ResultSet rs) throws SQLException {
 	List<Station> stationList = new ArrayList<>();
 	Station station = null;
-	try {
-	    int ticketId = rs.getInt("ti_id");
-	    ResultSet result = rs;
-	    boolean flag = true;
-	    while ((flag == true) && containsStation(result, ticketId)) {
-		station = new Station.Builder().withId(result.getInt("st_id")).withName(result.getString("st_name"))
-			.build();
-		stationList.add(station);
-		flag = rs.next();
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	int ticketId = rs.getInt("ti_id");
+	ResultSet result = rs;
+	boolean flag = true;
+	while ((flag == true) && containsStation(result, ticketId)) {
+	    station = new Station.Builder().withId(result.getInt("st_id")).withName(result.getString("st_name"))
+		    .build();
+	    stationList.add(station);
+	    flag = rs.next();
 	}
 	return stationList;
     }
 
-    private boolean containsStation(ResultSet rs, int ticketId) {
+    private boolean containsStation(ResultSet rs, int ticketId) throws SQLException {
 	boolean contains;
-	try {
-	    if (rs.getInt("ti_id") == ticketId) {
-		contains = true;
-	    } else {
-		contains = false;
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getInt("ti_id") == ticketId) {
+	    contains = true;
+	} else {
+	    contains = false;
 	}
 	return contains;
     }
 
     @Override
-    public Optional<Ticket> find(int id) {
+    public Optional<Ticket> find(int id) throws SQLException {
 	Optional<Ticket> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_TICKET_BY_ID)) {
 	    query.setInt(1, id);
@@ -123,14 +105,12 @@ public class JdbcTicketDao implements TicketDao {
 		Ticket = getTicketFromResultSet(rs);
 		result = Optional.of(Ticket);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Ticket> findAll() {
+    public List<Ticket> findAll() throws SQLException {
 	List<Ticket> ticketList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_TICKETS)) {
 	    ResultSet rs = query.executeQuery();
@@ -141,14 +121,12 @@ public class JdbcTicketDao implements TicketDao {
 		    ticketList.add(ticket);
 		}
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return ticketList;
     }
 
     @Override
-    public List<Ticket> findAll(int bookingId) {
+    public List<Ticket> findAll(int bookingId) throws SQLException {
 	List<Ticket> ticketList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_TICKETS_BY_BOOKING_ID)) {
 	    query.setInt(1, bookingId);
@@ -158,14 +136,12 @@ public class JdbcTicketDao implements TicketDao {
 		ticket = getTicketFromResultSet(rs);
 		ticketList.add(ticket);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return ticketList;
     }
 
     @Override
-    public void create(Ticket ticket) {
+    public void create(Ticket ticket) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_TICKET, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setBigDecimal(1, ticket.getPrice());
 	    query.setInt(2, ticket.getTrain().getId());
@@ -174,42 +150,24 @@ public class JdbcTicketDao implements TicketDao {
 	    if (keys.next()) {
 		ticket.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void update(Ticket ticket) {
+    public void update(Ticket ticket) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_TICKET)) {
 	    query.setBigDecimal(1, ticket.getPrice());
 	    query.setInt(2, ticket.getTrain().getId());
 	    query.setInt(3, ticket.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_TICKET_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
-
-    @Override
-    public void close() {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
-	}
-    }
-
 }

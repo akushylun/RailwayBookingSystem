@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.model.entities.Train;
+import com.akushylun.model.exceptions.ServiceException;
 import com.akushylun.model.services.TrainService;
 
 public class PostTrain implements Command {
@@ -23,7 +24,7 @@ public class PostTrain implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+	    throws ServletException, IOException, ServiceException {
 
 	String pageToGo = null;
 	Authenticator authenticator = new AuthenticatorImpl(request);

@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -25,11 +26,11 @@ public class JdbcPersonDaoTest {
     public void setUp() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcPersonDao(databaseConfig.getConnection(), true);
+	dao = new JdbcPersonDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void findByIdTest() {
+    public void findByIdTest() throws SQLException {
 	Person actualUser = dao.find(1).get();
 	assertNotNull(actualUser);
 	assertEquals("mark", actualUser.getName());
@@ -40,12 +41,12 @@ public class JdbcPersonDaoTest {
     }
 
     @Test
-    public void findAllTest() {
+    public void findAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
     @Test
-    public void createUserTest() {
+    public void createUserTest() throws SQLException {
 	Person expectedPerson = new Person.Builder().withName("sindi").withSurname("abbot").withRole(Role.USER)
 		.withPersonLogin(new Login.Builder().withId(1).build()).build();
 	dao.create(expectedPerson);
@@ -54,7 +55,7 @@ public class JdbcPersonDaoTest {
     }
 
     @Test
-    public void updateUserTest() {
+    public void updateUserTest() throws SQLException {
 	Person person = new Person.Builder().withId(1).withName("jack").withSurname("johnson").withRole(Role.USER)
 		.build();
 	dao.update(person);
@@ -62,7 +63,7 @@ public class JdbcPersonDaoTest {
     }
 
     @Test
-    public void deleteUserTest() {
+    public void deleteUserTest() throws SQLException {
 	Person person = new Person.Builder().withName("sindi").withSurname("abbot").withRole(Role.USER)
 		.withPersonLogin(new Login.Builder().withId(1).build()).build();
 	dao.create(person);

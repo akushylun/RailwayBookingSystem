@@ -1,5 +1,6 @@
 package com.akushylun.model.services;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -7,6 +8,7 @@ import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.StationDao;
 import com.akushylun.model.entities.Station;
+import com.akushylun.model.exceptions.ServiceException;
 
 public class StationService {
     private DaoFactory daoFactory;
@@ -23,49 +25,59 @@ public class StationService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<Station> getById(int stationId) {
+    public Optional<Station> getById(int stationId) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    StationDao stationDao = daoFactory.createStationDao();
 	    connection.begin();
 	    return stationDao.find(stationId);
+	} catch (SQLException ex) {
+	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Station> getByAll() {
+    public List<Station> getByAll() throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    StationDao stationDao = daoFactory.createStationDao();
 	    connection.begin();
 	    return stationDao.findAll();
+	} catch (SQLException ex) {
+	    throw new ServiceException(ex);
 	}
     }
 
-    public void createStation(Station station) {
+    public void createStation(Station station) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    StationDao stationDao = daoFactory.createStationDao();
 	    connection.begin();
 	    stationDao.create(station);
 	    connection.commit();
 	    connection.close();
+	} catch (SQLException ex) {
+	    throw new ServiceException(ex);
 	}
     }
 
-    public void updateStation(Station station) {
+    public void updateStation(Station station) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    StationDao stationDao = daoFactory.createStationDao();
 	    connection.begin();
 	    stationDao.update(station);
 	    connection.commit();
 	    connection.close();
+	} catch (SQLException ex) {
+	    throw new ServiceException(ex);
 	}
     }
 
-    public void deleteStation(int stationId) {
+    public void deleteStation(int stationId) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    StationDao stationDao = daoFactory.createStationDao();
 	    connection.begin();
 	    stationDao.delete(stationId);
 	    connection.commit();
 	    connection.close();
+	} catch (SQLException ex) {
+	    throw new ServiceException(ex);
 	}
     }
 }

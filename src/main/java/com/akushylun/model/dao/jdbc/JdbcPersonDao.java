@@ -30,12 +30,10 @@ public class JdbcPersonDao implements PersonDao {
 	    + " WHERE p_id = ?";
     private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_id = ?";
 
-    private final boolean connectionShouldBeClosed;
     private Connection connection;
 
-    public JdbcPersonDao(Connection connection, boolean connectionShouldBeClosed) {
+    public JdbcPersonDao(Connection connection) {
 	this.connection = connection;
-	this.connectionShouldBeClosed = connectionShouldBeClosed;
     }
 
     private Person getUserFromResultSet(ResultSet rs) throws SQLException {
@@ -45,23 +43,21 @@ public class JdbcPersonDao implements PersonDao {
 	return person;
     }
 
-    private Login getLoginFromResultSet(ResultSet rs) {
+    private Login getLoginFromResultSet(ResultSet rs) throws SQLException {
 	Login login = null;
-	try {
-	    if (rs.getString("l_email") != null) {
-		int id = rs.getInt("l_id");
-		String loginName = rs.getString("l_email");
-		String password = rs.getString("l_password");
-		login = new Login.Builder().withId(id).withEmail(loginName).withPassword(password).build();
-	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
+	if (rs.getString("l_email") != null) {
+	    int id = rs.getInt("l_id");
+	    String loginName = rs.getString("l_email");
+	    String password = rs.getString("l_password");
+	    login = new Login.Builder().withId(id).withEmail(loginName).withPassword(password).build();
+
 	}
 	return login;
+
     }
 
     @Override
-    public Optional<Person> find(int id) {
+    public Optional<Person> find(int id) throws SQLException {
 	Optional<Person> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_ID)) {
 	    query.setInt(1, id);
@@ -71,14 +67,12 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		result = Optional.of(person);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public Optional<Person> findByLogin(String loginName) {
+    public Optional<Person> findByLogin(String loginName) throws SQLException {
 	Optional<Person> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_LOGIN_NAME)) {
 	    query.setString(1, loginName);
@@ -88,14 +82,12 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		result = Optional.of(person);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Person> findAll() {
+    public List<Person> findAll() throws SQLException {
 	List<Person> userList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_PERSONS)) {
 	    ResultSet rs = query.executeQuery();
@@ -104,14 +96,12 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		userList.add(person);
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
 	return userList;
     }
 
     @Override
-    public void create(Person person) {
+    public void create(Person person) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_PERSON, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
@@ -122,42 +112,25 @@ public class JdbcPersonDao implements PersonDao {
 	    if (keys.next()) {
 		person.setId(keys.getInt(1));
 	    }
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void update(Person person) {
+    public void update(Person person) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_PERSON)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
 	    query.setString(3, person.getRole().name());
 	    query.setInt(4, person.getId());
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
 	}
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_PERSON_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
-	} catch (SQLException ex) {
-	    throw new RuntimeException(ex);
-	}
-    }
-
-    @Override
-    public void close() {
-	if (connectionShouldBeClosed) {
-	    try {
-		connection.close();
-	    } catch (SQLException e) {
-		throw new RuntimeException(e);
-	    }
 	}
     }
 

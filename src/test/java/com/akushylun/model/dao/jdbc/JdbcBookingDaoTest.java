@@ -6,6 +6,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,11 @@ public class JdbcBookingDaoTest {
     public void setUp() {
 	databaseConfig.establishConnection();
 	databaseConfig.runDatabaseScripts();
-	dao = new JdbcBookingDao(databaseConfig.getConnection(), true);
+	dao = new JdbcBookingDao(databaseConfig.getConnection());
     }
 
     @Test
-    public void getByIdTest() {
+    public void getByIdTest() throws SQLException {
 	Booking actualBooking = dao.find(1).get();
 	assertNotNull(actualBooking);
 	assertEquals(1, actualBooking.getId());
@@ -43,20 +44,20 @@ public class JdbcBookingDaoTest {
     }
 
     @Test
-    public void getAllTest() {
+    public void getAllTest() throws SQLException {
 	List<Booking> actualBookingList = dao.findAll();
 	assertNotNull(actualBookingList.size());
 	assertEquals(2, actualBookingList.size());
     }
 
     @Test
-    public void getAllByUserIdTest() {
+    public void getAllByUserIdTest() throws SQLException {
 	List<Booking> actualBookingList = dao.findAllByUserId(1);
 	assertEquals(2, actualBookingList.size());
     }
 
     @Test
-    public void createTest() {
+    public void createTest() throws SQLException {
 
 	List<Ticket> ticketList = new ArrayList<>();
 	Ticket ticket = new Ticket.Builder().withId(2).build();
@@ -73,14 +74,14 @@ public class JdbcBookingDaoTest {
     }
 
     @Test
-    public void deleteTest() {
+    public void deleteTest() throws SQLException {
 	dao.deleteBookingTicketsLink(1);
 	dao.delete(1);
 	assertFalse(dao.find(1).isPresent());
     }
 
     @Test
-    public void updateTest() {
+    public void updateTest() throws SQLException {
 	Booking expectedBooking = dao.find(1).get();
 	expectedBooking.setPrice(BigDecimal.valueOf(500));
 	dao.update(expectedBooking);

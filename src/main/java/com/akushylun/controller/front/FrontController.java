@@ -22,6 +22,7 @@ import com.akushylun.controller.commands.GetTrain;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
+import com.akushylun.model.exceptions.ServiceException;
 
 /**
  * Servlet implementation class FrontController
@@ -71,7 +72,13 @@ public class FrontController extends HttpServlet {
 	String key = method + ":" + path;
 	System.out.println(key);
 	Command command = commands.getOrDefault(key, (req, resp) -> "/index.jsp");
-	String viewPage = command.execute(request, response);
+	String viewPage = null;
+	try {
+	    viewPage = command.execute(request, response);
+	} catch (ServiceException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
 	request.getRequestDispatcher(viewPage).forward(request, response);
 
     }
