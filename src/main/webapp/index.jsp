@@ -28,6 +28,7 @@
 
 		<div class="starter-template">
 			<h1>Railway booking office</h1>
+
 			<p class="lead">
 				Booking office where You can buy tickets<br>
 			</p>

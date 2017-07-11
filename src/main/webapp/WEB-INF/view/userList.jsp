@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Bookings</title>
+<title>Insert title here</title>
 
 <!-- Bootstrap core CSS -->
 <link href="<c:url value="/resources/css/bootstrap.min.css" />"
@@ -19,11 +19,11 @@
 
 </head>
 <body>
-	<c:import url="parts/header.jsp"/>
+	<c:import url="parts/header.jsp" />
 
 	<div class="page-header">
 		<center>
-			<h1>List Of Orders</h1>
+			<h1>List Of Users</h1>
 		</center>
 	</div>
 	<div class="container">
@@ -31,24 +31,28 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Price</th>
-					<th>Date</th>
-					<th>TicketInfo</th>
+					<th>Name</th>
+					<th>Surname</th>
+					<th>Role</th>
+					<th>Login</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:set var="count" value="0" scope="page" />
-				<c:forEach var="booking" items="${bookingList}">
+				<c:forEach var="person" items="${personList}">
 					<c:set var="count" value="${count + 1}" scope="page" />
 					<tr>
 						<td><c:out value="${count}" /></td>
-						<td><c:out value="${booking.price}" /></td>
-						<td><c:out value="${booking.date}" /></td>
-						<td><a href="./tickets/${booking.id}">Ticket Info</a></td>
+						<td><c:out value="${person.name}" /></td>
+						<td><c:out value="${person.role}" /></td>
+						<td><c:out value="${person.login.email}" /></td>
+						<td><button class="btn btn-warning" type="submit">Update</button></td>
+						<td><button class="btn btn-danger" type="submit">Delete</button></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+
 </body>
 </html>

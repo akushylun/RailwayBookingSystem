@@ -1,3 +1,6 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <header>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -11,17 +14,29 @@
 				</button>
 				<a class="navbar-brand" href="index.jsp">RailwayBooking</a>
 			</div>
+
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="./view/bookings">Orders</a></li>
-					<li><a href="view/train">Search Train</a></li>
+
+					<c:choose>
+						<c:when test="${sessionScope.authToken.role eq 'USER'}">
+							<li class="active"><a href="./view/bookings">Orders</a></li>
+							<li><a href="view/train">Search Train</a></li>
+						</c:when>
+						<c:when test="${sessionScope.authToken.role eq 'ADMIN'}">
+							<li class="active"><a href="./view/persons">Users</a></li>
+							<li><a href="view/trains">Trains</a></li>
+						</c:when>
+					</c:choose>
 				</ul>
+
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="view/login">Login</a></li>
 					<li><a href="view/logout">Logout</a></li>
 				</ul>
+
 			</div>
 			<!--/.nav-collapse -->
 		</div>
 	</nav>
-</header>	
+</header>
