@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,9 @@ public class JdbcTrainDao implements TrainDao {
 	    + "A.d_datetime, A.m2m_cost_time as cost_time_start, B.m2m_cost_time as cost_time_end, A.st_id as st_id_start, A.st_name as st_name_start, "
 	    + "B.st_id as st_id_end, B.st_name as st_name_end FROM (SELECT tr_id, tr_name, st_id, st_name, d_id, d_datetime, m2m_cost_time "
 	    + "FROM train INNER JOIN departure ON tr_id = d_id INNER JOIN m2m_train_station ON tr_id = m2m_train_tr_id INNER JOIN station "
-	    + "ON m2m_station_st_id = st_id WHERE st_name = ? and date(d_datetime) = ?) as A INNER JOIN (SELECT tr_id, tr_name, st_id, st_name, "
+	    + "ON m2m_station_st_id = st_id WHERE st_name = ? AND cast(d_datetime as DATE) = ?) as A INNER JOIN (SELECT tr_id, tr_name, st_id, st_name, "
 	    + "d_id, d_datetime, m2m_cost_time FROM train INNER JOIN departure ON tr_id = d_id INNER JOIN m2m_train_station ON tr_id = m2m_train_tr_id "
-	    + "INNER JOIN station as s ON m2m_station_st_id = st_id WHERE st_name = ? AND date(d_datetime) = ?) as B ON A.tr_id = B.tr_id";
+	    + "INNER JOIN station as s ON m2m_station_st_id = st_id WHERE st_name = ?) as B ON A.tr_id = B.tr_id AND A.d_id = B.d_id";
     private static final String CREATE_TRAIN = "INSERT INTO train (tr_name) " + " VALUES (?)";
     private static final String UPDATE_TRAIN = "UPDATE train SET tr_name = ? WHERE tr_id = ?";
     private static final String DELETE_TRAIN_BY_ID = "DELETE FROM train WHERE tr_id = ?";
@@ -112,14 +113,13 @@ public class JdbcTrainDao implements TrainDao {
     }
 
     @Override
-    public List<Train> findAll(String stationStart, String stationEnd, String startDate) throws SQLException {
+    public List<Train> findAll(String stationStart, String stationEnd, LocalDate startDate) throws SQLException {
 	List<Train> trainList = new ArrayList<>();
 	try (PreparedStatement query = connection
 		.prepareStatement(SELECT_ALL_TRAINS_BY_STATION_START_STATION_END_START_DATE)) {
 	    query.setString(1, stationStart);
-	    query.setString(2, startDate);
+	    query.setString(2, startDate.toString());
 	    query.setString(3, stationEnd);
-	    query.setString(4, startDate);
 	    ResultSet rs = query.executeQuery();
 	    Train train;
 	    while (rs.next()) {

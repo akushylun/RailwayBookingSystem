@@ -1,6 +1,6 @@
-package com.akushylun.controller.constants;
+package com.akushylun.controller.util;
 
-public class PagePath {
+public final class PagePath {
 
     public static final String BOOKING = "/WEB-INF/view/booking.jsp";
     public static final String BOOKING_LIST = "/WEB-INF/view/bookingList.jsp";

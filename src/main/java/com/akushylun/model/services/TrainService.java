@@ -1,6 +1,7 @@
 package com.akushylun.model.services;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ public class TrainService {
 	}
     }
 
-    public List<Train> getByAll(String stationStart, String stationEnd, String startDate) throws ServiceException {
+    public List<Train> getByAll(String stationStart, String stationEnd, LocalDate startDate) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
