@@ -19,6 +19,7 @@ import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
 import com.akushylun.controller.commands.GetTickets;
 import com.akushylun.controller.commands.GetTrain;
+import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
@@ -49,6 +50,7 @@ public class FrontController extends HttpServlet {
 	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
 	commands.put("GET:/tickets/", new GetTickets());
+	commands.put("POST:/bookings", new PostBooking());
     }
 
     @Override

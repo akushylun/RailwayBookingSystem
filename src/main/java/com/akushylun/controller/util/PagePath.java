@@ -10,6 +10,6 @@ public final class PagePath {
     public static final String REGISTRATION = "/WEB-INF/view/registration.jsp";
     public static final String TICKET_LIST = "/WEB-INF/view/ticketList.jsp";
     public static final String TRAIN = "/WEB-INF/view/train.jsp";
-    public static final String ROUTE = "/WEB-INF/view/shedules.jsp";
+    public static final String ROUTE = "/WEB-INF/view/trainList.jsp";
 
 }

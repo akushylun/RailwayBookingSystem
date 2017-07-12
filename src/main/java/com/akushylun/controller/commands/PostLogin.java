@@ -23,6 +23,7 @@ public class PostLogin implements Command {
     private static final String PARAM_LOGIN = "login";
     private static final String PARAM_PASSWORD = "password";
 
+    // TODO
     private PersonService service = PersonService.getInstance();
 
     private Pattern emailPatern = RegexValidator.compileRegExpression(RegexValidator.EMAIL);
