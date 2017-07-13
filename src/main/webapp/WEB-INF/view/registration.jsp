@@ -15,7 +15,7 @@
 </head>
 <body>
 
-	<%@include file="parts/header.jsp"%>
+<c:import url="parts/header.jsp"/>
 	
 	<div class="container">
 		<form class="form-register" action="./registration" method="POST">

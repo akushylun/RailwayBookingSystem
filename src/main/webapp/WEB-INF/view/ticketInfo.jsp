@@ -14,16 +14,16 @@
 <link href="<c:url value="/resources/css/grid.css" />" rel="stylesheet">
 </head>
 <body>
-	<%@include file="parts/header.jsp"%>
+	<c:import url="parts/header.jsp" />
 	<div class="page-header">
-	<center>
-		<h1>List of tickets</h1>
-	</center>
+		<center>
+			<h1>List of tickets</h1>
+		</center>
 	</div>
-	
+
 	<center>
 		<form action="./tickets" method="GET">
-			<div class="container" >
+			<div class="container">
 				<table class="table table-striped">
 					<thead>
 						<tr>
@@ -43,7 +43,8 @@
 								<td><c:out value="${count}" /></td>
 								<td><c:out value="${ticket.price}" /></td>
 								<td><c:out value="${ticket.train.name}" /></td>
-								<td><c:out value="${ticket.train.departureList[0].dateTime}" /></td>
+								<td><c:out
+										value="${ticket.train.departureList[0].dateTime}" /></td>
 								<td><c:out value="${ticket.train.stationList[0].name}" /></td>
 								<td><c:out value="${ticket.train.stationList[1].name}" /></td>
 							</tr>

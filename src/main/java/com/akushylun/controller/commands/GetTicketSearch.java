@@ -12,7 +12,7 @@ import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Station;
 import com.akushylun.model.services.StationService;
 
-public class GetTrain implements Command {
+public class GetTicketSearch implements Command {
 
     StationService service = StationService.getInstance();
 
@@ -23,7 +23,7 @@ public class GetTrain implements Command {
 	List<Station> listStation = service.getByAll();
 	request.setAttribute("stationList", listStation);
 
-	return PagePath.TRAIN;
+	return PagePath.TICKET_SEARCH;
 
     }
 }

@@ -21,7 +21,7 @@
 					<c:choose>
 						<c:when test="${sessionScope.authToken.role eq 'USER'}">
 							<li class="active"><a href="./view/bookings">Orders</a></li>
-							<li><a href="view/train">Search Train</a></li>
+							<li><a href="view/ticket/search">Search Train</a></li>
 						</c:when>
 						<c:when test="${sessionScope.authToken.role eq 'ADMIN'}">
 							<li class="active"><a href="./view/persons">Users</a></li>

@@ -35,7 +35,7 @@ public class GetTickets implements Command {
 	}
 	request.setAttribute("ticketList", ticketList);
 
-	return PagePath.TICKET_LIST;
+	return PagePath.TICKET_INFO;
 
     }
 }

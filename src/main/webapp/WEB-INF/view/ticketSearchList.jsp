@@ -12,10 +12,10 @@
 	rel="stylesheet">
 </head>
 <body>
-	<%@include file="parts/header.jsp"%>
+	<c:import url="parts/header.jsp" />
 
 	<div class="container">
-		<form action="./bookings" method="POST">
+		<form action="./booking" method="POST">
 			<div class="page-header">
 				<center>
 					<h1>List Of Finded Trains</h1>
@@ -33,7 +33,7 @@
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="ticket" items="${trainList}">
+					<c:forEach var="ticket" items="${ticketList}">
 						<tr>
 							<td><c:out value="${ticket.train.name}" /></td>
 							<td><c:out value="${ticket.train.stationList[0].name}" /></td>
@@ -42,11 +42,12 @@
 							<td><c:out value="${ticket.price}" /></td>
 							<td><button class="btn btn-success btn-sm" type="submit">
 									Buy ticket</button></td>
-							<input type="hidden" id="thisField" name="ticketId"
-								value="${ticket.train.id}" />
-							<input type="hidden" name="ticketPrice" value="${ticket.price}" />
-							<input type="hidden" name="ticketDate" value="${ticket.train.departureList[0].dateTime}" />
 						</tr>
+						<input type="hidden" id="thisField" name="ticketId"
+							value="${ticket.train.id}" />
+						<input type="hidden" name="ticketPrice" value="${ticket.price}" />
+						<input type="hidden" name="ticketDate"
+							value="${ticket.train.departureList[0].dateTime}" />
 
 					</c:forEach>
 				</tbody>

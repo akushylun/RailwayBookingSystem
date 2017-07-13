@@ -34,6 +34,7 @@ public class PostBooking implements Command {
 	BigDecimal orderPrice = BigDecimal.valueOf(Double.parseDouble(ticketPriceParam));
 	LocalDateTime dateTime = LocalDateTime.parse(ticketDateParam);
 
+	System.out.println(orderPrice);
 	System.out.println(ticketId);
 	System.out.println(dateTime);
 

@@ -15,10 +15,10 @@
 <script src="<c:url value="/resources/js/datepicker.js" />"></script>
 </head>
 <body>
-	<%@include file="parts/header.jsp"%>
+	<c:import url="parts/header.jsp" />
 
 	<div class="container">
-		<form action="./train" method="POST">
+		<form action="./search/findedList" method="POST">
 			<div class="col-xs-3 col-xs-offset-5">
 				<div class="page-header">
 					<center>

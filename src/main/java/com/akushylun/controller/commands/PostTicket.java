@@ -18,7 +18,7 @@ import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Ticket;
 import com.akushylun.model.services.TicketService;
 
-public class PostTrain implements Command {
+public class PostTicket implements Command {
 
     private static final String STATION_FROM = "stationFrom";
     private static final String STATION_TO = "stationTo";
@@ -44,9 +44,9 @@ public class PostTrain implements Command {
 
 	if (inputTrainParamsAreValid) {
 	    List<Ticket> trainList = service.getByAll(stationFrom, stationTo, dateFormatted);
-	    request.setAttribute("trainList", trainList);
+	    request.setAttribute("ticketList", trainList);
 	}
-	return PagePath.ROUTE;
+	return PagePath.TICKET_SEARCH_LIST;
 
     }
 

@@ -8,8 +8,8 @@ public final class PagePath {
     public static final String INDEX = "index.jsp";
     public static final String PERSON_LIST = "/WEB-INF/view/userList.jsp";
     public static final String REGISTRATION = "/WEB-INF/view/registration.jsp";
-    public static final String TICKET_LIST = "/WEB-INF/view/ticketList.jsp";
-    public static final String TRAIN = "/WEB-INF/view/train.jsp";
-    public static final String ROUTE = "/WEB-INF/view/trainList.jsp";
+    public static final String TICKET_INFO = "/WEB-INF/view/ticketInfo.jsp";
+    public static final String TICKET_SEARCH = "/WEB-INF/view/ticketSearch.jsp";
+    public static final String TICKET_SEARCH_LIST = "/WEB-INF/view/ticketSearchList.jsp";
 
 }
