@@ -43,7 +43,6 @@ public class PostRegistration implements Command {
 	String password = request.getParameter(PARAM_PASSWORD);
 
 	boolean inputPersonParamsAreValid = isValidPerson(name, surname, email, password);
-
 	if (inputPersonParamsAreValid) {
 
 	    Login login = new Login.Builder().withEmail(email).withPassword(password).build();

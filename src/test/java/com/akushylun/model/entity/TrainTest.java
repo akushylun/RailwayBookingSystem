@@ -10,14 +10,14 @@ import java.util.List;
 import org.junit.Test;
 
 import com.akushylun.model.entities.Departure;
-import com.akushylun.model.entities.Station;
 import com.akushylun.model.entities.Train;
+import com.akushylun.model.entities.TrainStation;
 
 public class TrainTest {
 
     private final static int ID = 1;
     private final static String NAME = "Hyunday";
-    private List<Station> stationList = new ArrayList<Station>();
+    private List<TrainStation> stationList = new ArrayList<TrainStation>();
     private List<Departure> departureList = new ArrayList<Departure>();;
 
     @Test

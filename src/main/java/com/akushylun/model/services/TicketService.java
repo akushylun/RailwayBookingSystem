@@ -1,7 +1,6 @@
 package com.akushylun.model.services;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,16 +50,6 @@ public class TicketService {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    return ticketDao.findAll(bookingId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
-	}
-    }
-
-    public List<Ticket> getByAll(String stationStart, String stationEnd, LocalDate startDate) throws ServiceException {
-	try (DaoConnection connection = daoFactory.getConnection()) {
-	    TicketDao ticketDao = daoFactory.createTicketDao();
-	    connection.begin();
-	    return ticketDao.findAll(stationStart, stationEnd, startDate);
 	} catch (SQLException ex) {
 	    throw new ServiceException(ex);
 	}

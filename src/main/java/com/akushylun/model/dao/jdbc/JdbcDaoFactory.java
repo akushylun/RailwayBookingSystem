@@ -15,6 +15,7 @@ import com.akushylun.model.dao.PersonDao;
 import com.akushylun.model.dao.StationDao;
 import com.akushylun.model.dao.TicketDao;
 import com.akushylun.model.dao.TrainDao;
+import com.akushylun.model.dao.TrainStationDao;
 
 public class JdbcDaoFactory extends DaoFactory {
 
@@ -98,6 +99,15 @@ public class JdbcDaoFactory extends DaoFactory {
     public TrainDao createTrainDao() {
 	try {
 	    return new JdbcTrainDao(dataSource.getConnection());
+	} catch (SQLException e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    @Override
+    public TrainStationDao createTrainStationDao() {
+	try {
+	    return new JdbcTrainStationDao(dataSource.getConnection());
 	} catch (SQLException e) {
 	    throw new RuntimeException(e);
 	}

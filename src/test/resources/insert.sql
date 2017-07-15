@@ -24,7 +24,7 @@ INSERT INTO `ticket` VALUES (2,300.00,2);
 INSERT INTO `m2m_booking_ticket` VALUES (1,1);
 INSERT INTO `m2m_booking_ticket` VALUES (2,2);
 
-INSERT INTO `m2m_train_station` VALUES (0, 1,1);
-INSERT INTO `m2m_train_station` VALUES (0, 2,2);
-INSERT INTO `m2m_train_station` VALUES (30, 3,1);
-INSERT INTO `m2m_train_station` VALUES (60, 4,2);
+INSERT INTO `m2m_train_station` VALUES (0, 0.00, 1,1);
+INSERT INTO `m2m_train_station` VALUES (0, 0.00, 2,2);
+INSERT INTO `m2m_train_station` VALUES (30, 50.40, 3,1);
+INSERT INTO `m2m_train_station` VALUES (60, 190.99, 4,2);

@@ -28,26 +28,28 @@
 						<th>Station start</th>
 						<th>Station End</th>
 						<th>Time departure</th>
+						<th>Time arrival</th>
 						<th>Ticket Price</th>
 						<th>Buy ticket</th>
 					</tr>
 				</thead>
 				<tbody>
-					<c:forEach var="ticket" items="${ticketList}">
+					<c:forEach var="train" items="${trainList}">
 						<tr>
-							<td><c:out value="${ticket.train.name}" /></td>
-							<td><c:out value="${ticket.train.stationList[0].name}" /></td>
-							<td><c:out value="${ticket.train.stationList[1].name}" /></td>
-							<td><c:out value="${ticket.train.departureList[0].dateTime}" /></td>
-							<td><c:out value="${ticket.price}" /></td>
+							<td><c:out value="${train.name}" /></td>
+							<td><c:out value="${train.stationList[0].station.name}" /></td>
+							<td><c:out value="${train.stationList[1].station.name}" /></td>
+							<td><c:out value="${train.stationList[0].datetime}" /></td>
+							<td><c:out value="${train.stationList[1].datetime}" /></td>
+							<td><c:out
+									value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" /></td>
 							<td><button class="btn btn-success btn-sm" type="submit">
 									Buy ticket</button></td>
 						</tr>
 						<input type="hidden" id="thisField" name="ticketId"
-							value="${ticket.train.id}" />
-						<input type="hidden" name="ticketPrice" value="${ticket.price}" />
-						<input type="hidden" name="ticketDate"
-							value="${ticket.train.departureList[0].dateTime}" />
+							value="${train.id}" />
+						<input type="hidden" name="ticketPrice"
+							value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" />
 
 					</c:forEach>
 				</tbody>

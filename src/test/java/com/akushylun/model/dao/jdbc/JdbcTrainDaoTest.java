@@ -6,7 +6,6 @@ import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,13 +39,10 @@ public class JdbcTrainDaoTest {
 	assertEquals(2, dao.findAll().size());
     }
 
-    @Test
-    public void getAllByParamsTest() throws SQLException {
-	String stationStart = "kiev";
-	String stationEnd = "lviv";
-	LocalDate startDate = LocalDate.of(2017, 07, 8);
-	assertEquals(1, dao.findAll(stationStart, stationEnd, startDate).size());
-    }
+    // @Test
+    // public void getAllByParams() throws SQLException {
+    // assertEquals(1, dao.findAll("kiev", "lviv", LocalDate.of(2017, 07, 8)));
+    // }
 
     @Test
     public void createTest() throws SQLException {

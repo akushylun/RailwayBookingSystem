@@ -15,6 +15,7 @@ import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Ticket;
+import com.akushylun.model.entities.Train;
 import com.akushylun.model.services.BookingService;
 
 public class PostBooking implements Command {
@@ -27,21 +28,16 @@ public class PostBooking implements Command {
 
 	String ticketIdParam = request.getParameter("ticketId");
 	String ticketPriceParam = request.getParameter("ticketPrice");
-	String ticketDateParam = request.getParameter("ticketDate");
 
 	int ticketId = Integer.parseInt(ticketIdParam);
 	Person person = (Person) request.getSession().getAttribute("authToken");
 	BigDecimal orderPrice = BigDecimal.valueOf(Double.parseDouble(ticketPriceParam));
-	LocalDateTime dateTime = LocalDateTime.parse(ticketDateParam);
 
-	System.out.println(orderPrice);
-	System.out.println(ticketId);
-	System.out.println(dateTime);
-
-	Ticket ticket = new Ticket.Builder().withId(ticketId).build();
+	Train train = new Train.Builder().withId(ticketId).build();
+	Ticket ticket = new Ticket.Builder().withTrain(train).withPrice(orderPrice).build();
 	List<Ticket> ticketList = new ArrayList<>();
 	ticketList.add(ticket);
-	Booking booking = new Booking.Builder().withPrice(orderPrice).withDate(dateTime).withUser(person)
+	Booking booking = new Booking.Builder().withPrice(orderPrice).withDate(LocalDateTime.now()).withUser(person)
 		.withTickets(ticketList).build();
 
 	service.createBooking(booking);

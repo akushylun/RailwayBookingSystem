@@ -7,6 +7,7 @@ import java.util.Optional;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
+import com.akushylun.model.dao.TicketDao;
 import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
 
@@ -59,7 +60,9 @@ public class BookingService {
     public void createBooking(Booking booking) throws ServiceException {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
+	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
+	    ticketDao.create(booking.getTickets().get(0));
 	    bookingDao.create(booking);
 	    bookingDao.createBookingTicketsLink(booking);
 	    connection.commit();

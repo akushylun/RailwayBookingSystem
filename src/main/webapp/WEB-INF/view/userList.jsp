@@ -44,6 +44,7 @@
 					<tr>
 						<td><c:out value="${count}" /></td>
 						<td><c:out value="${person.name}" /></td>
+						<td><c:out value="${person.surname}" /></td>
 						<td><c:out value="${person.role}" /></td>
 						<td><c:out value="${person.login.email}" /></td>
 						<td><button class="btn btn-warning" type="submit">Update</button></td>

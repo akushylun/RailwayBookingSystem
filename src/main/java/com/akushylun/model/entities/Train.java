@@ -7,7 +7,7 @@ public class Train {
 
     private int id;
     private String name;
-    private List<Station> stationList = new ArrayList<Station>();
+    private List<TrainStation> stationList = new ArrayList<TrainStation>();
     private List<Departure> departureList = new ArrayList<Departure>();
 
     private Train(Builder builder) {
@@ -29,7 +29,7 @@ public class Train {
 	return name;
     }
 
-    public List<Station> getStationList() {
+    public List<TrainStation> getStationList() {
 	return stationList;
     }
 
@@ -40,7 +40,7 @@ public class Train {
     public static class Builder {
 	private int id;
 	private String name;
-	private List<Station> stationList = new ArrayList<Station>();
+	private List<TrainStation> stationList = new ArrayList<TrainStation>();
 	private List<Departure> departureList = new ArrayList<Departure>();
 
 	public Builder withId(int id) {
@@ -53,7 +53,7 @@ public class Train {
 	    return this;
 	}
 
-	public Builder withStationList(List<Station> stationList) {
+	public Builder withStationList(List<TrainStation> stationList) {
 	    this.stationList = stationList;
 	    return this;
 	}

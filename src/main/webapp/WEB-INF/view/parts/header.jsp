@@ -25,7 +25,7 @@
 						</c:when>
 						<c:when test="${sessionScope.authToken.role eq 'ADMIN'}">
 							<li class="active"><a href="./view/persons">Users</a></li>
-							<li><a href="view/trains">Trains</a></li>
+							<li><a href="view/trainList">Trains</a></li>
 						</c:when>
 					</c:choose>
 				</ul>

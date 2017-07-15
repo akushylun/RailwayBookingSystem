@@ -10,28 +10,34 @@ import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.TrainDao;
-import com.akushylun.model.entities.Departure;
 import com.akushylun.model.entities.Station;
 import com.akushylun.model.entities.Train;
+import com.akushylun.model.entities.TrainStation;
 import com.mysql.cj.api.jdbc.Statement;
 
 public class JdbcTrainDao implements TrainDao {
 
-    private static final String SELECT_TRAIN_BY_ID = "SELECT tr.tr_id, tr.tr_name, s.st_id, s.st_name, d.d_id, d.d_datetime, "
-	    + "m2m.m2m_cost_time FROM train as tr INNER JOIN departure as d ON tr.tr_id = d.d_id INNER JOIN m2m_train_station as m2m "
-	    + "ON tr.tr_id = m2m.m2m_train_tr_id INNER JOIN station as s ON m2m.m2m_station_st_id = s.st_id WHERE tr.tr_id = ? ORDER BY "
-	    + "m2m_cost_time";
-    private static final String SELECT_ALL_TRAINS = "SELECT tr.tr_id, tr.tr_name, s.st_id, s.st_name, d.d_id, d.d_datetime, "
-	    + "m2m.m2m_cost_time FROM train as tr INNER JOIN departure as d ON tr.tr_id = d.d_id INNER JOIN m2m_train_station as m2m "
-	    + "ON tr.tr_id = m2m.m2m_train_tr_id INNER JOIN station as s ON m2m.m2m_station_st_id = s.st_id ORDER BY "
-	    + "tr.tr_id, m2m_cost_time";
-    private static final String SELECT_ALL_TRAINS_BY_STATION_START_STATION_END_START_DATE = "SELECT A.tr_id, A.tr_name, A.st_name, A.d_id, "
-	    + "A.d_datetime, A.m2m_cost_time as cost_time_start, B.m2m_cost_time as cost_time_end, A.st_id as st_id_start, A.st_name as st_name_start, "
-	    + "B.st_id as st_id_end, B.st_name as st_name_end FROM (SELECT tr_id, tr_name, st_id, st_name, d_id, d_datetime, m2m_cost_time "
-	    + "FROM train INNER JOIN departure ON tr_id = d_id INNER JOIN m2m_train_station ON tr_id = m2m_train_tr_id INNER JOIN station "
-	    + "ON m2m_station_st_id = st_id WHERE st_name = ? AND cast(d_datetime as DATE) = ?) as A INNER JOIN (SELECT tr_id, tr_name, st_id, st_name, "
-	    + "d_id, d_datetime, m2m_cost_time FROM train INNER JOIN departure ON tr_id = d_id INNER JOIN m2m_train_station ON tr_id = m2m_train_tr_id "
-	    + "INNER JOIN station as s ON m2m_station_st_id = st_id WHERE st_name = ?) as B ON A.tr_id = B.tr_id AND A.d_id = B.d_id";
+    private static final String SELECT_TRAIN_BY_ID = "SELECT station.st_id as st_id_start, st2.st_id as st_id_end, station.st_name as "
+	    + "st_name_start, st2.st_name as st_name_end, train.tr_id, train.tr_name, DATE_ADD(departure.d_datetime, "
+	    + "INTERVAL m2m.m2m_cost_time MINUTE) as start_time, DATE_ADD(departure.d_datetime, INTERVAL (m2m2.m2m_cost_time - "
+	    + "m2m.m2m_cost_time) MINUTE) as end_time, m2m.m2m_cost_price as cost_price_start, m2m2.m2m_cost_price as cost_price_end "
+	    + "FROM train JOIN departure ON tr_id = d_train_tr_id JOIN m2m_train_station as m2m ON tr_id = m2m.m2m_train_tr_id JOIN station "
+	    + "ON station.st_id = m2m.m2m_station_st_id JOIN m2m_train_station as m2m2 ON tr_id = m2m2.m2m_train_tr_id JOIN station as st2 "
+	    + "ON st2.st_id = m2m2.m2m_station_st_id WHERE tr_id = ? AND m2m2.m2m_cost_price > m2m.m2m_cost_price AND m2m2.m2m_cost_time > "
+	    + "m2m.m2m_cost_time";
+    private static final String SELECT_ALL_TRAINS = "SELECT station.st_id as st_id_start, st2.st_id as st_id_end, station.st_name as "
+	    + "st_name_start, st2.st_name as st_name_end, train.tr_id, train.tr_name, DATE_ADD(departure.d_datetime,  "
+	    + "INTERVAL m2m.m2m_cost_time MINUTE) as start_time, DATE_ADD(departure.d_datetime, INTERVAL (m2m2.m2m_cost_time - m2m.m2m_cost_time) MINUTE) "
+	    + "as end_time, m2m.m2m_cost_price as cost_price_start, m2m2.m2m_cost_price as cost_price_end FROM train JOIN departure ON "
+	    + "tr_id = d_train_tr_id JOIN m2m_train_station as m2m ON tr_id = m2m.m2m_train_tr_id JOIN station ON station.st_id = "
+	    + "m2m.m2m_station_st_id JOIN m2m_train_station as m2m2 ON tr_id = m2m2.m2m_train_tr_id JOIN station as st2 ON st2.st_id = m2m2.m2m_station_st_id WHERE m2m2.m2m_cost_price > m2m.m2m_cost_price AND m2m2.m2m_cost_time > m2m.m2m_cost_time; ";
+    private static final String SELECT_ALL_BY_STATION_START_END_DATE = "SELECT station.st_id as st_id_start, st2.st_id as st_id_end, "
+	    + "station.st_name as st_name_start, st2.st_name as st_name_end, train.tr_id, train.tr_name, DATE_ADD(departure.d_datetime, "
+	    + "INTERVAL m2m.m2m_cost_time MINUTE) as start_time, DATE_ADD(departure.d_datetime, INTERVAL (m2m2.m2m_cost_time - "
+	    + "m2m.m2m_cost_time) MINUTE) as end_time, m2m.m2m_cost_price as cost_price_start, m2m2.m2m_cost_price as cost_price_end  "
+	    + "FROM train JOIN departure ON tr_id = d_train_tr_id JOIN m2m_train_station as m2m ON tr_id = m2m.m2m_train_tr_id JOIN station "
+	    + "ON station.st_id = m2m.m2m_station_st_id JOIN m2m_train_station as m2m2 ON tr_id = m2m2.m2m_train_tr_id JOIN station as st2 "
+	    + "ON st2.st_id = m2m2.m2m_station_st_id WHERE station.st_name  = ? AND st2.st_name = ? AND cast(departure.d_datetime as DATE) = ?";
     private static final String CREATE_TRAIN = "INSERT INTO train (tr_name) " + " VALUES (?)";
     private static final String UPDATE_TRAIN = "UPDATE train SET tr_name = ? WHERE tr_id = ?";
     private static final String DELETE_TRAIN_BY_ID = "DELETE FROM train WHERE tr_id = ?";
@@ -42,47 +48,6 @@ public class JdbcTrainDao implements TrainDao {
 	this.connection = connection;
     }
 
-    private Train getTrainFromResultSet(ResultSet rs) throws SQLException {
-	Train train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
-		.withDepartureList(getDepartureFromResultSet(rs)).withStationList(getStationFromResultSet(rs)).build();
-	return train;
-    }
-
-    private List<Station> getStationFromResultSet(ResultSet rs) throws SQLException {
-	List<Station> stationList = new ArrayList<>();
-	Station station = null;
-	int trainId = rs.getInt("tr_id");
-	ResultSet result = rs;
-	boolean flag = true;
-	while ((flag == true) && containsStation(result, trainId)) {
-	    station = new Station.Builder().withId(rs.getInt("st_id")).withName(rs.getString("st_name")).build();
-	    stationList.add(station);
-	    flag = rs.next();
-	}
-	return stationList;
-    }
-
-    private boolean containsStation(ResultSet rs, int trainId) throws SQLException {
-	boolean contains;
-	if (rs.getInt("tr_id") == trainId) {
-	    contains = true;
-	} else {
-	    contains = false;
-	}
-	return contains;
-    }
-
-    private List<Departure> getDepartureFromResultSet(ResultSet rs) throws SQLException {
-	List<Departure> departureList = new ArrayList<>();
-	Departure departure = null;
-	if (rs.getInt("d_id") != 0) {
-	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
-		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-	    departureList.add(departure);
-	}
-	return departureList;
-    }
-
     @Override
     public Optional<Train> find(int id) throws SQLException {
 	Optional<Train> result = Optional.empty();
@@ -91,7 +56,7 @@ public class JdbcTrainDao implements TrainDao {
 	    ResultSet rs = query.executeQuery();
 	    Train train;
 	    while (rs.next()) {
-		train = getTrainFromResultSet(rs);
+		train = extractTrainFromResultSet(rs);
 		result = Optional.of(train);
 	    }
 	}
@@ -105,7 +70,7 @@ public class JdbcTrainDao implements TrainDao {
 	    ResultSet rs = query.executeQuery();
 	    Train train;
 	    while (rs.next()) {
-		train = getTrainFromResultSet(rs);
+		train = extractTrainFromResultSet(rs);
 		trainList.add(train);
 	    }
 	}
@@ -115,11 +80,10 @@ public class JdbcTrainDao implements TrainDao {
     @Override
     public List<Train> findAll(String stationStart, String stationEnd, LocalDate startDate) throws SQLException {
 	List<Train> trainList = new ArrayList<>();
-	try (PreparedStatement query = connection
-		.prepareStatement(SELECT_ALL_TRAINS_BY_STATION_START_STATION_END_START_DATE)) {
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BY_STATION_START_END_DATE)) {
 	    query.setString(1, stationStart);
-	    query.setString(2, startDate.toString());
-	    query.setString(3, stationEnd);
+	    query.setString(2, stationEnd);
+	    query.setString(3, startDate.toString());
 	    ResultSet rs = query.executeQuery();
 	    Train train;
 	    while (rs.next()) {
@@ -131,23 +95,36 @@ public class JdbcTrainDao implements TrainDao {
     }
 
     private Train extractTrainFromResultSet(ResultSet rs) throws SQLException {
-	Train train;
-	List<Departure> departureList = new ArrayList<>();
-	Departure departure;
-	departure = new Departure.Builder().withId(rs.getInt("d_id"))
-		.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-	departureList.add(departure);
-	List<Station> stationList = new ArrayList<>();
-	Station stationFrom = new Station.Builder().withId(rs.getInt("st_id_start"))
-		.withName(rs.getString("st_name_start")).build();
+	Train train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
+		.withStationList(getStationListFromResultSet(rs)).build();
+	return train;
+    }
+
+    private List<TrainStation> getStationListFromResultSet(ResultSet rs) throws SQLException {
+	List<TrainStation> trainStationList = new ArrayList<>();
+	if (rs.getInt("st_id_start") != 0 && rs.getInt("st_id_end") != 0) {
+	    TrainStation trainStationFrom = new TrainStation.Builder()
+		    .withDateTime(rs.getTimestamp("start_time").toLocalDateTime())
+		    .withPrice(rs.getBigDecimal("cost_price_start")).withStation(getStationFromResultSet(rs)).build();
+	    TrainStation trainStationTo = new TrainStation.Builder()
+		    .withDateTime(rs.getTimestamp("end_time").toLocalDateTime())
+		    .withPrice(rs.getBigDecimal("cost_price_end")).withStation(getStationToResultSet(rs)).build();
+	    trainStationList.add(trainStationFrom);
+	    trainStationList.add(trainStationTo);
+	}
+	return trainStationList;
+    }
+
+    private Station getStationToResultSet(ResultSet rs) throws SQLException {
 	Station stationTo = new Station.Builder().withId(rs.getInt("st_id_end")).withName(rs.getString("st_name_end"))
 		.build();
-	stationList.add(stationFrom);
-	stationList.add(stationTo);
+	return stationTo;
+    }
 
-	train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
-		.withDepartureList(departureList).withStationList(stationList).build();
-	return train;
+    private Station getStationFromResultSet(ResultSet rs) throws SQLException {
+	Station stationFrom = new Station.Builder().withId(rs.getInt("st_id_start"))
+		.withName(rs.getString("st_name_start")).build();
+	return stationFrom;
     }
 
     @Override

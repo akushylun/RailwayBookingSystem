@@ -31,9 +31,9 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Price</th>
-					<th>Date</th>
-					<th>TicketInfo</th>
+					<th>Order Price</th>
+					<th>Order Date</th>
+					<th>Ticket Detail</th>
 				</tr>
 			</thead>
 			<tbody>

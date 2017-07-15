@@ -31,6 +31,7 @@
 							<th>Ticket Price</th>
 							<th>Train</th>
 							<th>Departure time</th>
+							<th>Arrival time</th>
 							<th>Station from</th>
 							<th>Station to</th>
 						</tr>
@@ -43,10 +44,13 @@
 								<td><c:out value="${count}" /></td>
 								<td><c:out value="${ticket.price}" /></td>
 								<td><c:out value="${ticket.train.name}" /></td>
+								<td><c:out value="${ticket.train.stationList[0].datetime}" /></td>
+								<td><c:out value="${ticket.train.stationList[1].datetime}" /></td>
+
 								<td><c:out
-										value="${ticket.train.departureList[0].dateTime}" /></td>
-								<td><c:out value="${ticket.train.stationList[0].name}" /></td>
-								<td><c:out value="${ticket.train.stationList[1].name}" /></td>
+										value="${ticket.train.stationList[0].station.name}" /></td>
+								<td><c:out
+										value="${ticket.train.stationList[1].station.name}" /></td>
 							</tr>
 						</c:forEach>
 					</tbody>

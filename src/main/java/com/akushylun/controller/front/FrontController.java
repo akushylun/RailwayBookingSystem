@@ -17,12 +17,14 @@ import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
+import com.akushylun.controller.commands.GetRoute;
 import com.akushylun.controller.commands.GetTicketSearch;
 import com.akushylun.controller.commands.GetTickets;
+import com.akushylun.controller.commands.GetTrains;
 import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
-import com.akushylun.controller.commands.PostTicket;
+import com.akushylun.controller.commands.PostTrain;
 import com.akushylun.model.dao.exceptions.ServiceException;
 
 /**
@@ -40,10 +42,10 @@ public class FrontController extends HttpServlet {
     @Override
     public void init() {
 	commands.put("GET:/ticket/search", new GetTicketSearch());
-	commands.put("POST:/ticket/search/findedList", new PostTicket());
+	commands.put("POST:/ticket/search/findedList", new PostTrain());
 	commands.put("GET:/bookings", new GetBookingsByUser());
 	commands.put("GET:/booking", new GetBooking());
-	commands.put("POST:/booking", new PostBooking());
+	commands.put("POST:/ticket/search/booking", new PostBooking());
 	commands.put("GET:/registration", new GetRegistration());
 	commands.put("POST:/registration", new PostRegistration());
 	commands.put("GET:/persons", new GetPersons());
@@ -51,6 +53,8 @@ public class FrontController extends HttpServlet {
 	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
 	commands.put("GET:/tickets/", new GetTickets());
+	commands.put("GET:/trainList", new GetTrains());
+	commands.put("GET:/addRoute", new GetRoute());
     }
 
     @Override

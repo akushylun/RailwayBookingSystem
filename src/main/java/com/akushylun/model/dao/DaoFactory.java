@@ -22,6 +22,8 @@ public abstract class DaoFactory {
 
     public abstract TrainDao createTrainDao();
 
+    public abstract TrainStationDao createTrainStationDao();
+
     public static final String DB_FILE = "/db.properties";
     private static final String DB_FACTORY_CLASS = "factory.class";
     private static DaoFactory instance;

@@ -159,6 +159,7 @@ CREATE TABLE `m2m_booking_ticket` (
 
 CREATE TABLE IF NOT EXISTS `m2m_train_station` (
   `m2m_cost_time` INT NOT NULL,
+  `m2m_cost_price` decimal(15,2) NOT NULL,
   `m2m_station_st_id` INT NOT NULL,
   `m2m_train_tr_id` INT NOT NULL,
   KEY `fk_m2m_station_idx` (`m2m_station_st_id`),

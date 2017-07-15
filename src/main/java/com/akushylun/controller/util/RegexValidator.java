@@ -4,8 +4,8 @@ import java.util.regex.Pattern;
 
 public final class RegexValidator {
 
-    public static final String NAME = "^[a-z0-9_-]{3,15}$";
-    public static final String SURNAME = "^[a-z0-9_-]{3,15}$";;
+    public static final String NAME = "^[a-zA-Z0-9_-]{3,15}$";
+    public static final String SURNAME = "^[a-zA-Z0-9_-]{3,15}$";;
     public static final String EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     public static final String PASSWORD = "((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{2,})";
 
