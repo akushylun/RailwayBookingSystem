@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.akushylun.controller.security.Authenticator;
-import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.controller.util.Authenticator;
+import com.akushylun.controller.util.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;

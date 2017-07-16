@@ -13,8 +13,8 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.akushylun.controller.security.Authenticator;
-import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.controller.util.Authenticator;
+import com.akushylun.controller.util.AuthenticatorImpl;
 
 @WebFilter(urlPatterns = { "/controllers" }, servletNames = { "frontController" })
 public class ServletSecurityFilter implements Filter {

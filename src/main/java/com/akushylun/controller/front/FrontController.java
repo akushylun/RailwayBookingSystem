@@ -15,14 +15,15 @@ import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
 import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
+import com.akushylun.controller.commands.GetPerson;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
-import com.akushylun.controller.commands.GetRoute;
 import com.akushylun.controller.commands.GetTicketSearch;
 import com.akushylun.controller.commands.GetTickets;
 import com.akushylun.controller.commands.GetTrains;
 import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
+import com.akushylun.controller.commands.PostPerson;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
 import com.akushylun.model.dao.exceptions.DaoException;
@@ -54,7 +55,8 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/logout", new GetLogout());
 	commands.put("GET:/tickets/", new GetTickets());
 	commands.put("GET:/trainList", new GetTrains());
-	commands.put("GET:/addRoute", new GetRoute());
+	commands.put("POST:/person", new GetPerson());
+	commands.put("POST:/updatePerson", new PostPerson());
     }
 
     @Override

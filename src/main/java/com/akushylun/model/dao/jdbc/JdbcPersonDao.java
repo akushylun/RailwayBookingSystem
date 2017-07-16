@@ -27,11 +27,14 @@ public class JdbcPersonDao implements PersonDao {
 	    + "WHERE l.l_email = ?";
     private static final String SELECT_ALL_PERSONS = "SELECT p.p_id, p.p_name, p.p_surname, "
 	    + "p.p_role_r_name, l.l_id, l.l_email, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id ";
+    private static final String SELECT_ALL_PERSONS_BY_ROLE = "SELECT p.p_id, p.p_name, p.p_surname, "
+	    + "p.p_role_r_name, l.l_id, l.l_email, l.l_password  FROM person as p INNER JOIN login as l ON p.p_login_l_id = l.l_id "
+	    + "WHERE p.p_role_r_name = ?";
     private static final String CREATE_PERSON = "INSERT INTO person (p_name, p_surname, p_role_r_name, p_login_l_id) "
 	    + "SELECT ?,?,?,?";
     private static final String UPDATE_PERSON = "UPDATE person SET p_name = ?, p_surname = ?, " + "p_role_r_name = ?"
 	    + " WHERE p_id = ?";
-    private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_id = ?";
+    private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_login_l_id = ?";
 
     private static final Logger LOGGER = Logger.getLogger(JdbcPersonDao.class);
     private Connection connection;
@@ -114,6 +117,25 @@ public class JdbcPersonDao implements PersonDao {
     public List<Person> findAll() {
 	List<Person> userList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_PERSONS)) {
+	    ResultSet rs = query.executeQuery();
+	    Person person;
+	    while (rs.next()) {
+		person = getUserFromResultSet(rs);
+		userList.add(person);
+	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_ALL;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+	return userList;
+    }
+
+    @Override
+    public List<Person> findAll(Role role) {
+	List<Person> userList = new ArrayList<>();
+	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_PERSONS_BY_ROLE)) {
+	    query.setString(1, role.toString());
 	    ResultSet rs = query.executeQuery();
 	    Person person;
 	    while (rs.next()) {

@@ -35,6 +35,7 @@
 					<th>Surname</th>
 					<th>Role</th>
 					<th>Login</th>
+					<th>Update User</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -47,8 +48,14 @@
 						<td><c:out value="${person.surname}" /></td>
 						<td><c:out value="${person.role}" /></td>
 						<td><c:out value="${person.login.email}" /></td>
-						<td><button class="btn btn-warning" type="submit">Update</button></td>
-						<td><button class="btn btn-danger" type="submit">Delete</button></td>
+						<td><form action="./person" method="POST">
+								<button class="btn btn-warning" type="submit">Update</button>
+								<input type="hidden" name="id" value="${person.id}" /> <input
+									type="hidden" name="name" value="${person.name}" /> <input
+									type="hidden" name="surname" value="${person.surname}" /> <input
+									type="hidden" name="role" value="${person.role}" /> <input
+									type="hidden" name="email" value="${person.login.email}" />
+							</form></td>
 					</tr>
 				</c:forEach>
 			</tbody>

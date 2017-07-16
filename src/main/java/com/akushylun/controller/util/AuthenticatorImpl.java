@@ -1,4 +1,4 @@
-package com.akushylun.controller.security;
+package com.akushylun.controller.util;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

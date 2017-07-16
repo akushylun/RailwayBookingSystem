@@ -8,6 +8,7 @@ import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
 import com.akushylun.model.dao.PersonDao;
 import com.akushylun.model.entities.Person;
+import com.akushylun.model.entities.Person.Role;
 
 public class PersonService {
 
@@ -41,6 +42,14 @@ public class PersonService {
 	}
     }
 
+    public List<Person> getAll(Role role) {
+	try (DaoConnection connection = daoFactory.getConnection()) {
+	    PersonDao personDao = daoFactory.createPersonDao();
+	    connection.begin();
+	    return personDao.findAll(role);
+	}
+    }
+
     public void create(Person person) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
@@ -66,8 +75,10 @@ public class PersonService {
     public void deleteById(int id) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
+	    LoginDao loginDao = daoFactory.createLoginDao();
 	    connection.begin();
 	    personDao.delete(id);
+	    loginDao.delete(id);
 	    connection.commit();
 	    connection.close();
 	}

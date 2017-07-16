@@ -10,8 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.akushylun.controller.security.Authenticator;
-import com.akushylun.controller.security.AuthenticatorImpl;
+import com.akushylun.controller.util.Authenticator;
+import com.akushylun.controller.util.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
 import com.akushylun.model.dao.DaoFactory;

@@ -6,10 +6,10 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TrainStationDao;
-import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.TrainStation;
 
 public class TrainStationService {
+
     private DaoFactory daoFactory;
 
     public TrainStationService(DaoFactory daoFactory) {
@@ -24,7 +24,7 @@ public class TrainStationService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<TrainStation> getById(int trainStationId) throws DaoException {
+    public Optional<TrainStation> getById(int trainStationId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainStationDao trainStationDao = daoFactory.createTrainStationDao();
 	    connection.begin();
@@ -32,7 +32,7 @@ public class TrainStationService {
 	}
     }
 
-    public List<TrainStation> getByAll() throws DaoException {
+    public List<TrainStation> getByAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainStationDao trainStationDao = daoFactory.createTrainStationDao();
 	    connection.begin();
@@ -40,7 +40,7 @@ public class TrainStationService {
 	}
     }
 
-    public void createTrainStation(TrainStation trainStation) throws DaoException {
+    public void createTrainStation(TrainStation trainStation) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainStationDao trainStationDao = daoFactory.createTrainStationDao();
 	    connection.begin();
@@ -50,7 +50,7 @@ public class TrainStationService {
 	}
     }
 
-    public void updateTrainStation(TrainStation trainStation) throws DaoException {
+    public void updateTrainStation(TrainStation trainStation) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainStationDao trainStationDao = daoFactory.createTrainStationDao();
 	    connection.begin();
@@ -60,7 +60,7 @@ public class TrainStationService {
 	}
     }
 
-    public void deleteTrainStation(int trainStationId) throws DaoException {
+    public void deleteTrainStation(int trainStationId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainStationDao trainStationDao = daoFactory.createTrainStationDao();
 	    connection.begin();

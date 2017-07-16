@@ -14,42 +14,39 @@
 </head>
 <body>
 	<c:import url="parts/header.jsp" />
-	<div class="page-header">
-		<center>
-			<h1>List Of Routes</h1>
-		</center>
-	</div>
-	<table class="table table-striped">
-		<thead>
-			<tr>
-				<th>Train Id</th>
-				<th>Train</th>
-				<th>Station From</th>
-				<th>Station To</th>
-				<th>Departure</th>
-				<th>Arrival</th>
-				<th>Ticket Price</th>
-			</tr>
-		</thead>
-		<tbody>
-			<c:forEach var="train" items="${trainList}">
-
+		<div class="page-header">
+			<center>
+				<h1>List Of Routes</h1>
+			</center>
+		</div>
+		<table class="table table-striped">
+			<thead>
 				<tr>
-					<td><c:out value="${train.id}" /></td>
-					<td><c:out value="${train.name}" /></td>
-					<td><c:out value="${train.stationList[0].station.name}" /></td>
-					<td><c:out value="${train.stationList[1].station.name}" /></td>
-					<td><c:out value="${train.stationList[0].datetime}" /></td>
-					<td><c:out value="${train.stationList[1].datetime}" /></td>
-					<td><c:out
-							value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" /></td>
+					<th>Train Id</th>
+					<th>Train</th>
+					<th>Station From</th>
+					<th>Station To</th>
+					<th>Departure</th>
+					<th>Arrival</th>
+					<th>Ticket Price</th>
 				</tr>
+			</thead>
+			<tbody>
+				<c:forEach var="train" items="${trainList}">
 
-			</c:forEach>
-		</tbody>
-	</table>
-	<center>
-		<a class="btn btn-link" href="./addRoute">Create New</a>
-	</center>
+					<tr>
+						<td><c:out value="${train.id}" /></td>
+						<td><c:out value="${train.name}" /></td>
+						<td><c:out value="${train.stationList[0].station.name}" /></td>
+						<td><c:out value="${train.stationList[1].station.name}" /></td>
+						<td><c:out value="${train.stationList[0].datetime}" /></td>
+						<td><c:out value="${train.stationList[1].datetime}" /></td>
+						<td><c:out
+								value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" /></td>
+					</tr>
+					<input type="hidden" name="train" value="${trainList}">
+				</c:forEach>
+			</tbody>
+		</table>
 </body>
 </html>
