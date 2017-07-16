@@ -9,12 +9,14 @@ public class TrainStation {
     private Station station;
     private BigDecimal cost_price;
     private LocalDateTime datetime;
+    private Train train;
 
     private TrainStation(Builder builder) {
 	this.id = builder.id;
 	this.station = builder.station;
 	this.cost_price = builder.cost_price;
 	this.datetime = builder.datetime;
+	this.train = builder.train;
     }
 
     public int getId() {
@@ -37,12 +39,17 @@ public class TrainStation {
 	return datetime;
     }
 
+    public Train getTrain() {
+	return train;
+    }
+
     public static class Builder {
 
 	private int id;
 	private Station station;
 	private BigDecimal cost_price;
 	private LocalDateTime datetime;
+	private Train train;
 
 	public Builder withStation(Station station) {
 	    this.station = station;
@@ -64,6 +71,11 @@ public class TrainStation {
 	    return this;
 	}
 
+	public Builder withTrain(Train train) {
+	    this.train = train;
+	    return this;
+	}
+
 	public TrainStation build() {
 	    return new TrainStation(this);
 	}
@@ -78,6 +90,7 @@ public class TrainStation {
 	result = prime * result + ((datetime == null) ? 0 : datetime.hashCode());
 	result = prime * result + id;
 	result = prime * result + ((station == null) ? 0 : station.hashCode());
+	result = prime * result + ((train == null) ? 0 : train.hashCode());
 	return result;
     }
 
@@ -107,13 +120,18 @@ public class TrainStation {
 		return false;
 	} else if (!station.equals(other.station))
 	    return false;
+	if (train == null) {
+	    if (other.train != null)
+		return false;
+	} else if (!train.equals(other.train))
+	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
 	return "TrainStation [id=" + id + ", station=" + station + ", cost_price=" + cost_price + ", datetime="
-		+ datetime + "]";
+		+ datetime + ", train=" + train + "]";
     }
 
 }

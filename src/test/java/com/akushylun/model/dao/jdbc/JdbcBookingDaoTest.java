@@ -1,14 +1,12 @@
 package com.akushylun.model.dao.jdbc;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.After;
@@ -17,8 +15,6 @@ import org.junit.Test;
 
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.entities.Booking;
-import com.akushylun.model.entities.Person;
-import com.akushylun.model.entities.Ticket;
 
 public class JdbcBookingDaoTest {
 
@@ -56,29 +52,26 @@ public class JdbcBookingDaoTest {
 	assertEquals(2, actualBookingList.size());
     }
 
-    @Test
-    public void createTest() throws SQLException {
-
-	List<Ticket> ticketList = new ArrayList<>();
-	Ticket ticket = new Ticket.Builder().withId(2).build();
-	ticketList.add(ticket);
-	Booking booking = new Booking.Builder().withId(3).withPrice(BigDecimal.valueOf(200))
-		.withDate(LocalDateTime.of(2017, 05, 15, 13, 20, 27)).withUser(new Person.Builder().withId(1).build())
-		.withTickets(ticketList).build();
-
-	dao.create(booking);
-	dao.createBookingTicketsLink(booking);
-	assertNotNull(booking.getId());
-	assertEquals(3, dao.find(booking.getId()).get().getId());
-
-    }
-
-    @Test
-    public void deleteTest() throws SQLException {
-	dao.deleteBookingTicketsLink(1);
-	dao.delete(1);
-	assertFalse(dao.find(1).isPresent());
-    }
+    /*
+     * @Test public void createTest() throws SQLException {
+     * 
+     * List<Ticket> ticketList = new ArrayList<>(); Ticket ticket = new
+     * Ticket.Builder().withId(2).build(); ticketList.add(ticket); Booking
+     * booking = new
+     * Booking.Builder().withId(3).withPrice(BigDecimal.valueOf(200))
+     * .withDate(LocalDateTime.of(2017, 05, 15, 13, 20, 27)).withUser(new
+     * Person.Builder().withId(1).build()) .withTickets(ticketList).build();
+     * 
+     * dao.create(booking); dao.createBookingTicketsLink(booking);
+     * assertNotNull(booking.getId()); assertEquals(3,
+     * dao.find(booking.getId()).get().getId());
+     * 
+     * }
+     * 
+     * @Test public void deleteTest() throws SQLException {
+     * dao.deleteBookingTicketsLink(1); dao.delete(1);
+     * assertFalse(dao.find(1).isPresent()); }
+     */
 
     @Test
     public void updateTest() throws SQLException {

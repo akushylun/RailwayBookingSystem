@@ -54,9 +54,8 @@ public class BookingService {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
-	    ticketDao.create(booking.getTickets().get(0));
+	    ticketDao.create(booking.getTicket());
 	    bookingDao.create(booking);
-	    bookingDao.createBookingTicketsLink(booking);
 	    connection.commit();
 	    connection.close();
 	}

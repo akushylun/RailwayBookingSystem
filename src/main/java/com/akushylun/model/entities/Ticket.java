@@ -1,21 +1,20 @@
 package com.akushylun.model.entities;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Ticket {
 
     private int id;
-    private BigDecimal price;
+    private String description;
     private List<Booking> bookings;
-    private Train train;
+    private List<TrainStation> trainStationList;
 
     private Ticket(Builder builder) {
 	this.id = builder.id;
-	this.price = builder.price;
+	this.description = builder.description;
 	this.bookings = builder.bookings;
-	this.train = builder.train;
+	this.trainStationList = builder.trainStationList;
     }
 
     public int getId() {
@@ -26,36 +25,36 @@ public class Ticket {
 	this.id = id;
     }
 
-    public BigDecimal getPrice() {
-	return price;
+    public String getDescription() {
+	return description;
     }
 
     public List<Booking> getBookings() {
 	return bookings;
     }
 
-    public Train getTrain() {
-	return train;
+    public List<TrainStation> getTrainStationList() {
+	return trainStationList;
     }
 
-    public void setTrain(Train train) {
-	this.train = train;
+    public void setTrainStationList(List<TrainStation> trainStationList) {
+	this.trainStationList = trainStationList;
     }
 
     public static class Builder {
 
 	private int id;
-	private BigDecimal price;
+	private String description;
 	private List<Booking> bookings = new ArrayList<>();
-	private Train train;
+	private List<TrainStation> trainStationList;
 
 	public Builder withId(int id) {
 	    this.id = id;
 	    return this;
 	}
 
-	public Builder withPrice(BigDecimal price) {
-	    this.price = price.setScale(2, BigDecimal.ROUND_HALF_UP);
+	public Builder withDescription(String description) {
+	    this.description = description;
 	    return this;
 	}
 
@@ -64,8 +63,8 @@ public class Ticket {
 	    return this;
 	}
 
-	public Builder withTrain(Train train) {
-	    this.train = train;
+	public Builder withTrainStationList(List<TrainStation> trainStationList) {
+	    this.trainStationList = trainStationList;
 	    return this;
 	}
 
@@ -80,9 +79,9 @@ public class Ticket {
 	final int prime = 31;
 	int result = 1;
 	result = prime * result + ((bookings == null) ? 0 : bookings.hashCode());
+	result = prime * result + ((description == null) ? 0 : description.hashCode());
 	result = prime * result + id;
-	result = prime * result + ((price == null) ? 0 : price.hashCode());
-	result = prime * result + ((train == null) ? 0 : train.hashCode());
+	result = prime * result + ((trainStationList == null) ? 0 : trainStationList.hashCode());
 	return result;
     }
 
@@ -100,24 +99,25 @@ public class Ticket {
 		return false;
 	} else if (!bookings.equals(other.bookings))
 	    return false;
+	if (description == null) {
+	    if (other.description != null)
+		return false;
+	} else if (!description.equals(other.description))
+	    return false;
 	if (id != other.id)
 	    return false;
-	if (price == null) {
-	    if (other.price != null)
+	if (trainStationList == null) {
+	    if (other.trainStationList != null)
 		return false;
-	} else if (!price.equals(other.price))
-	    return false;
-	if (train == null) {
-	    if (other.train != null)
-		return false;
-	} else if (!train.equals(other.train))
+	} else if (!trainStationList.equals(other.trainStationList))
 	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Ticket [id=" + id + ", price=" + price + ", bookings=" + bookings + ", train=" + train + "]";
+	return "Ticket [id=" + id + ", description=" + description + ", bookings=" + bookings + ", trainStationList="
+		+ trainStationList + "]";
     }
 
 }

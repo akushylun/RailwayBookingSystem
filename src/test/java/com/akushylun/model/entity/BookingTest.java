@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
@@ -22,13 +20,11 @@ public class BookingTest {
     private final static LocalDateTime DATE = LocalDateTime.now();
     private Person person = new Person.Builder().build();
     private Ticket ticket = new Ticket.Builder().build();
-    private List<Ticket> ticketsList = new ArrayList<>();
 
     @Test
     public void shouldCreateOrder() {
 
-	ticketsList.add(ticket);
-	Booking booking = new Booking.Builder().withId(ID).withPrice(PRICE).withDate(DATE).withTickets(ticketsList)
+	Booking booking = new Booking.Builder().withId(ID).withPrice(PRICE).withDate(DATE).withTicket(ticket)
 		.withUser(person).build();
 
 	assertNotNull(booking);
@@ -37,7 +33,6 @@ public class BookingTest {
 	assertEquals(ID, booking.getId());
 	assertEquals(PRICE, booking.getPrice());
 	assertEquals(DATE, booking.getDate());
-	assertEquals(ticketsList, booking.getTickets());
 	assertEquals(person, booking.getUser());
 
     }

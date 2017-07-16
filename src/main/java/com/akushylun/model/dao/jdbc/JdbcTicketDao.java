@@ -13,10 +13,7 @@ import org.apache.log4j.Logger;
 
 import com.akushylun.controller.util.LogMessage;
 import com.akushylun.model.dao.TicketDao;
-import com.akushylun.model.entities.Departure;
-import com.akushylun.model.entities.Station;
 import com.akushylun.model.entities.Ticket;
-import com.akushylun.model.entities.Train;
 import com.akushylun.model.entities.TrainStation;
 
 public class JdbcTicketDao implements TicketDao {
@@ -38,8 +35,10 @@ public class JdbcTicketDao implements TicketDao {
 	    + "ti.ti_train_tr_id INNER JOIN departure as d ON d.d_train_tr_id = tr.tr_id INNER JOIN m2m_train_station as m2m_ts ON "
 	    + "m2m_ts.m2m_train_tr_id = tr.tr_id INNER JOIN station as st ON m2m_ts.m2m_station_st_id = st.st_id WHERE booking.b_id = ? "
 	    + "ORDER BY ti.ti_id, m2m_ts.m2m_cost_time";
-    private static final String CREATE_TICKET = "INSERT INTO ticket (ti_price, ti_train_tr_id) " + "VALUES (?,?)";
-    private static final String UPDATE_TICKET = "UPDATE ticket SET ti_price = ?, ti_train_tr_id = ? WHERE ti_id = ?";
+    private static final String CREATE_TICKET = "INSERT INTO ticket (ti_description) " + "VALUES (?)";
+    private static final String CREATE_M2M_TICKET_TRAIN_STATION = "INSERT INTO m2m_ticket_train_station (m2m_ticket_ti_id, m2m_m2m_train_station_id) "
+	    + "VALUES (?,(SELECT m2m_train_station_id FROM m2m_train_station WHERE m2m_train_tr_id = ? AND m2m_station_st_id = ?))";
+    private static final String UPDATE_TICKET = "UPDATE ticket SET ti_description = ? WHERE ti_id = ?";
     private static final String DELETE_TICKET_BY_ID = "DELETE FROM ticket WHERE ti_id = ?";
 
     private static final Logger LOGGER = Logger.getLogger(JdbcTicketDao.class);
@@ -71,85 +70,13 @@ public class JdbcTicketDao implements TicketDao {
     private Ticket getTicketFromResultSet(ResultSet rs) {
 	Ticket ticket;
 	try {
-	    ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).withPrice(rs.getBigDecimal("ti_price"))
-		    .withTrain(getTrainFromResultSet(rs)).build();
+	    ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).build();
 	} catch (SQLException ex) {
 	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Ticket.class.getName();
 	    LOGGER.error(errorMessage, ex);
 	    throw new RuntimeException(errorMessage, ex);
 	}
 	return ticket;
-    }
-
-    private Train getTrainFromResultSet(ResultSet rs) {
-	Train train = null;
-	try {
-	    train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name"))
-		    .withDepartureList(getDeparturesFromResultSet(rs)).withStationList(getStationsFromResultSet(rs))
-		    .build();
-	} catch (SQLException ex) {
-	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Train.class.getName();
-	    LOGGER.error(errorMessage, ex);
-	    throw new RuntimeException(errorMessage, ex);
-	}
-	return train;
-    }
-
-    private List<Departure> getDeparturesFromResultSet(ResultSet rs) {
-	List<Departure> departureList = new ArrayList<>();
-	Departure departure = null;
-	try {
-	    if (rs.getInt("d_id") != 0) {
-		departure = new Departure.Builder().withId(rs.getInt("d_id"))
-			.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).build();
-		departureList.add(departure);
-	    }
-	} catch (SQLException ex) {
-	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Departure.class.getName();
-	    LOGGER.error(errorMessage, ex);
-	    throw new RuntimeException(errorMessage, ex);
-	}
-	return departureList;
-    }
-
-    private List<TrainStation> getStationsFromResultSet(ResultSet rs) {
-	List<TrainStation> stationList = new ArrayList<>();
-	TrainStation trainStation = null;
-	Station station = null;
-	int ticketId;
-	try {
-	    ticketId = rs.getInt("ti_id");
-	    ResultSet result = rs;
-	    boolean flag = true;
-	    while ((flag == true) && containsStation(result, ticketId)) {
-		station = new Station.Builder().withId(rs.getInt("st_id")).withName(rs.getString("st_name")).build();
-		trainStation = new TrainStation.Builder().withStation(station)
-			.withDateTime(rs.getTimestamp("m2m_cost_time").toLocalDateTime()).build();
-		stationList.add(trainStation);
-		flag = rs.next();
-	    }
-	} catch (SQLException ex) {
-	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Ticket.class.getName();
-	    LOGGER.error(errorMessage, ex);
-	    throw new RuntimeException(errorMessage, ex);
-	}
-	return stationList;
-    }
-
-    private boolean containsStation(ResultSet rs, int ticketId) {
-	boolean contains;
-	try {
-	    if (rs.getInt("ti_id") == ticketId) {
-		contains = true;
-	    } else {
-		contains = false;
-	    }
-	} catch (SQLException ex) {
-	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Ticket.class.getName();
-	    LOGGER.error(errorMessage, ex);
-	    throw new RuntimeException(errorMessage, ex);
-	}
-	return contains;
     }
 
     @Override
@@ -194,8 +121,47 @@ public class JdbcTicketDao implements TicketDao {
     @Override
     public void create(Ticket ticket) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_TICKET, Statement.RETURN_GENERATED_KEYS)) {
-	    query.setBigDecimal(1, ticket.getPrice());
-	    query.setInt(2, ticket.getTrain().getId());
+	    query.setString(1, ticket.getDescription());
+	    query.executeUpdate();
+	    ResultSet keys = query.getGeneratedKeys();
+	    if (keys.next()) {
+		ticket.setId(keys.getInt(1));
+	    }
+	    createM2MTicketTrainStation(ticket, ticket.getTrainStationList().get(0));
+	    createM2MTicketTrainStation(ticket, ticket.getTrainStationList().get(1));
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+    }
+
+    private void createM2MTicketTrainStation(Ticket ticket, TrainStation trainStation) {
+	try (PreparedStatement query = connection.prepareStatement(CREATE_M2M_TICKET_TRAIN_STATION,
+		Statement.RETURN_GENERATED_KEYS)) {
+	    query.setInt(1, ticket.getId());
+	    query.setInt(2, trainStation.getTrain().getId());
+	    query.setInt(3, trainStation.getStation().getId());
+	    query.executeUpdate();
+	    ResultSet keys = query.getGeneratedKeys();
+	    if (keys.next()) {
+		ticket.setId(keys.getInt(1));
+	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+    }
+
+    @Override
+    public void createM2MTicketTrainStationTo(Ticket ticket) {
+	try (PreparedStatement query = connection.prepareStatement(CREATE_M2M_TICKET_TRAIN_STATION,
+		Statement.RETURN_GENERATED_KEYS)) {
+	    query.setInt(1, ticket.getId());
+	    query.setInt(2, ticket.getTrainStationList().get(0).getTrain().getId());
+	    query.setInt(3, ticket.getTrainStationList().get(0).getStation().getId());
+	    query.setInt(4, ticket.getTrainStationList().get(1).getStation().getId());
 	    query.executeUpdate();
 	    ResultSet keys = query.getGeneratedKeys();
 	    if (keys.next()) {
@@ -211,9 +177,8 @@ public class JdbcTicketDao implements TicketDao {
     @Override
     public void update(Ticket ticket) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_TICKET)) {
-	    query.setBigDecimal(1, ticket.getPrice());
-	    query.setInt(2, ticket.getTrain().getId());
-	    query.setInt(3, ticket.getId());
+	    query.setString(1, ticket.getDescription());
+	    query.setInt(2, ticket.getId());
 	    query.executeUpdate();
 	} catch (SQLException ex) {
 	    String errorMessage = LogMessage.DB_ERROR_UPDATE;

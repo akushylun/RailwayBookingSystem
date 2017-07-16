@@ -19,7 +19,7 @@
 
 </head>
 <body>
-	<c:import url="parts/header.jsp"/>
+	<c:import url="parts/header.jsp" />
 
 	<div class="page-header">
 		<center>
@@ -33,7 +33,11 @@
 					<th>#</th>
 					<th>Order Price</th>
 					<th>Order Date</th>
-					<th>Ticket Detail</th>
+					<th>Train</th>
+					<th>Departure time</th>
+					<th>Arrival time</th>
+					<th>Station from</th>
+					<th>Station to</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -44,7 +48,11 @@
 						<td><c:out value="${count}" /></td>
 						<td><c:out value="${booking.price}" /></td>
 						<td><c:out value="${booking.date}" /></td>
-						<td><a href="./tickets/${booking.id}">Ticket Info</a></td>
+						<td><c:out value="${booking.ticket.trainStationList[0].train.name}" /></td>
+						<td><c:out value="${booking.ticket.trainStationList[0].datetime}" /></td>
+						<td><c:out value="${booking.ticket.trainStationList[1].datetime}" /></td>
+						<td><c:out value="${booking.ticket.trainStationList[0].station.name}" /></td>
+						<td><c:out value="${booking.ticket.trainStationList[1].station.name}" /></td>
 					</tr>
 				</c:forEach>
 			</tbody>

@@ -46,9 +46,13 @@
 							<td><button class="btn btn-success btn-sm" type="submit">
 									Buy ticket</button></td>
 						</tr>
-						<input type="hidden" id="thisField" name="ticketId"
+						<input type="hidden" id="thisField" name="trainId"
 							value="${train.id}" />
-						<input type="hidden" name="ticketPrice"
+						<input type="hidden" id="thisField" name="stationFrom"
+							value="${train.stationList[0].station.id}" />
+						<input type="hidden" id="thisField" name="stationTo"
+							value="${train.stationList[1].station.id}" />
+						<input type="hidden" id="thisField" name="bookingPrice"
 							value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" />
 
 					</c:forEach>

@@ -19,7 +19,6 @@ import com.akushylun.controller.commands.GetPerson;
 import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
 import com.akushylun.controller.commands.GetTicketSearch;
-import com.akushylun.controller.commands.GetTickets;
 import com.akushylun.controller.commands.GetTrains;
 import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
@@ -53,7 +52,6 @@ public class FrontController extends HttpServlet {
 	commands.put("GET:/login", new GetLogin());
 	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
-	commands.put("GET:/tickets/", new GetTickets());
 	commands.put("GET:/trainList", new GetTrains());
 	commands.put("POST:/person", new GetPerson());
 	commands.put("POST:/updatePerson", new PostPerson());

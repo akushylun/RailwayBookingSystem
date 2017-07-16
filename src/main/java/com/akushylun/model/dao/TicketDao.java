@@ -8,4 +8,6 @@ public interface TicketDao extends GenericDao<Ticket> {
 
     List<Ticket> findAll(int bookingId);
 
+    void createM2MTicketTrainStationTo(Ticket ticket);
+
 }

@@ -2,22 +2,20 @@ package com.akushylun.model.entities;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Booking {
 
     private int id;
     private BigDecimal price;
     private LocalDateTime dateTime;
-    private List<Ticket> tickets = new ArrayList<Ticket>();
+    private Ticket ticket;
     private Person person;
 
     private Booking(Builder builder) {
 	this.id = builder.id;
 	this.price = builder.price;
 	this.dateTime = builder.dateTime;
-	this.tickets = builder.tickets;
+	this.ticket = builder.ticket;
 	this.person = builder.person;
     }
 
@@ -49,12 +47,12 @@ public class Booking {
 	return dateTime;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-	this.tickets = tickets;
+    public Ticket getTicket() {
+	return ticket;
     }
 
-    public List<Ticket> getTickets() {
-	return tickets;
+    public void setTicket(Ticket ticket) {
+	this.ticket = ticket;
     }
 
     public Person getUser() {
@@ -66,7 +64,7 @@ public class Booking {
 	private BigDecimal price;
 	private LocalDateTime dateTime;
 	private Person person;
-	private List<Ticket> tickets = new ArrayList<Ticket>();
+	private Ticket ticket;
 
 	public Builder withId(int id) {
 	    this.id = id;
@@ -78,8 +76,8 @@ public class Booking {
 	    return this;
 	}
 
-	public Builder withTickets(List<Ticket> tickets) {
-	    this.tickets.addAll(tickets);
+	public Builder withTicket(Ticket ticket) {
+	    this.ticket = ticket;
 	    return this;
 	}
 
@@ -107,7 +105,7 @@ public class Booking {
 	result = prime * result + id;
 	result = prime * result + ((person == null) ? 0 : person.hashCode());
 	result = prime * result + ((price == null) ? 0 : price.hashCode());
-	result = prime * result + ((tickets == null) ? 0 : tickets.hashCode());
+	result = prime * result + ((ticket == null) ? 0 : ticket.hashCode());
 	return result;
     }
 
@@ -137,18 +135,18 @@ public class Booking {
 		return false;
 	} else if (!price.equals(other.price))
 	    return false;
-	if (tickets == null) {
-	    if (other.tickets != null)
+	if (ticket == null) {
+	    if (other.ticket != null)
 		return false;
-	} else if (!tickets.equals(other.tickets))
+	} else if (!ticket.equals(other.ticket))
 	    return false;
 	return true;
     }
 
     @Override
     public String toString() {
-	return "Booking [id=" + id + ", price=" + price + ", dateTime=" + dateTime + ", tickets=" + tickets
-		+ ", person=" + person + "]";
+	return "Booking [id=" + id + ", price=" + price + ", dateTime=" + dateTime + ", ticket=" + ticket + ", person="
+		+ person + "]";
     }
 
 }
