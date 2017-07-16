@@ -6,9 +6,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 
 public interface Command {
     String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException;
+	    throws ServletException, IOException, DaoException;
 }

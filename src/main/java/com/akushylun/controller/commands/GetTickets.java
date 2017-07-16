@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Ticket;
 import com.akushylun.model.services.TicketService;
 
@@ -19,7 +19,7 @@ public class GetTickets implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException {
+	    throws ServletException, IOException, DaoException {
 
 	List<Ticket> ticketList = new ArrayList<>();
 	String path = request.getRequestURI();

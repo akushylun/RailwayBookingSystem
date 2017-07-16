@@ -1,6 +1,5 @@
 package com.akushylun.model.services;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TicketDao;
-import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Booking;
 
 public class BookingService {
@@ -27,37 +25,31 @@ public class BookingService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<Booking> getById(int bookingId) throws ServiceException {
+    public Optional<Booking> getById(int bookingId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    connection.begin();
 	    return bookingDao.find(bookingId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Booking> getAll() throws ServiceException {
+    public List<Booking> getAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    connection.begin();
 	    return bookingDao.findAll();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Booking> getAllByUserId(int userId) throws ServiceException {
+    public List<Booking> getAllByUserId(int userId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    connection.begin();
 	    return bookingDao.findAllByUserId(userId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void createBooking(Booking booking) throws ServiceException {
+    public void createBooking(Booking booking) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    TicketDao ticketDao = daoFactory.createTicketDao();
@@ -67,32 +59,26 @@ public class BookingService {
 	    bookingDao.createBookingTicketsLink(booking);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void updateBooking(Booking booking) throws ServiceException {
+    public void updateBooking(Booking booking) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    connection.begin();
 	    bookingDao.update(booking);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void deleteBooking(int bookingId) throws ServiceException {
+    public void deleteBooking(int bookingId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    BookingDao bookingDao = daoFactory.createBookingDao();
 	    connection.begin();
 	    bookingDao.delete(bookingId);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 }

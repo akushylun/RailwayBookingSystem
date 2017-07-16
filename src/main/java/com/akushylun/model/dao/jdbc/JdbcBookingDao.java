@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
+
+import com.akushylun.controller.util.LogMessage;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
@@ -37,6 +40,7 @@ public class JdbcBookingDao implements BookingDao {
     private static final String DELETE_BOOKING_BY_ID = "DELETE FROM booking WHERE b_id = ?";
     private static final String DELETE_M2M_BOOKING_TICKETS_ID = "DELETE FROM m2m_booking_ticket WHERE m2m_booking_b_id = ?";
 
+    private static final Logger LOGGER = Logger.getLogger(JdbcBookingDao.class);
     private Connection connection;
 
     public JdbcBookingDao(Connection connection) {
@@ -44,7 +48,7 @@ public class JdbcBookingDao implements BookingDao {
     }
 
     @Override
-    public Optional<Booking> find(int id) throws SQLException {
+    public Optional<Booking> find(int id) {
 	Optional<Booking> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_BOOKING_BY_ID)) {
 	    query.setInt(1, id);
@@ -54,39 +58,63 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		result = Optional.of(booking);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return result;
     }
 
-    private Booking getBookingFromResultSet(ResultSet rs) throws SQLException {
-	Booking booking = new Booking.Builder().withId(rs.getInt("b_id")).withPrice(rs.getBigDecimal("b_price"))
-		.withDate(rs.getTimestamp("b_date").toLocalDateTime()).withUser(getUserFromResultSet(rs))
-		.withTickets(getTicketsFromResultSet(rs)).build();
+    private Booking getBookingFromResultSet(ResultSet rs) {
+	Booking booking;
+	try {
+	    booking = new Booking.Builder().withId(rs.getInt("b_id")).withPrice(rs.getBigDecimal("b_price"))
+		    .withDate(rs.getTimestamp("b_date").toLocalDateTime()).withUser(getUserFromResultSet(rs))
+		    .withTickets(getTicketsFromResultSet(rs)).build();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Booking.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
 	return booking;
     }
 
-    private Person getUserFromResultSet(ResultSet rs) throws SQLException {
+    private Person getUserFromResultSet(ResultSet rs) {
 	Person person = null;
-	if (rs.getInt("p_id") != 0) {
-	    person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
-		    .withSurname(rs.getString("p_surname"))
-		    .withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
+	try {
+	    if (rs.getInt("p_id") != 0) {
+		person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
+			.withSurname(rs.getString("p_surname"))
+			.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
+	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Person.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return person;
     }
 
-    private List<Ticket> getTicketsFromResultSet(ResultSet rs) throws SQLException {
+    private List<Ticket> getTicketsFromResultSet(ResultSet rs) {
 	List<Ticket> ticketsList = new ArrayList<>();
 	Ticket ticket = null;
-	if (rs.getInt("ti_id") != 0) {
-	    ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).withPrice(rs.getBigDecimal("ti_price")).build();
-	    ticketsList.add(ticket);
+	try {
+	    if (rs.getInt("ti_id") != 0) {
+		ticket = new Ticket.Builder().withId(rs.getInt("ti_id")).withPrice(rs.getBigDecimal("ti_price"))
+			.build();
+		ticketsList.add(ticket);
+	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Ticket.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return ticketsList;
     }
 
     @Override
-    public List<Booking> findAllByUserId(int userId) throws SQLException {
+    public List<Booking> findAllByUserId(int userId) {
 	List<Booking> bookingList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS_BY_PERSON_ID)) {
 	    query.setInt(1, userId);
@@ -96,12 +124,16 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		bookingList.add(booking);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Booking.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return bookingList;
     }
 
     @Override
-    public List<Booking> findAll() throws SQLException {
+    public List<Booking> findAll() {
 	List<Booking> bookingList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_BOOKINGS);
 		ResultSet rs = query.executeQuery();) {
@@ -110,12 +142,16 @@ public class JdbcBookingDao implements BookingDao {
 		booking = getBookingFromResultSet(rs);
 		bookingList.add(booking);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_ALL;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return bookingList;
     }
 
     @Override
-    public void create(Booking booking) throws SQLException {
+    public void create(Booking booking) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_BOOKING, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setBigDecimal(1, booking.getPrice());
 	    query.setTimestamp(2, Timestamp.valueOf(booking.getDate()));
@@ -125,11 +161,15 @@ public class JdbcBookingDao implements BookingDao {
 	    if (keys.next()) {
 		booking.setId(keys.getInt(1));
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void createBookingTicketsLink(Booking booking) throws SQLException {
+    public void createBookingTicketsLink(Booking booking) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_M2M_BOOKING_TICKETS_ID)) {
 	    query.setInt(1, booking.getId());
 	    List<Ticket> tickets = booking.getTickets();
@@ -138,32 +178,48 @@ public class JdbcBookingDao implements BookingDao {
 		query.setInt(2, ticketId);
 		query.executeUpdate();
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void update(Booking booking) throws SQLException {
+    public void update(Booking booking) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_BOOKING)) {
 	    query.setBigDecimal(1, booking.getPrice());
 	    query.setTimestamp(2, Timestamp.valueOf(booking.getDate()));
 	    query.setInt(3, booking.getId());
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_UPDATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_BOOKING_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_DELETE_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void deleteBookingTicketsLink(int id) throws SQLException {
+    public void deleteBookingTicketsLink(int id) {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_M2M_BOOKING_TICKETS_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_DELETE_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 }

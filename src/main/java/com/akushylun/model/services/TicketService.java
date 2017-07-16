@@ -1,13 +1,11 @@
 package com.akushylun.model.services;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TicketDao;
-import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Ticket;
 
 public class TicketService {
@@ -25,69 +23,57 @@ public class TicketService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<Ticket> getById(int ticketId) throws ServiceException {
+    public Optional<Ticket> getById(int ticketId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    return ticketDao.find(ticketId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Ticket> getByAll() throws ServiceException {
+    public List<Ticket> getByAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    return ticketDao.findAll();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Ticket> getByBookingId(int bookingId) throws ServiceException {
+    public List<Ticket> getByBookingId(int bookingId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    return ticketDao.findAll(bookingId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void createTicket(Ticket ticket) throws ServiceException {
+    public void createTicket(Ticket ticket) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    ticketDao.create(ticket);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void updateTicket(Ticket ticket) throws ServiceException {
+    public void updateTicket(Ticket ticket) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    ticketDao.update(ticket);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void deleteTicket(int ticketId) throws ServiceException {
+    public void deleteTicket(int ticketId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
 	    connection.begin();
 	    ticketDao.delete(ticketId);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 }

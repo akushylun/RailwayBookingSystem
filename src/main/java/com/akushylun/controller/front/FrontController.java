@@ -25,7 +25,7 @@ import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 
 /**
  * Servlet implementation class FrontController
@@ -81,7 +81,7 @@ public class FrontController extends HttpServlet {
 	String viewPage = null;
 	try {
 	    viewPage = command.execute(request, response);
-	} catch (ServiceException e) {
+	} catch (DaoException e) {
 	    // TODO Auto-generated catch block
 	    e.printStackTrace();
 	}

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Train;
 import com.akushylun.model.services.TrainService;
 
@@ -18,7 +18,7 @@ public class GetTrains implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException {
+	    throws ServletException, IOException, DaoException {
 
 	List<Train> trainList = service.getByAll();
 	request.setAttribute("trainList", trainList);

@@ -19,8 +19,6 @@ public class AuthenticatorImpl implements Authenticator {
 	Person person = null;
 	if (isLoggedIn()) {
 	    person = (Person) request.getSession(true).getAttribute(AUTH_TOKEN);
-	} else {
-	    throw new IllegalStateException("The person is not logged! ");
 	}
 	return person;
     }

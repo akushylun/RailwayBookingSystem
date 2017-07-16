@@ -5,22 +5,22 @@ import java.sql.SQLException;
 /**
  * Custom Exception class for handling SQLException
  */
-public class ServiceException extends SQLException {
+public class DaoException extends SQLException {
 
     private static final long serialVersionUID = 1L;
 
-    public ServiceException() {
+    public DaoException() {
     }
 
-    public ServiceException(String message, Throwable exception) {
+    public DaoException(String message, Throwable exception) {
 	super(message, exception);
     }
 
-    public ServiceException(String message) {
+    public DaoException(String message) {
 	super(message);
     }
 
-    public ServiceException(Throwable exception) {
+    public DaoException(Throwable exception) {
 	super(exception);
     }
 }

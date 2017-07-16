@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
+
+import com.akushylun.controller.util.LogMessage;
 import com.akushylun.model.dao.PersonDao;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
@@ -30,34 +33,15 @@ public class JdbcPersonDao implements PersonDao {
 	    + " WHERE p_id = ?";
     private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_id = ?";
 
+    private static final Logger LOGGER = Logger.getLogger(JdbcPersonDao.class);
     private Connection connection;
 
     public JdbcPersonDao(Connection connection) {
 	this.connection = connection;
     }
 
-    private Person getUserFromResultSet(ResultSet rs) throws SQLException {
-	Person person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
-		.withSurname(rs.getString("p_surname")).withPersonLogin(getLoginFromResultSet(rs))
-		.withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
-	return person;
-    }
-
-    private Login getLoginFromResultSet(ResultSet rs) throws SQLException {
-	Login login = null;
-	if (rs.getString("l_email") != null) {
-	    int id = rs.getInt("l_id");
-	    String loginName = rs.getString("l_email");
-	    String password = rs.getString("l_password");
-	    login = new Login.Builder().withId(id).withEmail(loginName).withPassword(password).build();
-
-	}
-	return login;
-
-    }
-
     @Override
-    public Optional<Person> find(int id) throws SQLException {
+    public Optional<Person> find(int id) {
 	Optional<Person> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_ID)) {
 	    query.setInt(1, id);
@@ -67,12 +51,48 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		result = Optional.of(person);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return result;
     }
 
+    private Person getUserFromResultSet(ResultSet rs) {
+	Person person;
+	try {
+	    person = new Person.Builder().withId(rs.getInt("p_id")).withName(rs.getString("p_name"))
+		    .withSurname(rs.getString("p_surname")).withPersonLogin(getLoginFromResultSet(rs))
+		    .withRole(Role.valueOf(rs.getString("p_role_r_name").toUpperCase())).build();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Person.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+	return person;
+    }
+
+    private Login getLoginFromResultSet(ResultSet rs) {
+	Login login = null;
+	try {
+	    if (rs.getString("l_email") != null) {
+		int id = rs.getInt("l_id");
+		String loginName = rs.getString("l_email");
+		String password = rs.getString("l_password");
+		login = new Login.Builder().withId(id).withEmail(loginName).withPassword(password).build();
+	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Login.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+	return login;
+
+    }
+
     @Override
-    public Optional<Person> findByLogin(String loginName) throws SQLException {
+    public Optional<Person> findByLogin(String loginName) {
 	Optional<Person> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_PERSON_BY_LOGIN_NAME)) {
 	    query.setString(1, loginName);
@@ -82,12 +102,16 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		result = Optional.of(person);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_BY_LOGIN;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return result;
     }
 
     @Override
-    public List<Person> findAll() throws SQLException {
+    public List<Person> findAll() {
 	List<Person> userList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_PERSONS)) {
 	    ResultSet rs = query.executeQuery();
@@ -96,12 +120,16 @@ public class JdbcPersonDao implements PersonDao {
 		person = getUserFromResultSet(rs);
 		userList.add(person);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_ALL;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return userList;
     }
 
     @Override
-    public void create(Person person) throws SQLException {
+    public void create(Person person) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_PERSON, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
@@ -112,25 +140,37 @@ public class JdbcPersonDao implements PersonDao {
 	    if (keys.next()) {
 		person.setId(keys.getInt(1));
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void update(Person person) throws SQLException {
+    public void update(Person person) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_PERSON)) {
 	    query.setString(1, person.getName());
 	    query.setString(2, person.getSurname());
 	    query.setString(3, person.getRole().name());
 	    query.setInt(4, person.getId());
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_UPDATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_PERSON_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_DELETE_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 

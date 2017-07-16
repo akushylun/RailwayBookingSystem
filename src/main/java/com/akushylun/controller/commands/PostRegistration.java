@@ -13,7 +13,7 @@ import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
@@ -35,7 +35,7 @@ public class PostRegistration implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException {
+	    throws ServletException, IOException, DaoException {
 
 	String name = request.getParameter(PARAM_NAME);
 	String surname = request.getParameter(PARAM_SURNAME);

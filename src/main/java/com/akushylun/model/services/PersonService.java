@@ -1,6 +1,5 @@
 package com.akushylun.model.services;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +7,6 @@ import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.LoginDao;
 import com.akushylun.model.dao.PersonDao;
-import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Person;
 
 public class PersonService {
@@ -27,27 +25,23 @@ public class PersonService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<Person> getById(int userId) throws ServiceException {
+    public Optional<Person> getById(int userId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    connection.begin();
 	    return personDao.find(userId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Person> getAll() throws ServiceException {
+    public List<Person> getAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    connection.begin();
 	    return personDao.findAll();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void create(Person person) throws ServiceException {
+    public void create(Person person) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    LoginDao loginDao = daoFactory.createLoginDao();
@@ -56,42 +50,34 @@ public class PersonService {
 	    personDao.create(person);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void update(Person person) throws ServiceException {
+    public void update(Person person) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    connection.begin();
 	    personDao.update(person);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void deleteById(int id) throws ServiceException {
+    public void deleteById(int id) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao personDao = daoFactory.createPersonDao();
 	    connection.begin();
 	    personDao.delete(id);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public Optional<Person> login(String loginName, String password) throws ServiceException {
+    public Optional<Person> login(String loginName, String password) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    PersonDao loginDao = daoFactory.createPersonDao();
 	    connection.begin();
 	    return loginDao.findByLogin(loginName).filter(login -> password.equals(login.getLogin().getPassword()));
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 }

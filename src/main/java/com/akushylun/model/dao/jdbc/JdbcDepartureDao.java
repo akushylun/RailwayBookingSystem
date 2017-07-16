@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
+
+import com.akushylun.controller.util.LogMessage;
 import com.akushylun.model.dao.DepartureDao;
 import com.akushylun.model.entities.Departure;
 import com.akushylun.model.entities.Train;
@@ -26,27 +29,15 @@ public class JdbcDepartureDao implements DepartureDao {
 	    + " WHERE d_id = ?";
     private static final String DELETE_DEPARTURE_BY_ID = "DELETE FROM departure WHERE d_id = ?";
 
+    private static final Logger LOGGER = Logger.getLogger(JdbcDepartureDao.class);
     private Connection connection;
 
     public JdbcDepartureDao(Connection connection) {
 	this.connection = connection;
     }
 
-    private Departure getDepartureFromResultSet(ResultSet rs) throws SQLException {
-	Departure departure = null;
-	departure = new Departure.Builder().withId(rs.getInt("d_id"))
-		.withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).withTrain(getTrainFromResultSet(rs))
-		.build();
-	return departure;
-    }
-
-    private Train getTrainFromResultSet(ResultSet rs) throws SQLException {
-	Train train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name")).build();
-	return train;
-    }
-
     @Override
-    public Optional<Departure> find(int id) throws SQLException {
+    public Optional<Departure> find(int id) {
 	Optional<Departure> result = Optional.empty();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_DEPARTURE_BY_ID)) {
 	    query.setInt(1, id);
@@ -56,12 +47,42 @@ public class JdbcDepartureDao implements DepartureDao {
 		departure = getDepartureFromResultSet(rs);
 		result = Optional.of(departure);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return result;
     }
 
+    private Departure getDepartureFromResultSet(ResultSet rs) {
+	Departure departure = null;
+	try {
+	    departure = new Departure.Builder().withId(rs.getInt("d_id"))
+		    .withDateTtime(rs.getTimestamp("d_datetime").toLocalDateTime()).withTrain(getTrainFromResultSet(rs))
+		    .build();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Departure.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+	return departure;
+    }
+
+    private Train getTrainFromResultSet(ResultSet rs) {
+	Train train = null;
+	try {
+	    train = new Train.Builder().withId(rs.getInt("tr_id")).withName(rs.getString("tr_name")).build();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_RETRIEVES_ENTITY + Train.class.getName();
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
+	}
+	return train;
+    }
+
     @Override
-    public List<Departure> findAll() throws SQLException {
+    public List<Departure> findAll() {
 	List<Departure> sheduleList = new ArrayList<>();
 	try (PreparedStatement query = connection.prepareStatement(SELECT_ALL_DEPARTURES)) {
 	    ResultSet rs = query.executeQuery();
@@ -70,12 +91,16 @@ public class JdbcDepartureDao implements DepartureDao {
 		departure = getDepartureFromResultSet(rs);
 		sheduleList.add(departure);
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_FIND_ALL;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 	return sheduleList;
     }
 
     @Override
-    public void create(Departure departure) throws SQLException {
+    public void create(Departure departure) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_DEPARTURE, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setTimestamp(1, Timestamp.valueOf(departure.getDateTime()));
 	    query.setInt(2, departure.getTrain().getId());
@@ -84,25 +109,37 @@ public class JdbcDepartureDao implements DepartureDao {
 	    if (keys.next()) {
 		departure.setId(keys.getInt(1));
 	    }
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_CREATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
 
     }
 
     @Override
-    public void update(Departure departure) throws SQLException {
+    public void update(Departure departure) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_DEPARTURE)) {
 	    query.setTimestamp(1, Timestamp.valueOf(departure.getDateTime()));
 	    query.setInt(2, departure.getTrain().getId());
 	    query.setInt(3, departure.getId());
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_UPDATE;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 
     @Override
-    public void delete(int id) throws SQLException {
+    public void delete(int id) {
 	try (PreparedStatement query = connection.prepareStatement(DELETE_DEPARTURE_BY_ID)) {
 	    query.setInt(1, id);
 	    query.executeUpdate();
+	} catch (SQLException ex) {
+	    String errorMessage = LogMessage.DB_ERROR_DELETE_BY_ID;
+	    LOGGER.error(errorMessage, ex);
+	    throw new RuntimeException(errorMessage, ex);
 	}
     }
 

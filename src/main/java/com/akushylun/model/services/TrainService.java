@@ -1,6 +1,5 @@
 package com.akushylun.model.services;
 
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +7,6 @@ import java.util.Optional;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.TrainDao;
-import com.akushylun.model.dao.exceptions.ServiceException;
 import com.akushylun.model.entities.Train;
 
 public class TrainService {
@@ -26,69 +24,57 @@ public class TrainService {
 	return Holder.INSTANCE;
     }
 
-    public Optional<Train> getById(int trainId) throws ServiceException {
+    public Optional<Train> getById(int trainId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    return trainDao.find(trainId);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Train> getByAll() throws ServiceException {
+    public List<Train> getByAll() {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    return trainDao.findAll();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public List<Train> getByAll(String stationStart, String stationEnd, LocalDate startDate) throws ServiceException {
+    public List<Train> getByAll(String stationStart, String stationEnd, LocalDate startDate) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    return trainDao.findAll(stationStart, stationEnd, startDate);
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void createTrain(Train train) throws ServiceException {
+    public void createTrain(Train train) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    trainDao.create(train);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void updateTrain(Train train) throws ServiceException {
+    public void updateTrain(Train train) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    trainDao.update(train);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 
-    public void deleteTrain(int trainId) throws ServiceException {
+    public void deleteTrain(int trainId) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TrainDao trainDao = daoFactory.createTrainDao();
 	    connection.begin();
 	    trainDao.delete(trainId);
 	    connection.commit();
 	    connection.close();
-	} catch (SQLException ex) {
-	    throw new ServiceException(ex);
 	}
     }
 }

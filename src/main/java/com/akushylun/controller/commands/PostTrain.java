@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Train;
 import com.akushylun.model.services.TrainService;
 
@@ -31,7 +31,7 @@ public class PostTrain implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException {
+	    throws ServletException, IOException, DaoException {
 
 	String stationFrom = request.getParameter(STATION_FROM);
 	String stationTo = request.getParameter(STATION_TO);

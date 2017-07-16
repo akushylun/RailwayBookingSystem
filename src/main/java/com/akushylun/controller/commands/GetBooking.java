@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
-import com.akushylun.model.dao.exceptions.ServiceException;
+import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.services.BookingService;
 
@@ -18,7 +18,7 @@ public class GetBooking implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, ServiceException {
+	    throws ServletException, IOException, DaoException {
 
 	String path = request.getRequestURI();
 	int bookingId = Integer.parseInt(path.replaceAll("\\D+", ""));
