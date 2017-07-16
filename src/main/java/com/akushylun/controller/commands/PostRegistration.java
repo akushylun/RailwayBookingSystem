@@ -13,6 +13,7 @@ import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
+import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Login;
 import com.akushylun.model.entities.Person;
@@ -26,7 +27,7 @@ public class PostRegistration implements Command {
     private static final String PARAM_EMAIL = "email";
     private static final String PARAM_PASSWORD = "password";
 
-    private PersonService service = PersonService.getInstance();
+    private PersonService service = new PersonService(DaoFactory.getInstance());
 
     private Pattern namePatern = RegexValidator.compileRegExpression(RegexValidator.NAME);
     private Pattern surnamePatern = RegexValidator.compileRegExpression(RegexValidator.SURNAME);

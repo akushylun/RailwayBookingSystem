@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
+import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
@@ -20,7 +21,7 @@ import com.akushylun.model.services.BookingService;
 
 public class PostBooking implements Command {
 
-    BookingService service = BookingService.getInstance();
+    BookingService service = new BookingService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)

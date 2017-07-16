@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
+import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.services.PersonService;
 
 public class GetPersons implements Command {
 
-    PersonService service = PersonService.getInstance();
+    PersonService service = new PersonService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)

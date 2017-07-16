@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
+import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Station;
 import com.akushylun.model.services.StationService;
 
 public class GetRoute implements Command {
 
-    StationService service = StationService.getInstance();
+    StationService service = new StationService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.akushylun.controller.security.Authenticator;
 import com.akushylun.controller.security.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
+import com.akushylun.model.dao.DaoFactory;
 import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
@@ -18,7 +19,7 @@ import com.akushylun.model.services.BookingService;
 
 public class GetBookingsByUser implements Command {
 
-    private BookingService service = BookingService.getInstance();
+    private BookingService service = new BookingService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
