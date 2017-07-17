@@ -33,6 +33,7 @@
 				</thead>
 				<tbody>
 					<c:forEach var="train" items="${trainList}">
+
 						<tr>
 							<td><c:out value="${train.name}" /></td>
 							<td><c:out value="${train.stationList[0].station.name}" /></td>
@@ -41,22 +42,22 @@
 							<td><c:out value="${train.stationList[1].datetime}" /></td>
 							<td><c:out
 									value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" /></td>
-							<td><button class="btn btn-success btn-sm" type="submit">
-									Buy ticket</button></td>
+							<td><form action="./booking" method="POST">
+									<button class="btn btn-success btn-sm" type="submit">Buy
+										ticket</button>
+									<input type="hidden" name="trainId"
+										value="${train.id}" /> 
+									<input type="hidden" name="stationFrom"
+										value="${train.stationList[0].station.id}" /> 
+									<input type="hidden" name="stationTo"
+										value="${train.stationList[1].station.id}" /> 
+									<input type="hidden" name="bookingPrice"
+										value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" />
+								</form></td>
 						</tr>
-						<input type="hidden" id="thisField" name="trainId"
-							value="${train.id}" />
-						<input type="hidden" id="thisField" name="stationFrom"
-							value="${train.stationList[0].station.id}" />
-						<input type="hidden" id="thisField" name="stationTo"
-							value="${train.stationList[1].station.id}" />
-						<input type="hidden" id="thisField" name="bookingPrice"
-							value="${train.stationList[1].cost_price - train.stationList[0].cost_price}" />
-
 					</c:forEach>
 				</tbody>
 			</table>
-		</form>
 	</div>
 </body>
 </html>

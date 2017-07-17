@@ -43,7 +43,7 @@ public class PostBooking implements Command {
 		.withTicket(ticket).build();
 
 	service.createBooking(booking);
-	return PagePath.BOOKING_LIST;
+	return PagePath.TICKET_SEARCH;
 
     }
 

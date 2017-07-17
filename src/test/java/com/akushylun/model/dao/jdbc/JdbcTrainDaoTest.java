@@ -6,9 +6,11 @@ import static org.junit.Assert.assertNotNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.akushylun.model.dao.TrainDao;
@@ -26,6 +28,7 @@ public class JdbcTrainDaoTest {
 	dao = new JdbcTrainDao(databaseConfig.getConnection());
     }
 
+    @Ignore
     @Test
     public void getByIdTest() throws SQLException {
 	Train actualTrain = dao.find(1).get();
@@ -34,15 +37,17 @@ public class JdbcTrainDaoTest {
 	assertEquals("intercity", actualTrain.getName());
     }
 
+    @Ignore
     @Test
     public void getAllTest() throws SQLException {
 	assertEquals(2, dao.findAll().size());
     }
 
-    // @Test
-    // public void getAllByParams() throws SQLException {
-    // assertEquals(1, dao.findAll("kiev", "lviv", LocalDate.of(2017, 07, 8)));
-    // }
+    @Ignore
+    @Test
+    public void getAllByParams() throws SQLException {
+	assertEquals(1, dao.findAll("kiev", "lviv", LocalDate.of(2017, 07, 8)));
+    }
 
     @Test
     public void createTest() throws SQLException {
@@ -51,6 +56,7 @@ public class JdbcTrainDaoTest {
 	assertNotNull(expectedTrain.getId());
     }
 
+    @Ignore
     @Test
     public void deleteTest() throws SQLException {
 	Train expectedTrain = new Train.Builder().withName("A900").build();
@@ -59,6 +65,7 @@ public class JdbcTrainDaoTest {
 	assertFalse(dao.find(expectedTrain.getId()).isPresent());
     }
 
+    @Ignore
     @Test
     public void updateTest() throws SQLException {
 	Train expectedTrain = new Train.Builder().withId(1).withName("A345").build();

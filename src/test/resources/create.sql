@@ -44,7 +44,14 @@ CREATE TABLE `person` (
 
 
 
-
+DROP TABLE IF EXISTS `ticket`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `ticket` (
+  `ti_id` int(11) NOT NULL auto_increment,
+  `ti_description` VARCHAR(100) NULL,
+  PRIMARY KEY (`ti_id`)
+);
 
 
 DROP TABLE IF EXISTS `booking`;
@@ -55,13 +62,13 @@ CREATE TABLE `booking` (
   `b_price` numeric(15,2) NOT NULL,
   `b_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `b_person_p_id` int(11) NOT NULL,
+  `b_ticket_ti_id` INT NOT NULL,
   PRIMARY KEY (`b_id`),
   KEY `fk_booking_person1` (`b_person_p_id`),
-  CONSTRAINT `fk_booking_person1` FOREIGN KEY (`b_person_p_id`) REFERENCES `person` (`p_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_booking_ticket1_idx` (`b_ticket_ti_id`),
+  CONSTRAINT `fk_booking_person1` FOREIGN KEY (`b_person_p_id`) REFERENCES `person` (`p_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_booking_ticket1` FOREIGN KEY (`b_ticket_ti_id`) REFERENCES `ticket` (`ti_id`)ON DELETE NO ACTION ON UPDATE NO ACTION
 );
-
-
-
 
 
 
@@ -76,12 +83,6 @@ CREATE TABLE `station` (
 );
 
 
-
-
-
-
-
-
 DROP TABLE IF EXISTS `train`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -90,12 +91,6 @@ CREATE TABLE `train` (
   `tr_name` varchar(100) NOT NULL,
   PRIMARY KEY (`tr_id`)
 );
-
-
-
-
-
-
 
 
 DROP TABLE IF EXISTS `departure`;
@@ -112,63 +107,31 @@ CREATE TABLE `departure` (
 
 
 
-
-
-
-
-
-DROP TABLE IF EXISTS `ticket`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ticket` (
-  `ti_id` int(11) NOT NULL auto_increment,
-  `ti_price` decimal(15,2) NOT NULL,
-  `ti_train_tr_id` int(11) NOT NULL,
-  PRIMARY KEY (`ti_id`),
-  KEY `fk_ticket_train_idx` (`ti_train_tr_id`),
-  CONSTRAINT `fk_ticket_train1` FOREIGN KEY (`ti_train_tr_id`) REFERENCES `train` (`tr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-
-
-
-
-
-
-
-
-DROP TABLE IF EXISTS `m2m_booking_ticket`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `m2m_booking_ticket` (
-  `m2m_booking_b_id` int(11) NOT NULL,
-  `m2m_ticket_ti_id` int(11) NOT NULL,
-  KEY `fk_m2m_booking_ticket_booking_idx` (`m2m_booking_b_id`),
-  KEY `fk_m2m_booking_ticket_ticket1_idx` (`m2m_ticket_ti_id`),
-  PRIMARY KEY (`m2m_booking_b_id`, `m2m_ticket_ti_id`),
-  CONSTRAINT `fk_m2m_booking_ticket_booking1` FOREIGN KEY (`m2m_booking_b_id`) REFERENCES `booking` (`b_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_m2m_booking_ticket_ticket1` FOREIGN KEY (`m2m_ticket_ti_id`) REFERENCES `ticket` (`ti_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-
-
-
-
-
-
-
 CREATE TABLE IF NOT EXISTS `m2m_train_station` (
+  `m2m_train_station_id` INT NOT NULL AUTO_INCREMENT,
   `m2m_cost_time` INT NOT NULL,
   `m2m_cost_price` decimal(15,2) NOT NULL,
   `m2m_station_st_id` INT NOT NULL,
   `m2m_train_tr_id` INT NOT NULL,
-  KEY `fk_m2m_station_idx` (`m2m_station_st_id`),
-  PRIMARY KEY (`m2m_station_st_id`, `m2m_train_tr_id`),
+   PRIMARY KEY (`m2m_train_station_id`),
   KEY `fk_m2m_train_idx` (`m2m_train_tr_id`),
-  KEY `m2m_cost_time` (`m2m_cost_time`),
-  CONSTRAINT `fk_m2m_station1` FOREIGN KEY (`m2m_station_st_id`) REFERENCES `station` (`st_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_m2m_train1` FOREIGN KEY (`m2m_train_tr_id`) REFERENCES `train` (`tr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `fk_m2m_train_station_station1` (`m2m_station_st_id`),
+  CONSTRAINT `fk_m2m_shedule_station_train1`FOREIGN KEY (`m2m_train_tr_id`) REFERENCES `train` (`tr_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_m2m_train_station_station1`FOREIGN KEY (`m2m_station_st_id`) REFERENCES `station` (`st_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
   );
+
+CREATE TABLE IF NOT EXISTS `m2m_ticket_train_station` (
+  `m2m_ticket_ti_id` INT NOT NULL,
+  `m2m_m2m_train_station_id` INT NOT NULL,
+  PRIMARY KEY (`m2m_ticket_ti_id`, `m2m_m2m_train_station_id`),
+  KEY `fk_ticket_has_m2m_train_station_m2m_train_station1_idx` (`m2m_m2m_train_station_id` ASC),
+  KEY `fk_ticket_has_m2m_train_station_ticket1_idx` (`m2m_ticket_ti_id` ASC),
+  CONSTRAINT `fk_ticket_has_m2m_train_station_ticket1` FOREIGN KEY (`m2m_ticket_ti_id`) REFERENCES `ticket` (`ti_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_ticket_has_m2m_train_station_m2m_train_station1` FOREIGN KEY (`m2m_m2m_train_station_id`) REFERENCES `m2m_train_station` (`m2m_train_station_id`)ON DELETE NO ACTION ON UPDATE NO ACTION);
+
+
+
+
 
 
   

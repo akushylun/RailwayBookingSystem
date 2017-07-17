@@ -44,7 +44,7 @@ public class DatabaseConfig {
 	    RunScript.execute(connection, new FileReader(scriptCreate));
 	    RunScript.execute(connection, new FileReader(scriptInsert));
 	} catch (Exception e) {
-	    throw new RuntimeException("could not initialize with script");
+	    throw new RuntimeException("could not initialize with script" + e.getMessage());
 	}
     }
 
