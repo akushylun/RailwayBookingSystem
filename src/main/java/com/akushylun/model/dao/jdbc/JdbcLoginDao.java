@@ -85,7 +85,7 @@ public class JdbcLoginDao implements LoginDao {
     public void create(Login login) {
 	try (PreparedStatement query = connection.prepareStatement(CREATE_LOGIN, Statement.RETURN_GENERATED_KEYS)) {
 	    query.setString(1, login.getEmail());
-	    query.setString(2, login.getPassword());
+	    query.setInt(2, login.getPassword().hashCode());
 	    query.executeUpdate();
 	    ResultSet keys = query.getGeneratedKeys();
 	    if (keys.next()) {
@@ -102,7 +102,7 @@ public class JdbcLoginDao implements LoginDao {
     public void update(Login login) {
 	try (PreparedStatement query = connection.prepareStatement(UPDATE_LOGIN)) {
 	    query.setString(1, login.getEmail());
-	    query.setString(2, login.getPassword());
+	    query.setInt(2, login.getPassword().hashCode());
 	    query.setInt(3, login.getId());
 	    query.executeUpdate();
 	} catch (SQLException ex) {

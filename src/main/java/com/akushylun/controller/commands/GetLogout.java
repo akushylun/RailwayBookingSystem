@@ -15,7 +15,7 @@ public class GetLogout implements Command {
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	authenticator.logout();
 
-	return PagePath.INDEX;
+	return PagePath.LOGIN;
 
     }
 }
