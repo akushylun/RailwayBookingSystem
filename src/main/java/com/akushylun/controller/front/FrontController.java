@@ -26,7 +26,7 @@ import com.akushylun.controller.commands.PostTrain;
 import com.akushylun.controller.commands.PostUser;
 
 /**
- * Servlet implementation class FrontController
+ * Servlet implementation class FrontController, handles all requests.
  */
 @WebServlet(name = "frontController", urlPatterns = { "/view/*" })
 public class FrontController extends HttpServlet {
@@ -69,14 +69,19 @@ public class FrontController extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
 	    throws ServletException, IOException {
 
-	String method = request.getMethod().toUpperCase();
-	String path = request.getRequestURI();
-	path = path.replaceAll(".*/view", "").replaceAll("\\d+", "");
-	String key = method + ":" + path;
+	String key = getCommandKeyPath(request);
 	Command command = commands.getOrDefault(key, (req, resp) -> "/index.jsp");
 	String viewPage = command.execute(request, response);
 	request.getRequestDispatcher(viewPage).forward(request, response);
 
+    }
+
+    private String getCommandKeyPath(HttpServletRequest request) {
+	String method = request.getMethod().toUpperCase();
+	String path = request.getRequestURI();
+	path = path.replaceAll(".*/view", "").replaceAll("\\d+", "");
+	String key = method + ":" + path;
+	return key;
     }
 
 }

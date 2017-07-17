@@ -9,8 +9,6 @@
 
 <link href="<c:url value="/resources/css/header.css" />"
 	rel="stylesheet">
-
-<!-- Custom styles for this template -->
 <link href="<c:url value="/resources/css/grid.css" />" rel="stylesheet">
 
 </head>

@@ -1,9 +1,7 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,8 +16,7 @@ public class GetUsers implements Command {
     PersonService service = new PersonService(DaoFactory.getInstance());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	List<Person> personList = service.getAll(Role.USER);
 	request.setAttribute("personList", personList);

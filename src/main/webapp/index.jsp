@@ -10,7 +10,7 @@
 <meta name="author" content="">
 <link rel="icon" href="../../favicon.ico">
 
-<title>Starter Template for Bootstrap</title>
+<title>Railway Booking</title>
 
 <!-- Custom styles for this template -->
 <link href="<c:url value="/resources/css/starter-template.css" />"

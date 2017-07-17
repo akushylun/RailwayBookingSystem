@@ -5,15 +5,12 @@ import java.util.regex.Pattern;
 public final class RegexValidator {
 
     public static final String NAME = "^[a-zA-Z0-9_-]{3,15}$";
-    public static final String SURNAME = "^[a-zA-Z0-9_-]{3,15}$";;
+    public static final String SURNAME = "^[a-zA-Z0-9_-]{3,15}$";
     public static final String EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    public static final String PASSWORD = "((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{2,})";
+    public static final String PASSWORD = "((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{6,50})";
 
     public static final String STATION = "^[a-zA-Z]+$";
     public static final String DATE = "[(0?[1-9]|[12][0-9]|3[01])]{1,2}-[(a-zA-Z)]{2,}-[((19|20)\\d\\d)]{4}";
-
-    public static final String PRICE = "[0-9]+([.][0-9]{1,2})?";
-    public static final String TIME = "[0-9]";
 
     /**
      * Compiles the given regular expression into Pattern

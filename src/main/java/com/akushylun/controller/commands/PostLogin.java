@@ -1,17 +1,16 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.akushylun.controller.util.Authenticator;
 import com.akushylun.controller.util.AuthenticatorImpl;
+import com.akushylun.controller.util.JSPMessage;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
 import com.akushylun.model.dao.DaoFactory;
@@ -29,8 +28,7 @@ public class PostLogin implements Command {
     private Pattern passwordPatern = RegexValidator.compileRegExpression(RegexValidator.PASSWORD);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	String pageToGo = "";
 	String email = request.getParameter(PARAM_LOGIN);
@@ -39,6 +37,8 @@ public class PostLogin implements Command {
 	boolean inputPersonParamsAreValid = validatePerson(email, password);
 
 	if (!inputPersonParamsAreValid) {
+	    request.setAttribute("loginError", JSPMessage.EMAIL_MISTAKE);
+	    request.setAttribute("passwordError", JSPMessage.PASSWORD_MISTAKE);
 	    pageToGo = PagePath.LOGIN;
 	} else {
 	    Optional<Person> person = service.login(email, password);

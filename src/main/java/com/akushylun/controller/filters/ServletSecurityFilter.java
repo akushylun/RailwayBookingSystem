@@ -17,6 +17,10 @@ import com.akushylun.controller.util.Authenticator;
 import com.akushylun.controller.util.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 
+/**
+ * ServletSecurityFilter class checks if the Person has a session. If true, the
+ * person can move free, if false the Person must logIn
+ */
 @WebFilter(urlPatterns = { "/controllers" }, servletNames = { "frontController" })
 public class ServletSecurityFilter implements Filter {
 
@@ -31,6 +35,7 @@ public class ServletSecurityFilter implements Filter {
 	HttpServletRequest req = (HttpServletRequest) request;
 	HttpServletResponse resp = (HttpServletResponse) response;
 	Authenticator auth = new AuthenticatorImpl(req);
+
 	String loginURI = "/login";
 	String registationURI = "/registration";
 	String requestURI = req.getRequestURI().replaceAll(".*/view", "");

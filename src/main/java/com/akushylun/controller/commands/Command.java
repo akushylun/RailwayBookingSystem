@@ -1,12 +1,16 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public interface Command {
-    String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException;
+    /**
+     * 
+     * @param request
+     *            HTTP request from Servlet
+     * @param response
+     *            HTTP response from Servlet
+     * @return page path to which request will be forwarded
+     */
+    String execute(HttpServletRequest request, HttpServletResponse response);
 }

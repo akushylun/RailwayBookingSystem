@@ -1,16 +1,15 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.akushylun.controller.util.Authenticator;
 import com.akushylun.controller.util.AuthenticatorImpl;
+import com.akushylun.controller.util.JSPMessage;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
 import com.akushylun.model.dao.DaoFactory;
@@ -34,17 +33,22 @@ public class PostRegistration implements Command {
     private Pattern passwordPatern = RegexValidator.compileRegExpression(RegexValidator.PASSWORD);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
+	String pageToGo = "";
 	String name = request.getParameter(PARAM_NAME);
 	String surname = request.getParameter(PARAM_SURNAME);
 	String email = request.getParameter(PARAM_EMAIL);
 	String password = request.getParameter(PARAM_PASSWORD);
 
 	boolean inputPersonParamsAreValid = isValidPerson(name, surname, email, password);
-	if (inputPersonParamsAreValid) {
-
+	if (!inputPersonParamsAreValid) {
+	    request.setAttribute("nameError", JSPMessage.NAME_MISTAKE);
+	    request.setAttribute("surnameError", JSPMessage.SURNAME_MISTAKE);
+	    request.setAttribute("emailError", JSPMessage.EMAIL_MISTAKE);
+	    request.setAttribute("passwordError", JSPMessage.PASSWORD_MISTAKE);
+	    pageToGo = PagePath.REGISTRATION;
+	} else {
 	    Login login = new Login.Builder().withEmail(email).withPassword(password).build();
 	    Person person = new Person.Builder().withName(name).withSurname(surname).withPersonLogin(login)
 		    .withRole(Role.USER).build();
@@ -54,10 +58,9 @@ public class PostRegistration implements Command {
 	    HttpSession session = request.getSession(true);
 	    Authenticator authenticator = new AuthenticatorImpl(request);
 	    authenticator.setAttributeToSession(session, person);
+	    pageToGo = PagePath.INDEX;
 	}
-
-	return PagePath.INDEX;
-
+	return pageToGo;
     }
 
     private boolean isValidPerson(String name, String surname, String email, String password) {

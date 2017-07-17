@@ -1,6 +1,5 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,8 +28,7 @@ public class PostTrain implements Command {
     private TrainService service = new TrainService(DaoFactory.getInstance());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	String stationFrom = request.getParameter(STATION_FROM);
 	String stationTo = request.getParameter(STATION_TO);

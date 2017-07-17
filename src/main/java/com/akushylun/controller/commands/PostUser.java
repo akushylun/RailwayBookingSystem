@@ -1,10 +1,8 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -29,8 +27,7 @@ public class PostUser implements Command {
     private Pattern emailPatern = RegexValidator.compileRegExpression(RegexValidator.EMAIL);
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	int id = Integer.parseInt(request.getParameter("id"));
 	String name = request.getParameter(PARAM_NAME);

@@ -1,12 +1,10 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,8 +23,7 @@ public class PostBooking implements Command {
     BookingService service = new BookingService(DaoFactory.getInstance());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	String trainIdParam = request.getParameter("trainId");
 	String stationFromIdParam = request.getParameter("stationFrom");

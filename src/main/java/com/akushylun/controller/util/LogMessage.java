@@ -17,8 +17,4 @@ public class LogMessage {
     public static final String DB_ERROR_DELETE_BY_ID = "DB operation [Delete] Error ";
     public static final String DB_ERROR_RETRIEVES_ENTITY = "Db Error when retrieves values from entity class name: ";
 
-
-
-
-
 }

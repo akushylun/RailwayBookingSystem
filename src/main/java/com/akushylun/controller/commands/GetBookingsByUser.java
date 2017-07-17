@@ -1,10 +1,8 @@
 package com.akushylun.controller.commands;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -21,8 +19,7 @@ public class GetBookingsByUser implements Command {
     private BookingService service = new BookingService(DaoFactory.getInstance());
 
     @Override
-    public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	List<Booking> bookingList = new ArrayList<>();
