@@ -39,14 +39,6 @@ public class TicketService {
 	}
     }
 
-    public List<Ticket> getByBookingId(int bookingId) {
-	try (DaoConnection connection = daoFactory.getConnection()) {
-	    TicketDao ticketDao = daoFactory.createTicketDao();
-	    connection.begin();
-	    return ticketDao.findAll(bookingId);
-	}
-    }
-
     public void createTicket(Ticket ticket) {
 	try (DaoConnection connection = daoFactory.getConnection()) {
 	    TicketDao ticketDao = daoFactory.createTicketDao();
