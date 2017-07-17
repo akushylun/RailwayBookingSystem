@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.Authenticator;
 import com.akushylun.controller.util.AuthenticatorImpl;
+import com.akushylun.controller.util.PagePath;
 
 @WebFilter(urlPatterns = { "/controllers" }, servletNames = { "frontController" })
 public class ServletSecurityFilter implements Filter {
@@ -23,7 +24,6 @@ public class ServletSecurityFilter implements Filter {
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
-    // TODO check URL
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 	    throws IOException, ServletException {
@@ -37,7 +37,7 @@ public class ServletSecurityFilter implements Filter {
 	boolean allowedURI = requestURI.equals(loginURI) || requestURI.equals(registationURI);
 
 	if (!auth.isLoggedIn() && !allowedURI) {
-	    RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/WEB-INF/view/login.jsp");
+	    RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher(PagePath.LOGIN);
 	    dispatcher.forward(req, resp);
 	    return;
 	}

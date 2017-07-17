@@ -10,7 +10,7 @@ public final class RegexValidator {
     public static final String PASSWORD = "((?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).{2,})";
 
     public static final String STATION = "^[a-zA-Z]+$";
-    public static final String DATE = "((19|20)\\d\\d)-(0?[1-9]|1[012])-(0?[1-9]|[12][0-9]|3[01])";
+    public static final String DATE = "[(0?[1-9]|[12][0-9]|3[01])]{1,2}-[(a-zA-Z)]{2,}-[((19|20)\\d\\d)]{4}";
 
     public static final String PRICE = "[0-9]+([.][0-9]{1,2})?";
     public static final String TIME = "[0-9]";

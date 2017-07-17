@@ -9,17 +9,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.model.dao.DaoFactory;
-import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Station;
 import com.akushylun.model.services.StationService;
 
-public class GetTicketSearch implements Command {
+public class GetTrainSearch implements Command {
 
     StationService service = new StationService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, DaoException {
+	    throws ServletException, IOException {
 
 	List<Station> listStation = service.getByAll();
 	request.setAttribute("stationList", listStation);

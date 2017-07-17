@@ -33,7 +33,7 @@ public class JdbcPersonDao implements PersonDao {
     private static final String CREATE_PERSON = "INSERT INTO person (p_name, p_surname, p_role_r_name, p_login_l_id) "
 	    + "SELECT ?,?,?,?";
     private static final String UPDATE_PERSON = "UPDATE person SET p_name = ?, p_surname = ?, " + "p_role_r_name = ?"
-	    + " WHERE p_id = ?";
+	    + " WHERE p_login_l_id = ?";
     private static final String DELETE_PERSON_BY_ID = "DELETE FROM person WHERE p_login_l_id = ?";
 
     private static final Logger LOGGER = Logger.getLogger(JdbcPersonDao.class);

@@ -12,7 +12,6 @@ import com.akushylun.controller.util.Authenticator;
 import com.akushylun.controller.util.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.model.dao.DaoFactory;
-import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Booking;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.services.BookingService;
@@ -23,7 +22,7 @@ public class GetBookingsByUser implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, DaoException {
+	    throws ServletException, IOException {
 
 	Authenticator authenticator = new AuthenticatorImpl(request);
 	List<Booking> bookingList = new ArrayList<>();

@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<!-- Bootstrap core CSS -->
+<link href="<c:url value="/resources/css/bootstrap.min.css" />"
+	rel="stylesheet">
 <header>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
@@ -20,19 +23,20 @@
 
 					<c:choose>
 						<c:when test="${sessionScope.authToken.role eq 'USER'}">
-							<li class="active"><a href="./view/bookings">Orders</a></li>
-							<li><a href="view/ticket/search">Search Train</a></li>
+							<li class="active"><a href="/railway-booking/view/bookings">Orders</a></li>
+							<li><a href="/railway-booking/view/train/search">Search
+									Train</a></li>
 						</c:when>
 						<c:when test="${sessionScope.authToken.role eq 'ADMIN'}">
-							<li class="active"><a href="./view/persons">Users</a></li>
-							<li><a href="view/trainList">Trains</a></li>
+							<li class="active"><a href="/railway-booking/view/users">Users</a></li>
+							<li><a href="/railway-booking/view/trainList">Trains</a></li>
 						</c:when>
 					</c:choose>
 				</ul>
 
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="view/login">Login</a></li>
-					<li><a href="view/logout">Logout</a></li>
+					<li><a href="/railway-booking/view/login">Login</a></li>
+					<li><a href="/railway-booking/view/logout">Logout</a></li>
 				</ul>
 
 			</div>

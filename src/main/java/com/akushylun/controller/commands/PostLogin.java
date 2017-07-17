@@ -15,7 +15,6 @@ import com.akushylun.controller.util.AuthenticatorImpl;
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.controller.util.RegexValidator;
 import com.akushylun.model.dao.DaoFactory;
-import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.services.PersonService;
 
@@ -31,7 +30,7 @@ public class PostLogin implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, DaoException {
+	    throws ServletException, IOException {
 
 	String pageToGo = "";
 	String email = request.getParameter(PARAM_LOGIN);

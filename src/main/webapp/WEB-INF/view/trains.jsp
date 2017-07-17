@@ -7,8 +7,6 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<link href="<c:url value="/resources/css/bootstrap.min.css" />"
-	rel="stylesheet">
 <link href="<c:url value="/resources/css/header.css" />"
 	rel="stylesheet">
 </head>

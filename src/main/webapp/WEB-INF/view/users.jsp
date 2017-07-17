@@ -5,11 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Bookings</title>
-
-<!-- Bootstrap core CSS -->
-<link href="<c:url value="/resources/css/bootstrap.min.css" />"
-	rel="stylesheet">
+<title>Insert title here</title>
 
 <link href="<c:url value="/resources/css/header.css" />"
 	rel="stylesheet">
@@ -23,7 +19,7 @@
 
 	<div class="page-header">
 		<center>
-			<h1>List Of Orders</h1>
+			<h1>List Of Users</h1>
 		</center>
 	</div>
 	<div class="container">
@@ -31,32 +27,36 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Order Price</th>
-					<th>Order Date</th>
-					<th>Train</th>
-					<th>Departure time</th>
-					<th>Arrival time</th>
-					<th>Station from</th>
-					<th>Station to</th>
+					<th>Name</th>
+					<th>Surname</th>
+					<th>Role</th>
+					<th>Login</th>
+					<th>Update User</th>
 				</tr>
 			</thead>
 			<tbody>
 				<c:set var="count" value="0" scope="page" />
-				<c:forEach var="booking" items="${bookingList}">
+				<c:forEach var="person" items="${personList}">
 					<c:set var="count" value="${count + 1}" scope="page" />
 					<tr>
 						<td><c:out value="${count}" /></td>
-						<td><c:out value="${booking.price}" /></td>
-						<td><c:out value="${booking.date}" /></td>
-						<td><c:out value="${booking.ticket.trainStationList[0].train.name}" /></td>
-						<td><c:out value="${booking.ticket.trainStationList[0].datetime}" /></td>
-						<td><c:out value="${booking.ticket.trainStationList[1].datetime}" /></td>
-						<td><c:out value="${booking.ticket.trainStationList[0].station.name}" /></td>
-						<td><c:out value="${booking.ticket.trainStationList[1].station.name}" /></td>
+						<td><c:out value="${person.name}" /></td>
+						<td><c:out value="${person.surname}" /></td>
+						<td><c:out value="${person.role}" /></td>
+						<td><c:out value="${person.login.email}" /></td>
+						<td><form action="./user" method="POST">
+								<button class="btn btn-warning" type="submit">Update</button>
+								<input type="hidden" name="id" value="${person.login.id}" /> <input
+									type="hidden" name="name" value="${person.name}" /> <input
+									type="hidden" name="surname" value="${person.surname}" /> <input
+									type="hidden" name="role" value="${person.role}" /> <input
+									type="hidden" name="email" value="${person.login.email}" />
+							</form></td>
 					</tr>
 				</c:forEach>
 			</tbody>
 		</table>
 	</div>
+
 </body>
 </html>

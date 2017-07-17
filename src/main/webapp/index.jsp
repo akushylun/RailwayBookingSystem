@@ -12,10 +12,6 @@
 
 <title>Starter Template for Bootstrap</title>
 
-<!-- Bootstrap core CSS -->
-<link href="<c:url value="/resources/css/bootstrap.min.css" />"
-	rel="stylesheet">
-
 <!-- Custom styles for this template -->
 <link href="<c:url value="/resources/css/starter-template.css" />"
 	rel="stylesheet">

@@ -6,9 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<!-- Bootstrap core CSS -->
-<link href="<c:url value="/resources/css/bootstrap.min.css" />"
-	rel="stylesheet">
+
 <link href="<c:url value="/resources/css/registration.css" />"
 	rel="stylesheet">
 </head>
@@ -16,7 +14,7 @@
 	<c:import url="parts/header.jsp" />
 
 	<div class="container">
-		<form class="form-register" action="./updatePerson" method="POST">
+		<form class="form-register" action="./userUpdate" method="POST">
 		
 			<h2 class="form-signin-heading">Update person</h2>
 

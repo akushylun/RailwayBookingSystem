@@ -11,21 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.commands.Command;
-import com.akushylun.controller.commands.GetBooking;
 import com.akushylun.controller.commands.GetBookingsByUser;
 import com.akushylun.controller.commands.GetLogin;
 import com.akushylun.controller.commands.GetLogout;
-import com.akushylun.controller.commands.GetPerson;
-import com.akushylun.controller.commands.GetPersons;
 import com.akushylun.controller.commands.GetRegistration;
-import com.akushylun.controller.commands.GetTicketSearch;
+import com.akushylun.controller.commands.GetTrainSearch;
 import com.akushylun.controller.commands.GetTrains;
+import com.akushylun.controller.commands.GetUser;
+import com.akushylun.controller.commands.GetUsers;
 import com.akushylun.controller.commands.PostBooking;
 import com.akushylun.controller.commands.PostLogin;
-import com.akushylun.controller.commands.PostPerson;
 import com.akushylun.controller.commands.PostRegistration;
 import com.akushylun.controller.commands.PostTrain;
-import com.akushylun.model.dao.exceptions.DaoException;
+import com.akushylun.controller.commands.PostUser;
 
 /**
  * Servlet implementation class FrontController
@@ -41,20 +39,19 @@ public class FrontController extends HttpServlet {
 
     @Override
     public void init() {
-	commands.put("GET:/ticket/search", new GetTicketSearch());
-	commands.put("POST:/ticket/search/findedList", new PostTrain());
+	commands.put("GET:/train/search", new GetTrainSearch());
+	commands.put("POST:/train/search/findedList", new PostTrain());
+	commands.put("POST:/train/search/booking", new PostBooking());
 	commands.put("GET:/bookings", new GetBookingsByUser());
-	commands.put("GET:/booking", new GetBooking());
-	commands.put("POST:/ticket/search/booking", new PostBooking());
+	commands.put("GET:/trainList", new GetTrains());
 	commands.put("GET:/registration", new GetRegistration());
 	commands.put("POST:/registration", new PostRegistration());
-	commands.put("GET:/persons", new GetPersons());
 	commands.put("GET:/login", new GetLogin());
 	commands.put("POST:/login", new PostLogin());
 	commands.put("GET:/logout", new GetLogout());
-	commands.put("GET:/trainList", new GetTrains());
-	commands.put("POST:/person", new GetPerson());
-	commands.put("POST:/updatePerson", new PostPerson());
+	commands.put("POST:/user", new GetUser());
+	commands.put("GET:/users", new GetUsers());
+	commands.put("POST:/userUpdate", new PostUser());
     }
 
     @Override
@@ -76,15 +73,8 @@ public class FrontController extends HttpServlet {
 	String path = request.getRequestURI();
 	path = path.replaceAll(".*/view", "").replaceAll("\\d+", "");
 	String key = method + ":" + path;
-	System.out.println(key);
 	Command command = commands.getOrDefault(key, (req, resp) -> "/index.jsp");
-	String viewPage = null;
-	try {
-	    viewPage = command.execute(request, response);
-	} catch (DaoException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-	}
+	String viewPage = command.execute(request, response);
 	request.getRequestDispatcher(viewPage).forward(request, response);
 
     }

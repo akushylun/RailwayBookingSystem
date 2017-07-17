@@ -40,7 +40,7 @@ public class JdbcTrainDao implements TrainDao {
 	    + "m2m.m2m_cost_time) MINUTE) as end_time, m2m.m2m_cost_price as cost_price_start, m2m2.m2m_cost_price as cost_price_end  "
 	    + "FROM train JOIN departure ON tr_id = d_train_tr_id JOIN m2m_train_station as m2m ON tr_id = m2m.m2m_train_tr_id JOIN station "
 	    + "ON station.st_id = m2m.m2m_station_st_id JOIN m2m_train_station as m2m2 ON tr_id = m2m2.m2m_train_tr_id JOIN station as st2 "
-	    + "ON st2.st_id = m2m2.m2m_station_st_id WHERE station.st_name  = ? AND st2.st_name = ? AND cast(departure.d_datetime as DATE) = ?";
+	    + "ON st2.st_id = m2m2.m2m_station_st_id WHERE station.st_name  = ? AND st2.st_name = ? AND cast(departure.d_datetime as DATE) = ? AND m2m2.m2m_cost_price > m2m.m2m_cost_price AND departure.d_datetime > now()";
     private static final String CREATE_TRAIN = "INSERT INTO train (tr_name) " + " VALUES (?)";
     private static final String UPDATE_TRAIN = "UPDATE train SET tr_name = ? WHERE tr_id = ?";
     private static final String DELETE_TRAIN_BY_ID = "DELETE FROM train WHERE tr_id = ?";

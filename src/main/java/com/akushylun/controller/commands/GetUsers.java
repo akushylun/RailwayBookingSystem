@@ -9,22 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.akushylun.controller.util.PagePath;
 import com.akushylun.model.dao.DaoFactory;
-import com.akushylun.model.dao.exceptions.DaoException;
 import com.akushylun.model.entities.Person;
 import com.akushylun.model.entities.Person.Role;
 import com.akushylun.model.services.PersonService;
 
-public class GetPersons implements Command {
+public class GetUsers implements Command {
 
     PersonService service = new PersonService(DaoFactory.getInstance());
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-	    throws ServletException, IOException, DaoException {
+	    throws ServletException, IOException {
 
 	List<Person> personList = service.getAll(Role.USER);
 	request.setAttribute("personList", personList);
-	return PagePath.PERSON_LIST;
+	return PagePath.USER_LIST;
     }
 
 }
