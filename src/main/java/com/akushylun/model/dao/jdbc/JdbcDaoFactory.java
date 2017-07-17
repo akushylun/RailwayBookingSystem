@@ -6,6 +6,9 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
+
+import com.akushylun.controller.util.LogMessage;
 import com.akushylun.model.dao.BookingDao;
 import com.akushylun.model.dao.DaoConnection;
 import com.akushylun.model.dao.DaoFactory;
@@ -19,6 +22,7 @@ import com.akushylun.model.dao.TrainStationDao;
 
 public class JdbcDaoFactory extends DaoFactory {
 
+    private static final Logger LOGGER = Logger.getLogger(JdbcDaoFactory.class);
     private static final String DATASOURCE_NAME = "jdbc/railwaybooking";
     private static DataSource dataSource;
 
@@ -28,6 +32,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	    Context envContext = (Context) initContext.lookup("java:comp/env");
 	    dataSource = (DataSource) envContext.lookup(DATASOURCE_NAME);
 	} catch (Exception e) {
+	    String message = LogMessage.DB_ERROR_ACCESS_DATASOURCE;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -37,6 +43,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcDaoConnection(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_CONNECTION;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -46,6 +54,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcPersonDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -55,6 +65,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcLoginDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -64,6 +76,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcBookingDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -73,6 +87,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcDepartureDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -82,6 +98,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcStationDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -91,6 +109,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcTicketDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -100,6 +120,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcTrainDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }
@@ -109,6 +131,8 @@ public class JdbcDaoFactory extends DaoFactory {
 	try {
 	    return new JdbcTrainStationDao(dataSource.getConnection());
 	} catch (SQLException e) {
+	    String message = LogMessage.DB_ERROR_CREATE_DAO;
+	    LOGGER.error(message, e);
 	    throw new RuntimeException(e);
 	}
     }

@@ -16,5 +16,8 @@ public class LogMessage {
     public static final String DB_ERROR_UPDATE = "DB operation [Update] Error";
     public static final String DB_ERROR_DELETE_BY_ID = "DB operation [Delete] Error ";
     public static final String DB_ERROR_RETRIEVES_ENTITY = "Db Error when retrieves values from entity class name: ";
+    public static final String DB_ERROR_CREATE_DAO = "Db error couldn't create DAO";
+    public static final String DB_ERROR_CREATE_CONNECTION = "Db error couldn't create connection";
+    public static final String DB_ERROR_ACCESS_DATASOURCE = "Db error couldn't access dataSource";
 
 }

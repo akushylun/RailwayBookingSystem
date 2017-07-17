@@ -14,7 +14,7 @@
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<error-page>
-		<exception-type>java.lang.RuntimeException</exception-type>
+		<exception-type>javax.servlet.ServletException</exception-type>
 		<location>/view/error.jsp</location>
 	</error-page>
 	<session-config>
